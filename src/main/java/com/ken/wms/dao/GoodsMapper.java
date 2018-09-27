@@ -24,7 +24,14 @@ public interface GoodsMapper {
 	 * @return 返回执行ID对应的Goods
 	 */
 	Goods selectById(Integer id);
-	
+
+	/**
+	 * 选择指定 no 的 Goods
+	 * @param no 货物的编号
+	 * @return 返回执行NO对应的Goods
+	 */
+	Goods selectByNo(String no);
+
 	/**
 	 * 选择指定 Goods name 的 Goods
 	 * @param goodsName 货物的名称

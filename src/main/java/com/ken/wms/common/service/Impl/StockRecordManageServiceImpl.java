@@ -165,14 +165,14 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
             throw new StockRecordManageServiceException("exception");
 
         // 转换 Date 对象
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date startDate = null;
         Date endDate = null;
         try {
             if (StringUtils.isNotEmpty(startDateStr))
-                startDate = dateFormat.parse(startDateStr);
+                startDate = dateFormat.parse(startDateStr+" 00:00:00");
             if (StringUtils.isNotEmpty(endDateStr))
-                endDate = dateFormat.parse(endDateStr);
+                endDate = dateFormat.parse(endDateStr+" 23:59:59");
         } catch (ParseException e) {
             throw new StockRecordManageServiceException(e);
         }

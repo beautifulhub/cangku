@@ -28,12 +28,12 @@ public class StockInDO {
     /**
      * 商品ID
      */
-    private Integer goodID;
+    private Integer goodsID;
 
     /**
      * 商品名称
      */
-    private String goodName;
+    private String goodsName;
 
     /**
      * 入库仓库ID
@@ -72,11 +72,11 @@ public class StockInDO {
     }
 
     public Integer getGoodID() {
-        return goodID;
+        return goodsID;
     }
 
-    public void setGoodID(Integer goodID) {
-        this.goodID = goodID;
+    public void setGoodID(Integer goodsID) {
+        this.goodsID = goodsID;
     }
 
     public Integer getId() {
@@ -96,11 +96,11 @@ public class StockInDO {
     }
 
     public String getGoodName() {
-        return goodName;
+        return goodsName;
     }
 
-    public void setGoodName(String goodName) {
-        this.goodName = goodName;
+    public void setGoodName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     public long getNumber() {
@@ -129,8 +129,8 @@ public class StockInDO {
 
     @Override
     public String toString() {
-        return "StockInDO [id=" + id + ", supplierID=" + supplierID + ", supplierName=" + supplierName + ", goodID="
-                + goodID + ", goodName=" + goodName + ", repositoryID=" + repositoryID + ", number=" + number
+        return "StockInDO [id=" + id + ", supplierID=" + supplierID + ", supplierName=" + supplierName + ", goodsID="
+                + goodsID + ", goodsName=" + goodsName + ", repositoryID=" + repositoryID + ", number=" + number
                 + ", time=" + time + ", personInCharge=" + personInCharge + "]";
     }
 

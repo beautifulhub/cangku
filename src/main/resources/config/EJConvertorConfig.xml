@@ -51,9 +51,13 @@
     </entity>
 
     <entity class="com.ken.wms.domain.Goods" sheetName="货物信息" boldHeading="true">
-        <property>
+        <!--<property>
             <field>id</field>
             <value>货物ID</value>
+        </property>-->
+        <property>
+            <field>no</field>
+            <value>货物编号</value>
         </property>
         <property>
             <field>name</field>
@@ -64,12 +68,12 @@
             <value>货物类型</value>
         </property>
         <property>
-            <field>size</field>
-            <value>货物规格</value>
+            <field>sizes</field>
+            <value>货物尺码</value>
         </property>
         <property>
-            <field>value</field>
-            <value>货物价值</value>
+            <field>colors</field>
+            <value>货物颜色</value>
         </property>
     </entity>
 

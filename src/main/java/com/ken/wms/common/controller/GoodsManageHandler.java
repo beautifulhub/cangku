@@ -4,6 +4,7 @@ import com.ken.wms.common.service.Interface.GoodsManageService;
 import com.ken.wms.common.util.Response;
 import com.ken.wms.common.util.ResponseFactory;
 import com.ken.wms.domain.Goods;
+import com.ken.wms.domain.GoodsType;
 import com.ken.wms.domain.Supplier;
 import com.ken.wms.exception.GoodsManageServiceException;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,7 @@ public class GoodsManageHandler {
     private GoodsManageService goodsManageService;
 
     private static final String SEARCH_BY_ID = "searchByID";
+    private static final String SEARCH_BY_NO = "searchByNO";
     private static final String SEARCH_BY_NAME = "searchByName";
     private static final String SEARCH_ALL = "searchAll";
 
@@ -49,12 +51,15 @@ public class GoodsManageHandler {
         Map<String, Object> queryResult = null;
 
         switch (searchType) {
-            case SEARCH_BY_ID:
+            /*case SEARCH_BY_ID:
                 if (StringUtils.isNumeric(keyWord))
                     queryResult = goodsManageService.selectById(Integer.valueOf(keyWord));
+                break;*/
+            case SEARCH_BY_NO:
+                queryResult = goodsManageService.selectByNo(keyWord);
                 break;
             case SEARCH_BY_NAME:
-                queryResult = goodsManageService.selectByName(keyWord);
+                queryResult = goodsManageService.selectByName(keyWord); //模糊查询
                 break;
             case SEARCH_ALL:
                 queryResult = goodsManageService.selectAll(offset, limit);
@@ -274,5 +279,31 @@ public class GoodsManageHandler {
             outputStream.close();
 
         }
+    }
+
+    /**
+     * 查询所有货物类型的信息
+     *
+     * @return 返回一个map，其中：key 为 result 的值为操作的结果，包括：success 与 error；key 为 data
+     * 的值为货物类型list
+     */
+    @RequestMapping(value = "getGoodsType", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> getGoodsTypeInfo() throws GoodsManageServiceException {
+        // 初始化 Response
+        Response responseContent = ResponseFactory.newInstance();
+        String result = Response.RESPONSE_RESULT_ERROR;
+
+        // 获取货物类型
+        List<GoodsType> queryResult = goodsManageService.selectAllGoodsType();
+        if (queryResult != null) {
+            result = Response.RESPONSE_RESULT_SUCCESS;
+        }
+
+        // 设置 Response
+        responseContent.setResponseResult(result);
+        responseContent.setResponseData(queryResult);
+        return responseContent.generateResponse();
     }
 }

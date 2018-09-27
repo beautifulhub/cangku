@@ -6,73 +6,106 @@
 <mapper namespace="com.ken.wms.dao.GoodsMapper">
 
 	<resultMap type="com.ken.wms.domain.Goods" id="goods">
-		<id property="id" column="GOOD_ID"/>
-		<result property="name" column="GOOD_NAME"/>
-		<result property="type" column="GOOD_RYPE"/>
-		<result property="size" column="GOOD_SIZE"/>
-		<result property="value" column="GOOD_VALUE"/>
+		<id property="id" column="goods_id"/>
+		<result property="no" column="goods_no"/>
+		<result property="name" column="goods_name"/>
+		<result property="type" column="goods_typeid"/>
+		<result property="colors" column="goods_colors"/>
+		<result property="sizes" column="goods_sizes"/>
+		<result property="pic" column="goods_pic"/>
+		<result property="value" column="goods_value"/>
+		<result property="remark" column="goods_remark"/>
 	</resultMap>
 	
 	<select id="selectAll" resultMap="goods">
 		select
-			g.GOOD_ID,
-			g.GOOD_NAME,
-			g.GOOD_RYPE,
-			g.GOOD_SIZE,
-			g.GOOD_VALUE
-		from 
-			wms_goods g
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
+		from
+			wms_goods g, wms_goods_type gt
+		where
+		    g.goods_typeid = gt.goods_type_id
 	</select>
 	
 	<select id="selectById" resultMap="goods">
 		select
-			g.GOOD_ID,
-			g.GOOD_NAME,
-			g.GOOD_RYPE,
-			g.GOOD_SIZE,
-			g.GOOD_VALUE
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
 		from 
-			wms_goods g
+			wms_goods g, wms_goods_type gt
 		where
-			g.GOOD_ID = #{id}
+		    g.goods_typeid = gt.goods_type_id
+		    and g.goods_id = #{id}
 	</select>
-	
+
+	<select id="selectByNo" resultMap="goods">
+		select
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
+		from
+			wms_goods g, wms_goods_type gt
+		where
+		    g.goods_typeid = gt.goods_type_id
+		    and g.goods_no = #{no}
+	</select>
+
 	<select id="selectByName" resultMap="goods">
 		select
-			g.GOOD_ID,
-			g.GOOD_NAME,
-			g.GOOD_RYPE,
-			g.GOOD_SIZE,
-			g.GOOD_VALUE
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
 		from 
-			wms_goods g
+			wms_goods g, wms_goods_type gt
 		where
-			g.GOOD_NAME = #{goodsName}
+		    g.goods_typeid = gt.goods_type_id
+		    and g.goods_name = #{goodsName}
 	</select>
 	
 	<select id="selectApproximateByName" resultMap="goods">
 		select
-			g.GOOD_ID,
-			g.GOOD_NAME,
-			g.GOOD_RYPE,
-			g.GOOD_SIZE,
-			g.GOOD_VALUE
-		from 
-			wms_goods g
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
+		from
+			wms_goods g, wms_goods_type gt
 		where
-			g.GOOD_NAME like concat(concat('%',#{goodsName}),'%')
+			g.goods_typeid = gt.goods_type_id
+			and g.goods_name like concat(concat('%',#{goodsName}),'%')
 	</select>
 
 	<insert id="insert">
-		insert into wms_goods(GOOD_NAME,GOOD_RYPE,GOOD_SIZE,GOOD_VALUE)
-		values (#{name},#{type},#{size},#{value})
+		insert into wms_goods(goods_no,goods_name,goods_typeid,goods_sizes,goods_colors,goods_pic)
+		values (#{no},#{name},#{type},#{sizes},#{colors},#{pic})
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_goods(GOOD_NAME,GOOD_RYPE,GOOD_SIZE,GOOD_VALUE)
+		insert into wms_goods(goods_no,goods_name,goods_typeid,goods_sizes,goods_colors)
 		values
 		<foreach collection="list" item="goods" separator=",">
-			(#{goods.name},#{goods.type},#{goods.size},#{goods.value})
+			(#{goods.no},#{goods.name},#{goods.type},#{goods.sizes},#{goods.colors})
 		</foreach>
 	</insert>
 	
@@ -80,21 +113,25 @@
 		update
 			wms_goods
 		set
-			GOOD_NAME = #{name},
-			GOOD_RYPE = #{type},
-			GOOD_SIZE = #{size},
-			GOOD_VALUE = #{value}
+			goods_no = #{no},
+			goods_name = #{name},
+		<if test="type!=null and type!=''">
+			goods_typeid = #{type},
+		</if>
+			goods_sizes = #{sizes},
+			goods_colors = #{colors},
+			goods_pic = #{pic}
 		where
-			GOOD_ID = #{id}
+			goods_id = #{id}
 	</update>
 	
 	<delete id="deleteById">
 		delete from wms_goods
-		where GOOD_ID = #{id}
+		where goods_id = #{id}
 	</delete>
 	
 	<delete id="deleteByName">
 		delete from wms_goods
-		where GOOD_NAME = #{goodsName}
+		where goods_name = #{goodsName}
 	</delete>
 </mapper>

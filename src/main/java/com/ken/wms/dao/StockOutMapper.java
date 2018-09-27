@@ -31,10 +31,10 @@ public interface StockOutMapper {
     /**
      * 选择指定货物ID相关的出库记录
      *
-     * @param goodId 指定的货物ID
+     * @param goodsId 指定的货物ID
      * @return 返回指定货物ID相关的出库记录
      */
-    List<StockOutDO> selectByGoodId(Integer goodId);
+    List<StockOutDO> selectByGoodsId(Integer goodsId);
 
     /**
      * 选择指定仓库ID关联的出库记录

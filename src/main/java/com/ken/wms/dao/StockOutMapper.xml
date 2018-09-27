@@ -9,8 +9,8 @@
 		<id property="id" column="STOCKOUT_ID"/>
 		<result property="customerID" column="STOCKOUT_CUSTOMER_ID"/>
 		<result property="customerName" column="STOCKOUT_CUSTOMER_NAME"/>
-		<result property="goodID" column="STOCKOUT_GOOD_ID"/>
-		<result property="goodName" column="STOCKOUT_GOOD_NAME"/>
+		<result property="goodsID" column="STOCKOUT_GOODS_ID"/>
+		<result property="goodsName" column="STOCKOUT_GOODS_NAME"/>
 		<result property="number" column="STOCKOUT_NUMBER"/>
 		<result property="time" column="STOCKOUT_TIME"/>
 		<result property="personInCharge" column="STOCKOUT_PERSON"/>
@@ -22,8 +22,8 @@
 			r.RECORD_ID as STOCKOUT_ID,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
-			r.RECORD_GOODID as STOCKOUT_GOOD_ID,
-			g.GOOD_NAME as STOCKOUT_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKOUT_GOODS_ID,
+			g.GOODS_NAME as STOCKOUT_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKOUT_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
@@ -32,7 +32,7 @@
 			wms_record_out r,wms_goods g,wms_customer c
 		where
 			r.RECORD_CUSTOMERID = c.CUSTOMER_ID and
-			r.RECORD_GOODID = g.GOOD_ID
+			r.RECORD_GOODSID = g.GOODS_ID
 	</select>
 	
 	<select id="selectByCustomerId" resultMap="stockOutDO">
@@ -40,8 +40,8 @@
 			r.RECORD_ID as STOCKOUT_ID,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
-			r.RECORD_GOODID as STOCKOUT_GOOD_ID,
-			g.GOOD_NAME as STOCKOUT_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKOUT_GOODS_ID,
+			g.GOODS_NAME as STOCKOUT_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKOUT_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
@@ -50,17 +50,17 @@
 			wms_record_out r,wms_goods g,wms_customer c
 		where
 			r.RECORD_CUSTOMERID = c.CUSTOMER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
+			r.RECORD_GOODSID = g.GOODS_ID and
 			r.RECORD_CUSTOMERID = #{customerId}
 	</select>
 	
-	<select id="selectByGoodId" resultMap="stockOutDO">
+	<select id="selectByGoodsId" resultMap="stockOutDO">
 		select
 			r.RECORD_ID as STOCKOUT_ID,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
-			r.RECORD_GOODID as STOCKOUT_GOOD_ID,
-			g.GOOD_NAME as STOCKOUT_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKOUT_GOODS_ID,
+			g.GOODS_NAME as STOCKOUT_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKOUT_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
@@ -69,8 +69,8 @@
 			wms_record_out r,wms_goods g,wms_customer c
 		where
 			r.RECORD_CUSTOMERID = c.CUSTOMER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
-			r.RECORD_GOODID = #{goodId}
+			r.RECORD_GOODSID = g.GOODS_ID and
+			r.RECORD_GOODSID = #{goodsId}
 	</select>
 	
 	<select id="selectById" resultMap="stockOutDO">
@@ -78,8 +78,8 @@
 			r.RECORD_ID as STOCKOUT_ID,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
-			r.RECORD_GOODID as STOCKOUT_GOOD_ID,
-			g.GOOD_NAME as STOCKOUT_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKOUT_GOODS_ID,
+			g.GOODS_NAME as STOCKOUT_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKOUT_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
@@ -88,7 +88,7 @@
 			wms_record_out r,wms_goods g,wms_customer c
 		where
 			r.RECORD_CUSTOMERID = c.CUSTOMER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
+			r.RECORD_GOODSID = g.GOODS_ID and
 			r.RECORD_ID = #{id}
 	</select>
 	
@@ -97,8 +97,8 @@
 			r.RECORD_ID as STOCKOUT_ID,
 			r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
 			c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
-			r.RECORD_GOODID as STOCKOUT_GOOD_ID,
-			g.GOOD_NAME as STOCKOUT_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKOUT_GOODS_ID,
+			g.GOODS_NAME as STOCKOUT_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKOUT_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
@@ -107,7 +107,7 @@
 			wms_record_out r,wms_goods g,wms_customer c
 		where
 			r.RECORD_CUSTOMERID = c.CUSTOMER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
+			r.RECORD_GOODSID = g.GOODS_ID and
 			r.RECORD_REPOSITORYID = 1007
 	</select>
 
@@ -116,8 +116,8 @@
             r.RECORD_ID as STOCKOUT_ID,
             r.RECORD_CUSTOMERID as STOCKOUT_CUSTOMER_ID,
             c.CUSTOMER_NAME as STOCKOUT_CUSTOMER_NAME,
-            r.RECORD_GOODID as STOCKOUT_GOOD_ID,
-            g.GOOD_NAME as STOCKOUT_GOOD_NAME,
+            r.RECORD_GOODSID as STOCKOUT_GOODS_ID,
+            g.GOODS_NAME as STOCKOUT_GOODS_NAME,
             r.RECORD_NUMBER as STOCKOUT_NUMBER,
             r.RECORD_TIME as STOCKOUT_TIME,
             r.RECORD_PERSON as STOCKOUT_PERSON,
@@ -126,21 +126,21 @@
             wms_record_out r,wms_goods g,wms_customer c
         where
             r.RECORD_CUSTOMERID = c.CUSTOMER_ID and
-            r.RECORD_GOODID = g.GOOD_ID
+            r.RECORD_GOODSID = g.GOODS_ID
             <if test="repositoryID > 0">
                 and r.RECORD_REPOSITORYID = #{repositoryID}
             </if>
             <if test="startDate != null">
-                and r.RECORD_TIME >= #{startDate}
+                and r.RECORD_TIME &gt;= #{startDate}
             </if>
             <if test="endDate != null">
-                <![CDATA[and r.RECORD_TIME <= #{endDate}]]>
+                and r.RECORD_TIME &lt;= #{endDate}
             </if>
 	</select>
 		
 	<insert id="insert">
-		insert into wms_record_out(RECORD_CUSTOMERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
-		values(#{customerID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID})
+		insert into wms_record_out(RECORD_CUSTOMERID,RECORD_GOODSID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
+		values(#{customerID},#{goodsID},#{number},#{time},#{personInCharge},#{repositoryID})
 	</insert>
 	
 	<update id="update">
@@ -148,7 +148,7 @@
 			wms_record_out
 		set
 			RECORD_CUSTOMERID = #{customerID},
-			RECORD_GOODID = #{goodID},
+			RECORD_GOODSID = #{goodsID},
 			RECORD_NUMBER = #{number},
 			RECORD_TIME = #{time},
 			RECORD_PERSON = #{personInCharge}

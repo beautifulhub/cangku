@@ -6,14 +6,8 @@ import com.github.pagehelper.PageInfo;
 import com.ken.wms.common.service.Interface.GoodsManageService;
 import com.ken.wms.common.util.EJConvertor;
 import com.ken.wms.common.util.FileUtil;
-import com.ken.wms.dao.GoodsMapper;
-import com.ken.wms.dao.StockInMapper;
-import com.ken.wms.dao.StockOutMapper;
-import com.ken.wms.dao.StorageMapper;
-import com.ken.wms.domain.Goods;
-import com.ken.wms.domain.StockInDO;
-import com.ken.wms.domain.StockOutDO;
-import com.ken.wms.domain.Storage;
+import com.ken.wms.dao.*;
+import com.ken.wms.domain.*;
 import com.ken.wms.exception.GoodsManageServiceException;
 import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -38,6 +32,8 @@ public class GoodsManageServiceImpl implements GoodsManageService {
 
     @Autowired
     private GoodsMapper goodsMapper;
+    @Autowired
+    private GoodsTypeMapper goodsTypeMapper;
     @Autowired
     private StockInMapper stockInMapper;
     @Autowired
@@ -64,6 +60,37 @@ public class GoodsManageServiceImpl implements GoodsManageService {
         Goods goods;
         try {
             goods = goodsMapper.selectById(goodsId);
+        } catch (PersistenceException e) {
+            throw new GoodsManageServiceException(e);
+        }
+
+        if (goods != null) {
+            goodsList.add(goods);
+            total = 1;
+        }
+
+        resultSet.put("data", goodsList);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
+    /**
+     * 返回指定goods NO 的货物记录
+     *
+     * @param goodsNo 货物ID
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectByNo(String goodsNo) throws GoodsManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Goods> goodsList = new ArrayList<>();
+        long total = 0;
+
+        // 查询
+        Goods goods;
+        try {
+            goods = goodsMapper.selectByNo(goodsNo);
         } catch (PersistenceException e) {
             throw new GoodsManageServiceException(e);
         }
@@ -198,7 +225,8 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      */
     private boolean goodsCheck(Goods goods) {
         if (goods != null) {
-            if (goods.getName() != null && goods.getValue() != null) {
+//            if (goods.getName() != null && goods.getValue() != null) {
+            if (goods.getNo() != null && goods.getName() != null) {
                 return true;
             }
         }
@@ -267,12 +295,12 @@ public class GoodsManageServiceImpl implements GoodsManageService {
 
         try {
             // 检查该货物是否有入库信息
-            List<StockInDO> stockInDORecord = stockInMapper.selectByGoodID(goodsId);
+            List<StockInDO> stockInDORecord = stockInMapper.selectByGoodsID(goodsId);
             if (stockInDORecord != null && !stockInDORecord.isEmpty())
                 return false;
 
             // 检查该货物是否有出库信息
-            List<StockOutDO> stockOutDORecord = stockOutMapper.selectByGoodId(goodsId);
+            List<StockOutDO> stockOutDORecord = stockOutMapper.selectByGoodsId(goodsId);
             if (stockOutDORecord != null && !stockOutDORecord.isEmpty())
                 return false;
 
@@ -344,6 +372,22 @@ public class GoodsManageServiceImpl implements GoodsManageService {
             return null;
 
         return ejConvertor.excelWriter(Goods.class, goods);
+    }
+
+    /**
+     * 查询所有的货物类型记录
+     *
+     * @return 结果的一个list
+     */
+    @Override
+    public List<GoodsType> selectAllGoodsType() throws GoodsManageServiceException {
+        try {
+            List<GoodsType> goodsTypeList;
+            goodsTypeList = goodsTypeMapper.selectAll();
+            return goodsTypeList;
+        } catch (PersistenceException e) {
+            throw new GoodsManageServiceException(e);
+        }
     }
 
 }

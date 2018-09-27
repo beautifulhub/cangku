@@ -2,6 +2,7 @@ package com.ken.wms.common.service.Interface;
 
 
 import com.ken.wms.domain.Goods;
+import com.ken.wms.domain.GoodsType;
 import com.ken.wms.exception.GoodsManageServiceException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,14 @@ public interface GoodsManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     Map<String, Object> selectById(Integer goodsId) throws GoodsManageServiceException;
+
+    /**
+     * 返回指定goods NO 的货物记录
+     *
+     * @param goodsNo 货物ID
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    Map<String, Object> selectByNo(String goodsNo) throws GoodsManageServiceException;
 
     /**
      * 返回指定 goods name 的货物记录
@@ -99,4 +108,11 @@ public interface GoodsManageService {
      * @return excel 文件
      */
     File exportGoods(List<Goods> goods);
+
+    /**
+     * 查询所有的货物类型记录
+     *
+     * @return 结果的一个list
+     */
+    List<GoodsType> selectAllGoodsType() throws GoodsManageServiceException;
 }

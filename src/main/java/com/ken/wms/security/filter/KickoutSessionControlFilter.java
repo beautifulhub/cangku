@@ -9,6 +9,8 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -25,6 +27,8 @@ import java.util.LinkedList;
  * @since 2017/4/27.
  */
 public class KickoutSessionControlFilter extends AccessControlFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(KickoutSessionControlFilter.class);
 
     /**
      * 用户踢出后跳转地址
@@ -120,6 +124,7 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
                 }
             } catch (Exception e) {
                 // do logging
+                logger.error(e.toString());
                 e.printStackTrace();
             }
         }

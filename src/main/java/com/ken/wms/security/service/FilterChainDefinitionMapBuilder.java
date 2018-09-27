@@ -22,7 +22,7 @@ public class FilterChainDefinitionMapBuilder {
      * @return 返回授权信息列表
      */
     public LinkedHashMap<String, String> builderFilterChainDefinitionMap(){
-        LinkedHashMap<String, String> permissionMap = new LinkedHashMap<>();
+        LinkedHashMap<String, String> permissionMap = new LinkedHashMap<>(); //Hashtable无序，此有序
 
         // 固定的权限配置
         permissionMap.put("/css/**", "anon");

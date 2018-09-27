@@ -88,7 +88,7 @@
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
         <constructor-arg value="sid"/>
         <property name="httpOnly" value="true"/>
-        <property name="maxAge" value="-1"/>
+        <property name="maxAge" value="-1"/> <!--设置为0立即失效，设置为负，则为浏览器进程Cookie(内存中保存)，关闭浏览器就失效-->
     </bean>
 
     <!-- 自定义用户授权与认证 Realm 的配置 -->

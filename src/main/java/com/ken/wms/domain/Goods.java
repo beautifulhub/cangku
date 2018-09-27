@@ -7,11 +7,15 @@ package com.ken.wms.domain;
  */
 public class Goods {
 
-	private Integer id;// 货物ID
+	private Integer id;// ID标识
+	private String no;// 货物编号
 	private String name;// 货物名
 	private String type;// 货物类型
-	private String size;// 货物规格
+	private String sizes;// 货物尺码
+	private String colors;// 货物颜色
+	private String pic;// 货物实物图
 	private Double value;// 货物价值
+	private String remark;// 货物说明
 
 	public Integer getId() {
 		return id;
@@ -19,6 +23,14 @@ public class Goods {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getNo() {
+		return no;
+	}
+
+	public void setNo(String no) {
+		this.no = no;
 	}
 
 	public String getName() {
@@ -37,12 +49,28 @@ public class Goods {
 		this.type = type;
 	}
 
-	public String getSize() {
-		return size;
+	public String getSizes() {
+		return sizes;
 	}
 
-	public void setSize(String size) {
-		this.size = size;
+	public void setSizes(String sizes) {
+		this.sizes = sizes;
+	}
+
+	public String getColors() {
+		return colors;
+	}
+
+	public void setColors(String colors) {
+		this.colors = colors;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
 	}
 
 	public Double getValue() {
@@ -53,9 +81,26 @@ public class Goods {
 		this.value = value;
 	}
 
-	@Override
-	public String toString() {
-		return "Goods [id=" + id + ", name=" + name + ", type=" + type + ", size=" + size + ", value=" + value + "]";
+	public String getRemark() {
+		return remark;
 	}
 
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@Override
+	public String toString() {
+		return "Goods{" +
+				"id=" + id +
+				", no='" + no + '\'' +
+				", name='" + name + '\'' +
+				", type='" + type + '\'' +
+				", colors='" + colors + '\'' +
+				", sizes='" + sizes + '\'' +
+				", pic='" + pic + '\'' +
+				", value=" + value +
+				", remark='" + remark + '\'' +
+				'}';
+	}
 }

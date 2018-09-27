@@ -7,6 +7,8 @@ pageEncoding="UTF-8"%>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>仓库管理系统</title>
     <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/css/bootstrap-table.css">
@@ -433,5 +435,8 @@ pageEncoding="UTF-8"%>
         src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/lib/layui/layui.js"></script>
+
 </body>
 </html>

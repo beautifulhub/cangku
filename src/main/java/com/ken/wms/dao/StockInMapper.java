@@ -31,10 +31,10 @@ public interface StockInMapper {
     /**
      * 选择指定货物ID相关的入库记录
      *
-     * @param goodID 指定的货物ID
+     * @param goodsID 指定的货物ID
      * @return 返回指定货物相关的入库记录
      */
-    List<StockInDO> selectByGoodID(Integer goodID);
+    List<StockInDO> selectByGoodsID(Integer goodsID);
 
     /**
      * 选择指定仓库ID相关的入库记录

@@ -9,8 +9,8 @@
 		<id property="id" column="STOCKIN_ID"/>
 		<result property="supplierID" column="STOCKIN_SUPPLIER_ID"/>
 		<result property="supplierName" column="STOCKIN_SUPPLIER_NAME"/>
-		<result property="goodID" column="STOCKIN_GOOD_ID"/>
-		<result property="goodName" column="STOCKIN_GOOD_NAME"/>
+		<result property="goodsID" column="STOCKIN_GOODS_ID"/>
+		<result property="goodsName" column="STOCKIN_GOODS_NAME"/>
 		<result property="number" column="STOCKIN_NUMBER"/>
 		<result property="time" column="STOCKIN_TIME"/>
 		<result property="personInCharge" column="STOCKIN_PERSON"/>
@@ -22,8 +22,8 @@
 			r.RECORD_ID as STOCKIN_ID,
 			r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
 			s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
-			r.RECORD_GOODID as STOCKIN_GOOD_ID,
-			g.GOOD_NAME as STOCKIN_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKIN_GOODS_ID,
+			g.GOODS_NAME as STOCKIN_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
@@ -32,7 +32,7 @@
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
 			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID
+			r.RECORD_GOODSID = g.GOODS_ID
 	</select>
 	
 	<select id="selectBySupplierId" resultMap="stockInDO">
@@ -40,8 +40,8 @@
 			r.RECORD_ID as STOCKIN_ID,
 			r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
 			s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
-			r.RECORD_GOODID as STOCKIN_GOOD_ID,
-			g.GOOD_NAME as STOCKIN_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKIN_GOODS_ID,
+			g.GOODS_NAME as STOCKIN_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
@@ -50,17 +50,17 @@
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
 			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
+			r.RECORD_GOODSID = g.GOODS_ID and
 			r.RECORD_SUPPLIERID = #{supplierID}
 	</select>
 	
-	<select id="selectByGoodID" resultMap="stockInDO">
+	<select id="selectByGoodsID" resultMap="stockInDO">
 		select
 			r.RECORD_ID as STOCKIN_ID,
 			r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
 			s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
-			r.RECORD_GOODID as STOCKIN_GOOD_ID,
-			g.GOOD_NAME as STOCKIN_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKIN_GOODS_ID,
+			g.GOODS_NAME as STOCKIN_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
@@ -69,8 +69,8 @@
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
 			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
-			r.RECORD_GOODID = #{goodID}
+			r.RECORD_GOODSID = g.GOODS_ID and
+			r.RECORD_GOODSID = #{goodsID}
 	</select>
 	
 	<select id="selectByID" resultMap="stockInDO">
@@ -78,8 +78,8 @@
 			r.RECORD_ID as STOCKIN_ID,
 			r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
 			s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
-			r.RECORD_GOODID as STOCKIN_GOOD_ID,
-			g.GOOD_NAME as STOCKIN_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKIN_GOODS_ID,
+			g.GOODS_NAME as STOCKIN_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
@@ -88,7 +88,7 @@
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
 			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
+			r.RECORD_GOODSID = g.GOODS_ID and
 			r.RECORD_ID = #{id}
 	</select>
 	
@@ -97,8 +97,8 @@
 			r.RECORD_ID as STOCKIN_ID,
 			r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
 			s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
-			r.RECORD_GOODID as STOCKIN_GOOD_ID,
-			g.GOOD_NAME as STOCKIN_GOOD_NAME,
+			r.RECORD_GOODSID as STOCKIN_GOODS_ID,
+			g.GOODS_NAME as STOCKIN_GOODS_NAME,
 			r.RECORD_NUMBER as STOCKIN_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
@@ -107,7 +107,7 @@
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
 			r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-			r.RECORD_GOODID = g.GOOD_ID and
+			r.RECORD_GOODSID = g.GOODS_ID and
 			r.RECORD_REPOSITORYID = #{repositoryID}
 	</select>
 
@@ -116,8 +116,8 @@
             r.RECORD_ID as STOCKIN_ID,
             r.RECORD_SUPPLIERID as STOCKIN_SUPPLIER_ID,
             s.SUPPLIER_NAME as STOCKIN_SUPPLIER_NAME,
-            r.RECORD_GOODID as STOCKIN_GOOD_ID,
-            g.GOOD_NAME as STOCKIN_GOOD_NAME,
+            r.RECORD_GOODSID as STOCKIN_GOODS_ID,
+            g.GOODS_NAME as STOCKIN_GOODS_NAME,
             r.RECORD_NUMBER as STOCKIN_NUMBER,
             r.RECORD_TIME as STOCKIN_TIME,
             r.RECORD_PERSON as STOCKIN_PERSON,
@@ -126,7 +126,7 @@
             wms_record_in r,wms_goods g,wms_supplier s
         where
             r.RECORD_SUPPLIERID = s.SUPPLIER_ID and
-            r.RECORD_GOODID = g.GOOD_ID
+            r.RECORD_GOODSID = g.GOODS_ID
         <if test="repositoryID > 0">
             and r.RECORD_REPOSITORYID = #{repositoryID}
         </if>
@@ -139,8 +139,8 @@
 	</select>
 	
 	<insert id="insert">
-		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
-		values(#{supplierID},#{goodID},#{number},#{time},#{personInCharge},#{repositoryID})
+		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODSID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
+		values(#{supplierID},#{goodsID},#{number},#{time},#{personInCharge},#{repositoryID})
 	</insert>
 	
 	<update id="update">
@@ -148,7 +148,7 @@
 			wms_record_in
 		set
 			RECORD_SUPPLIERID = #{supplierID},
-			RECORD_GOODID = #{goodID},
+			RECORD_GOODSID = #{goodsID},
 			RECORD_NUMBER = #{number},
 			RECORD_TIME = #{time},
 			RECORD_PERSON = #{personInCharge}

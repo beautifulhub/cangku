@@ -33,15 +33,15 @@
 		select
 			r.REPO_ID as repositoryID,
 			s.RECORD_NUMBER as number,
-			g.GOOD_ID as goodsID,
-			g.GOOD_NAME as goodsName,
-			g.GOOD_RYPE as goodsType,
-			g.GOOD_SIZE as goodsSize,
-			g.GOOD_VALUE as goodsValue
+			g.GOODS_ID as goodsID,
+			g.GOODS_NAME as goodsName,
+			g.GOODS_TYPEID as goodsType,
+			g.GOODS_SIZE as goodsSize,
+			g.GOODS_VALUE as goodsValue
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODID = g.GOOD_ID and
+		 	s.RECORD_GOODSID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID
 		 	<if test="repositoryID > 0">
 		 		and r.REPO_ID = #{repositoryID}
@@ -52,17 +52,17 @@
 		select
 			r.REPO_ID as repositoryID,
 			s.RECORD_NUMBER as number,
-			g.GOOD_ID as goodsID,
-			g.GOOD_NAME as goodsName,
-			g.GOOD_RYPE as goodsType,
-			g.GOOD_SIZE as goodsSize,
-			g.GOOD_VALUE as goodsValue
+			g.GOODS_ID as goodsID,
+			g.GOODS_NAME as goodsName,
+			g.GOODS_TYPEID as goodsType,
+			g.GOODS_SIZE as goodsSize,
+			g.GOODS_VALUE as goodsValue
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODID = g.GOOD_ID and
+		 	s.RECORD_GOODSID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID and
-		 	g.GOOD_ID = #{goodsID}
+		 	g.GOODS_ID = #{goodsID}
 		 	<if test="repositoryID > 0">
 		 		and r.REPO_ID = #{repositoryID}
 		 	</if>
@@ -72,17 +72,17 @@
 		select
 			r.REPO_ID as repositoryID,
 			s.RECORD_NUMBER as number,
-			g.GOOD_ID as goodsID,
-			g.GOOD_NAME as goodsName,
-			g.GOOD_RYPE as goodsType,
-			g.GOOD_SIZE as goodsSize,
-			g.GOOD_VALUE as goodsValue
+			g.GOODS_ID as goodsID,
+			g.GOODS_NAME as goodsName,
+			g.GOODS_TYPEID as goodsType,
+			g.GOODS_SIZE as goodsSize,
+			g.GOODS_VALUE as goodsValue
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODID = g.GOOD_ID and
+		 	s.RECORD_GOODSID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID and
-		 	g.GOOD_NAME like concat("%",concat(#{goodsName},"%"))
+		 	g.GOODS_NAME like concat("%",concat(#{goodsName},"%"))
 		 	<if test="repositoryID > 0">
 		 		and r.REPO_ID = #{repositoryID}
 		 	</if>
@@ -92,17 +92,17 @@
 		select
 			r.REPO_ID as repositoryID,
 			s.RECORD_NUMBER as number,
-			g.GOOD_ID as goodsID,
-			g.GOOD_NAME as goodsName,
-			g.GOOD_RYPE as goodsType,
-			g.GOOD_SIZE as goodsSize,
-			g.GOOD_VALUE as goodsValue
+			g.GOODS_ID as goodsID,
+			g.GOODS_NAME as goodsName,
+			g.GOODS_TYPEID as goodsType,
+			g.GOODS_SIZE as goodsSize,
+			g.GOODS_VALUE as goodsValue
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODID = g.GOOD_ID and
+		 	s.RECORD_GOODSID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID and
-		 	g.GOOD_RYPE like concat("%",concat(#{goodsType},"%"))
+		 	g.GOODS_TYPEID like concat("%",concat(#{goodsType},"%"))
 		 	<if test="repositoryID > 0">
 		 		and r.REPO_ID = #{repositoryID}
 		 	</if>
@@ -112,18 +112,18 @@
 		update 
 			wms_record_storage
 		set
-			RECORD_GOODID = #{goodsID},
+			RECORD_GOODSID = #{goodsID},
 			RECORD_REPOSITORY = #{repositoryID},
 			RECORD_NUMBER = #{number}
 		where
-			RECORD_GOODID = #{goodsID} and
+			RECORD_GOODSID = #{goodsID} and
 			RECORD_REPOSITORY = #{repositoryID}
 	</update>
 	
 	<insert id="insert">
 		insert into wms_record_storage
 		(
-			RECORD_GOODID,
+			RECORD_GOODSID,
 			RECORD_REPOSITORY,
 			RECORD_NUMBER
 		)
@@ -136,7 +136,7 @@
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_record_storage(RECORD_GOODID,RECORD_REPOSITORY,RECORD_NUMBER)
+		insert into wms_record_storage(RECORD_GOODSID,RECORD_REPOSITORY,RECORD_NUMBER)
 		values
 		<foreach collection="list" item="storage" separator=",">
 			(
@@ -148,7 +148,7 @@
 		delete from 
 			wms_record_storage
 		where
-			RECORD_GOODID = #{goodsID}
+			RECORD_GOODSID = #{goodsID}
 	</delete>
 	
 	<delete id="deleteByRepositoryID">
@@ -162,7 +162,7 @@
 		delete from
 			wms_record_storage
 		where
-			RECORD_GOODID = #{goodsID} and
+			RECORD_GOODSID = #{goodsID} and
 			wms_record_storage.RECORD_REPOSITORY = #{repositoryID}
 	</delete>
 </mapper>

@@ -1,5 +1,6 @@
 package com.ken.wms.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author ken
  * @since 2017/2/26.
  */
-public class UserInfoDTO {
+public class UserInfoDTO implements Serializable{
 
     /**
      * 用户ID
