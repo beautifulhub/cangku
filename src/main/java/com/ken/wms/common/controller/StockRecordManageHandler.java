@@ -99,18 +99,20 @@ public class StockRecordManageHandler {
      * 货物入库操作
      *
      * @param supplierID      供应商ID
-     * @param goodsID         货物ID
+     * @param goodsNO         货物编号
      * @param repositoryIDStr 仓库ID
-     * @param number          入库数目
+     * @param goodsDetail     入库明细："颜色,尺码,数量;颜色,尺码,数量;"
      * @return 返回一个map，key为result的值表示操作是否成功
      */
     @RequestMapping(value = "stockIn", method = RequestMethod.POST)
     public
     @ResponseBody
     Map<String, Object> stockIn(@RequestParam("supplierID") Integer supplierID,
-                                @RequestParam("goodsID") Integer goodsID,
-                                @RequestParam(value = "repositoryID", required = false) String repositoryIDStr,
-                                @RequestParam("number") long number) throws StockRecordManageServiceException {
+                                @RequestParam("goodsNO") String goodsNO,
+                                @RequestParam("goodsName") String goodsName,
+                                @RequestParam("goodsDetail") String goodsDetail,
+                                @RequestParam(value = "repositoryID", required = false) String repositoryIDStr
+                                ) throws StockRecordManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
         String result = Response.RESPONSE_RESULT_ERROR;
@@ -147,7 +149,7 @@ public class StockRecordManageHandler {
 
         // 执行 Service
         if (authorizeCheck && argumentCheck) {
-            if (stockRecordManageService.stockInOperation(supplierID, goodsID, repositoryID, number, personInCharge)) {
+            if (stockRecordManageService.stockInOperation(supplierID, goodsNO, goodsName, goodsDetail, repositoryID, personInCharge)) {
                 result = Response.RESPONSE_RESULT_SUCCESS;
             }
         }

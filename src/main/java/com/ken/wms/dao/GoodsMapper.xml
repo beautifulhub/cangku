@@ -64,6 +64,15 @@
 		    and g.goods_no = #{no}
 	</select>
 
+	<select id="selectIDByNO" resultType="java.lang.Integer">
+		select
+		g.goods_id
+		from
+		wms_goods g
+		where
+		g.goods_no = #{no}
+	</select>
+
 	<select id="selectByName" resultMap="goods">
 		select
 			g.goods_id,

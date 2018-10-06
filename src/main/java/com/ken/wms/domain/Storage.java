@@ -8,13 +8,24 @@ package com.ken.wms.domain;
  */
 public class Storage {
 
+	private Integer storageID;//库存ID
 	private Integer goodsID;// 货物ID
+	private String goodsNO;// 货物编号
 	private String goodsName;// 货物名称
-	private String goodsSize;// 货物规格
+	private String goodsColor;// 货物颜色
+	private String goodsSize;// 货物尺码
+	private Long goodsNum;// 货物库存数量
 	private String goodsType;// 货物类型
 	private Double goodsValue;// 货物价值
 	private Integer repositoryID;// 仓库ID
-	private Long number;// 库存数量
+
+	public Integer getStorageID() {
+		return storageID;
+	}
+
+	public void setStorageID(Integer storageID) {
+		this.storageID = storageID;
+	}
 
 	public Integer getGoodsID() {
 		return goodsID;
@@ -22,6 +33,14 @@ public class Storage {
 
 	public void setGoodsID(Integer goodsID) {
 		this.goodsID = goodsID;
+	}
+
+	public String getGoodsNO() {
+		return goodsNO;
+	}
+
+	public void setGoodsNO(String goodsNO) {
+		this.goodsNO = goodsNO;
 	}
 
 	public String getGoodsName() {
@@ -32,12 +51,28 @@ public class Storage {
 		this.goodsName = goodsName;
 	}
 
+	public String getGoodsColor() {
+		return goodsColor;
+	}
+
+	public void setGoodsColor(String goodsColor) {
+		this.goodsColor = goodsColor;
+	}
+
 	public String getGoodsSize() {
 		return goodsSize;
 	}
 
 	public void setGoodsSize(String goodsSize) {
 		this.goodsSize = goodsSize;
+	}
+
+	public Long getGoodsNum() {
+		return goodsNum;
+	}
+
+	public void setGoodsNum(Long goodsNum) {
+		this.goodsNum = goodsNum;
 	}
 
 	public String getGoodsType() {
@@ -64,19 +99,19 @@ public class Storage {
 		this.repositoryID = repositoryID;
 	}
 
-	public Long getNumber() {
-		return number;
-	}
-
-	public void setNumber(Long number) {
-		this.number = number;
-	}
-
 	@Override
 	public String toString() {
-		return "Storage [goodsID=" + goodsID + ", goodsName=" + goodsName + ", goodsSize=" + goodsSize + ", goodsType="
-				+ goodsType + ", goodsValue=" + goodsValue + ", repositoryID=" + repositoryID + ", number=" + number
-				+ "]";
+		return "Storage{" +
+				"storageID=" + storageID +
+				", goodsID=" + goodsID +
+				", goodsNO='" + goodsNO + '\'' +
+				", goodsName='" + goodsName + '\'' +
+				", goodsColor='" + goodsColor + '\'' +
+				", goodsSize='" + goodsSize + '\'' +
+				", goodsNum=" + goodsNum +
+				", goodsType='" + goodsType + '\'' +
+				", goodsValue=" + goodsValue +
+				", repositoryID=" + repositoryID +
+				'}';
 	}
-
 }

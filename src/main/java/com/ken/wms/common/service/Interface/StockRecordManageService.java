@@ -15,12 +15,14 @@ public interface StockRecordManageService {
      * 货物入库操作
      *
      * @param supplierID   供应商ID
-     * @param goodsID      货物ID
+     * @param goodsNO      货物编号
+     * @param goodsName    货物名称
+     * @param goodsDetail  货物明细
      * @param repositoryID 入库仓库ID
-     * @param number       入库数量
+     * @param personInCharge 入库人员
      * @return 返回一个boolean 值，若值为true表示入库成功，否则表示入库失败
      */
-    boolean stockInOperation(Integer supplierID, Integer goodsID, Integer repositoryID, long number, String personInCharge) throws StockRecordManageServiceException;
+    boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge) throws StockRecordManageServiceException;
 
     /**
      * 货物出库操作

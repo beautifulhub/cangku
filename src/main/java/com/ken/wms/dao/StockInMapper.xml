@@ -11,7 +11,7 @@
 		<result property="supplierName" column="STOCKIN_SUPPLIER_NAME"/>
 		<result property="goodsID" column="STOCKIN_GOODS_ID"/>
 		<result property="goodsName" column="STOCKIN_GOODS_NAME"/>
-		<result property="number" column="STOCKIN_NUMBER"/>
+		<result property="goodsNum" column="STOCKIN_NUMBER"/>
 		<result property="time" column="STOCKIN_TIME"/>
 		<result property="personInCharge" column="STOCKIN_PERSON"/>
 		<result property="repositoryID" column="STOCKIN_REPOSITORY_ID"/>
@@ -139,8 +139,8 @@
 	</select>
 	
 	<insert id="insert">
-		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODSID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
-		values(#{supplierID},#{goodsID},#{number},#{time},#{personInCharge},#{repositoryID})
+		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODS_ID,RECORD_GOODS_COLOR,RECORD_GOODS_SIZE,RECORD_GOODS_NUM,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
+		values(#{supplierID},#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{time},#{personInCharge},#{repositoryID})
 	</insert>
 	
 	<update id="update">

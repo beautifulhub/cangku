@@ -94,7 +94,9 @@ public interface StorageManageService {
      * @param number       库存数量
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
-    boolean addNewStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean addNewStorageOLD(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+
+    boolean addNewStorage(Integer goodsID, String goodsColor, String goodsSize, Integer repositoryID, long number) throws StorageManageServiceException;
 
     /**
      * 更新一条库存记录
@@ -104,17 +106,18 @@ public interface StorageManageService {
      * @param number       更新的库存数量
      * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
      */
-    boolean updateStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean updateStorageOLD(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+
+    boolean updateStorage(Integer storageID, long number) throws StorageManageServiceException;
 
     /**
      * 为指定的货物库存记录增加指定数目
      *
-     * @param goodsID      货物ID
+     * @param goodsStr      货物Str
      * @param repositoryID 仓库ID
-     * @param number       增加的数量
      * @return 返回一个 boolean 值，若值为true表示数目增加成功，否则表示增加失败
      */
-    boolean storageIncrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean storageIncrease(Integer goodsID, String goodsNO, String goodsName, List<String> goodsStr, Integer repositoryID) throws StorageManageServiceException;
 
     /**
      * 为指定的货物库存记录减少指定的数目

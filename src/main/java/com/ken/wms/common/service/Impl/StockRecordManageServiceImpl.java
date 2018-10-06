@@ -2,6 +2,7 @@ package com.ken.wms.common.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Splitter;
 import com.ken.wms.common.service.Interface.StockRecordManageService;
 import com.ken.wms.common.service.Interface.StorageManageService;
 import com.ken.wms.dao.*;
@@ -22,6 +23,8 @@ import java.util.*;
 @Service
 public class StockRecordManageServiceImpl implements StockRecordManageService {
 
+    private static final Splitter SPLIT_COMMA = Splitter.on(",").trimResults().omitEmptyStrings();
+    private static final Splitter SPLIT_SEMICOLON = Splitter.on(";").trimResults().omitEmptyStrings();
     @Autowired
     private SupplierMapper supplierMapper;
     @Autowired
@@ -41,43 +44,53 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      * 货物入库操作
      *
      * @param supplierID   供应商ID
-     * @param goodsID      货物ID
+     * @param goodsNO      货物编号
+     * @param goodsName    货物名称
+     * @param goodsDetail  货物明细
      * @param repositoryID 入库仓库ID
-     * @param number       入库数量
+     * @param personInCharge 入库人员
      * @return 返回一个boolean 值，若值为true表示入库成功，否则表示入库失败
      */
     @UserOperation(value = "货物入库")
     @Override
-    public boolean stockInOperation(Integer supplierID, Integer goodsID, Integer repositoryID, long number, String personInCharge) throws StockRecordManageServiceException {
+    public boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge) throws StockRecordManageServiceException {
 
         // ID对应的记录是否存在
-        if (!(supplierValidate(supplierID) && goodsValidate(goodsID) && repositoryValidate(repositoryID)))
+        if (!(supplierValidate(supplierID) && goodsNOValidate(goodsNO) && repositoryValidate(repositoryID)))
             return false;
 
         if (personInCharge == null)
             return false;
 
         // 检查入库数量有效性
-        if (number < 0)
-            return false;
+        /*if (number < 0)
+            return false;*/
 
         try {
             // 更新库存记录
-            boolean isSuccess;
-            isSuccess = storageManageService.storageIncrease(goodsID, repositoryID, number);
-
-            // 保存入库记录
-            if (isSuccess) {
-                StockInDO stockInDO = new StockInDO();
-                stockInDO.setGoodID(goodsID);
-                stockInDO.setSupplierID(supplierID);
-                stockInDO.setNumber(number);
-                stockInDO.setPersonInCharge(personInCharge);
-                stockInDO.setTime(new Date());
-                stockInDO.setRepositoryID(repositoryID);
-                stockinMapper.insert(stockInDO);
+            boolean isSuccess = false;
+            //根据货物编号查询货物ID
+            Integer goodsID = goodsMapper.selectIDByNO(goodsNO);
+            //组装批量录入的货物信息
+            List<String> goodsSingle = SPLIT_SEMICOLON.splitToList(goodsDetail);
+            for(String goodss : goodsSingle){
+                List<String> goodsStr = SPLIT_COMMA.splitToList(goodss);
+                isSuccess = storageManageService.storageIncrease(goodsID, goodsNO, goodsName, goodsStr, repositoryID);
+                // 保存入库记录
+                if (isSuccess) {
+                    StockInDO stockInDO = new StockInDO();
+                    stockInDO.setSupplierID(supplierID);
+                    stockInDO.setGoodsID(goodsID);
+                    stockInDO.setGoodsName(goodsName);
+                    stockInDO.setGoodsColor(goodsStr.get(0));
+                    stockInDO.setGoodsSize(goodsStr.get(1));
+                    stockInDO.setGoodsNum(Long.parseLong(goodsStr.get(2)));
+                    stockInDO.setPersonInCharge(personInCharge);
+                    stockInDO.setTime(new Date());
+                    stockInDO.setRepositoryID(repositoryID);
+                    stockinMapper.insert(stockInDO);
+                }
             }
-
             return isSuccess;
         } catch (PersistenceException | StorageManageServiceException e) {
             throw new StockRecordManageServiceException(e);
@@ -351,8 +364,8 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         StockRecordDTO stockRecordDTO = new StockRecordDTO();
         stockRecordDTO.setRecordID(stockInDO.getId());
         stockRecordDTO.setSupplierOrCustomerName(stockInDO.getSupplierName());
-        stockRecordDTO.setGoodsName(stockInDO.getGoodName());
-        stockRecordDTO.setNumber(stockInDO.getNumber());
+        stockRecordDTO.setGoodsName(stockInDO.getGoodsName());
+        stockRecordDTO.setNumber(stockInDO.getGoodsNum());
         stockRecordDTO.setTime(dateFormat.format(stockInDO.getTime()));
         stockRecordDTO.setRepositoryID(stockInDO.getRepositoryID());
         stockRecordDTO.setPersonInCharge(stockInDO.getPersonInCharge());
@@ -389,6 +402,21 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     private boolean goodsValidate(Integer goodsID) throws StockRecordManageServiceException {
         try {
             Goods goods = goodsMapper.selectById(goodsID);
+            return goods != null;
+        } catch (PersistenceException e) {
+            throw new StockRecordManageServiceException(e);
+        }
+    }
+
+    /**
+     * 检查货物编号对应的记录是否存在
+     *
+     * @param goodsNO 货物编号
+     * @return 若存在则返回true，否则返回false
+     */
+    private boolean goodsNOValidate(String goodsNO) throws StockRecordManageServiceException {
+        try {
+            Goods goods = goodsMapper.selectByNo(goodsNO);
             return goods != null;
         } catch (PersistenceException e) {
             throw new StockRecordManageServiceException(e);

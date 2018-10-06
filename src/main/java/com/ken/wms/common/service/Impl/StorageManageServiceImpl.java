@@ -278,7 +278,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      */
     @UserOperation(value = "添加库存记录")
     @Override
-    public boolean addNewStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean addNewStorageOLD(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
         try {
             boolean isAvailable = true;
 
@@ -300,7 +300,44 @@ public class StorageManageServiceImpl implements StorageManageService {
                 Storage storage = new Storage();
                 storage.setGoodsID(goodsID);
                 storage.setRepositoryID(repositoryID);
-                storage.setNumber(number);
+                storage.setGoodsNum(number);
+                storageMapper.insert(storage);
+            }
+
+            return isAvailable;
+        } catch (PersistenceException e) {
+            throw new StorageManageServiceException(e);
+        }
+    }
+    /**
+     * 添加一条库存记录
+     *
+     * @param goodsID      指定的货物ID
+     * @param repositoryID 指定的仓库ID
+     * @param number       库存数量
+     * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
+     */
+    @UserOperation(value = "添加库存记录")
+    @Override
+    public boolean addNewStorage(Integer goodsID, String goodsColor, String goodsSize, Integer repositoryID, long number) throws StorageManageServiceException {
+        try {
+            boolean isAvailable = true;
+
+            // validate
+            Goods goods = goodsMapper.selectById(goodsID);
+            Repository repository = repositoryMapper.selectByID(repositoryID);
+            if (goods == null)
+                isAvailable = false;
+            if (repository == null)
+                isAvailable = false;
+            if (isAvailable) {
+                // insert
+                Storage storage = new Storage();
+                storage.setGoodsID(goodsID);
+                storage.setGoodsColor(goodsColor);
+                storage.setGoodsSize(goodsSize);
+                storage.setGoodsNum(number);
+                storage.setRepositoryID(repositoryID);
                 storageMapper.insert(storage);
             }
 
@@ -320,7 +357,7 @@ public class StorageManageServiceImpl implements StorageManageService {
      */
     @UserOperation(value = "修改库存记录")
     @Override
-    public boolean updateStorage(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean updateStorageOLD(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
         try {
             boolean isUpdate = false;
 
@@ -330,12 +367,35 @@ public class StorageManageServiceImpl implements StorageManageService {
                 if (number >= 0) {
                     // update
                     Storage storage = storageList.get(0);
-                    storage.setNumber(number);
+                    storage.setGoodsNum(number);
                     storageMapper.update(storage);
                     isUpdate = true;
                 }
             }
 
+            return isUpdate;
+        } catch (PersistenceException e) {
+            throw new StorageManageServiceException(e);
+        }
+    }
+
+    /**
+     * 更新一条库存记录
+     *
+     * @param storageID    指定的库存ID
+     * @param number       更新的库存数量
+     * @return 返回一个boolean值，值为true代表更新成功，否则代表失败
+     */
+    @UserOperation(value = "修改库存记录")
+    @Override
+    public boolean updateStorage(Integer storageID, long number) throws StorageManageServiceException {
+        try {
+            boolean isUpdate = false;
+            Storage storage = new Storage();
+            storage.setStorageID(storageID);
+            storage.setGoodsNum(number);
+            storageMapper.update(storage);
+            isUpdate = true;
             return isUpdate;
         } catch (PersistenceException e) {
             throw new StorageManageServiceException(e);
@@ -404,7 +464,7 @@ public class StorageManageServiceImpl implements StorageManageService {
                         isAvailable = false;
                     if (repository == null)
                         isAvailable = false;
-                    if (storage.getNumber() < 0)
+                    if (storage.getGoodsNum() < 0)
                         isAvailable = false;
                     List<Storage> temp = storageMapper.selectByGoodsIDAndRepositoryID(storage.getGoodsID(), storage.getRepositoryID());
                     if (!(temp != null && temp.isEmpty()))
@@ -448,24 +508,26 @@ public class StorageManageServiceImpl implements StorageManageService {
      *
      * @param goodsID      货物ID
      * @param repositoryID 仓库ID
-     * @param number       增加的数量
      * @return 返回一个 boolean 值，若值为true表示数目增加成功，否则表示增加失败
      */
     @Override
-    public boolean storageIncrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean storageIncrease(Integer goodsID, String goodsNO, String goodsName, List<String> goodsStr, Integer repositoryID) throws StorageManageServiceException {
 
         // 检查货物库存增加数目的有效性
-        if (number < 0)
-            return false;
+        /*if (number < 0)
+            return false;*/
 
         synchronized (this) {
             // 检查对应的库存记录是否存在
-            Storage storage = getStorage(goodsID, repositoryID);
+            String goodsColor = goodsStr.get(0);
+            String goodsSize = goodsStr.get(1);
+            String goodsNum = goodsStr.get(2);
+            Storage storage = getStorage(goodsID, goodsColor, goodsSize, repositoryID);
             if (storage != null) {
-                long newStorage = storage.getNumber() + number;
-                updateStorage(goodsID, repositoryID, newStorage);
+                long newStorage = storage.getGoodsNum() + Long.parseLong(goodsNum);
+                updateStorage(storage.getStorageID(), newStorage);
             } else {
-                addNewStorage(goodsID, repositoryID, number);
+                addNewStorage(goodsID, goodsColor, goodsSize, repositoryID, Long.parseLong(goodsNum));
             }
         }
         return true;
@@ -484,30 +546,30 @@ public class StorageManageServiceImpl implements StorageManageService {
 
         synchronized (this) {
             // 检查对应的库存记录是否存在
-            Storage storage = getStorage(goodsID, repositoryID);
+            /*Storage storage = getStorage(goodsID, repositoryID);
             if (null != storage) {
                 // 检查库存减少数目的范围是否合理
-                if (number < 0 || storage.getNumber() < number)
+                if (number < 0 || storage.getGoodsNum() < number)
                     return false;
 
-                long newStorage = storage.getNumber() - number;
+                long newStorage = storage.getGoodsNum() - number;
                 updateStorage(goodsID, repositoryID, newStorage);
                 return true;
-            } else
+            } else*/
                 return false;
         }
     }
 
     /**
-     * 获取指定货物ID，仓库ID对应的库存记录
+     * 获取指定货物ID，（具体到尺码、颜色）仓库ID对应的库存记录
      *
      * @param goodsID      货物ID
      * @param repositoryID 仓库ID
      * @return 若存在则返回对应的记录，否则返回null
      */
-    private Storage getStorage(Integer goodsID, Integer repositoryID) {
+    private Storage getStorage(Integer goodsID, String goodsColor, String goodsSize, Integer repositoryID) {
         Storage storage = null;
-        List<Storage> storageList = storageMapper.selectByGoodsIDAndRepositoryID(goodsID, repositoryID);
+        List<Storage> storageList = storageMapper.selectByGoodsInfoAndRepositoryID(goodsID, goodsColor, goodsSize, repositoryID);
         if (!storageList.isEmpty())
             storage = storageList.get(0);
         return storage;

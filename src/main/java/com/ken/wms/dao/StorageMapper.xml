@@ -7,14 +7,17 @@
 	
 	<!-- 结果映射 -->
 	<resultMap type="com.ken.wms.domain.Storage" id="storage">
+		<id property="storageID" column="storageID"/>
 		<id property="goodsID" column="goodsID"/>
+		<result property="goodsNO" column="goodsNO"/>
 		<result property="goodsName" column="goodsName"/>
+		<result property="goodsColor" column="goodsColor"/>
 		<result property="goodsSize" column="goodsSize"/>
 		<result property="goodsType" column="goodsType"/>
-		<result property="goodsValue" column="goodsValue"/>
-		<result property="repositoryID" column="repositoryID"/>
-		<result property="number" column="number"/>
-		<!-- 
+        <result property="goodsNum" column="number"/>
+        <result property="goodsValue" column="goodsValue"/>
+        <result property="repositoryID" column="repositoryID"/>
+		<!--
 		<association property="goodsInfo" javaType="com.ken.Goods" resultMap="goods"/>
 		 -->
 	</resultMap>
@@ -41,7 +44,7 @@
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODSID = g.GOODS_ID and
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID
 		 	<if test="repositoryID > 0">
 		 		and r.REPO_ID = #{repositoryID}
@@ -60,14 +63,37 @@
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODSID = g.GOODS_ID and
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID and
 		 	g.GOODS_ID = #{goodsID}
 		 	<if test="repositoryID > 0">
 		 		and r.REPO_ID = #{repositoryID}
 		 	</if>
 	</select>
-	
+
+	<select id="selectByGoodsInfoAndRepositoryID" resultMap="storage">
+		select
+		s.record_storage_id as storageID,
+        r.REPO_ID as repositoryID,
+        s.record_GOODS_COLOR as goodsColor,
+        s.record_GOODS_SIZE as goodsSize,
+        s.record_goods_num as number,
+        g.GOODS_NO as goodsNO,
+        g.GOODS_NAME as goodsName,
+        g.GOODS_ID as goodsID
+		from
+        wms_record_storage s,wms_respository r, wms_goods g
+		where
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
+		 	s.RECORD_REPOSITORY = r.REPO_ID and
+		 	s.record_GOODS_ID = #{goodsID}  and
+            s.record_GOODS_Color = #{goodsColor} AND
+            s.record_GOODS_Size = #{goodsSize}
+		 	<if test="repositoryID > 0">
+		 		and r.REPO_ID = #{repositoryID}
+		 	</if>
+	</select>
+
 	<select id="selectByGoodsNameAndRepositoryID" resultMap="storage">
 		select
 			r.REPO_ID as repositoryID,
@@ -80,7 +106,7 @@
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODSID = g.GOODS_ID and
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID and
 		 	g.GOODS_NAME like concat("%",concat(#{goodsName},"%"))
 		 	<if test="repositoryID > 0">
@@ -100,7 +126,7 @@
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODSID = g.GOODS_ID and
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID and
 		 	g.GOODS_TYPEID like concat("%",concat(#{goodsType},"%"))
 		 	<if test="repositoryID > 0">
@@ -112,31 +138,32 @@
 		update 
 			wms_record_storage
 		set
-			RECORD_GOODSID = #{goodsID},
-			RECORD_REPOSITORY = #{repositoryID},
-			RECORD_NUMBER = #{number}
+			RECORD_GOODS_NUM = #{goodsNum}
 		where
-			RECORD_GOODSID = #{goodsID} and
-			RECORD_REPOSITORY = #{repositoryID}
+			RECORD_storage_ID = #{storageID}
 	</update>
 	
 	<insert id="insert">
 		insert into wms_record_storage
 		(
-			RECORD_GOODSID,
-			RECORD_REPOSITORY,
-			RECORD_NUMBER
+			RECORD_GOODS_ID,
+			RECORD_GOODS_COLOR,
+			RECORD_GOODS_SIZE,
+			RECORD_GOODS_NUM,
+			RECORD_REPOSITORY
 		)
 		values
 		(
 			#{goodsID},
-			#{repositoryID},
-			#{number}
+			#{goodsColor},
+			#{goodsSize},
+			#{goodsNum},
+			#{repositoryID}
 		)
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_record_storage(RECORD_GOODSID,RECORD_REPOSITORY,RECORD_NUMBER)
+		insert into wms_record_storage(RECORD_GOODS_ID,RECORD_REPOSITORY,RECORD_NUMBER)
 		values
 		<foreach collection="list" item="storage" separator=",">
 			(
@@ -148,7 +175,7 @@
 		delete from 
 			wms_record_storage
 		where
-			RECORD_GOODSID = #{goodsID}
+			RECORD_GOODS_ID = #{goodsID}
 	</delete>
 	
 	<delete id="deleteByRepositoryID">
@@ -162,7 +189,7 @@
 		delete from
 			wms_record_storage
 		where
-			RECORD_GOODSID = #{goodsID} and
+			RECORD_GOODS_ID = #{goodsID} and
 			wms_record_storage.RECORD_REPOSITORY = #{repositoryID}
 	</delete>
 </mapper>

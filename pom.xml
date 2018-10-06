@@ -52,7 +52,7 @@
         <slf4j.version>1.7.21</slf4j.version>
         <jackson.version>2.7.0</jackson.version>
         <fastjson.version>1.2.33</fastjson.version>
-
+        <guava.version>17.0</guava.version>
         <!-- plugin config -->
         <plugin.tomcat.version>2.1</plugin.tomcat.version>
         <plugin.tomcat.port>8080</plugin.tomcat.port>
@@ -299,6 +299,12 @@
             <version>${fastjson.version}</version>
         </dependency>
 
+        <!-- other tools jar-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
 
     </dependencies>
 

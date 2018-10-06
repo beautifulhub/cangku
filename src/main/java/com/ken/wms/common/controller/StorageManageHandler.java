@@ -204,7 +204,7 @@ public class StorageManageHandler {
             isAvailable = false;
 
         if (isAvailable) {
-            isSuccess = storageManageService.addNewStorage(Integer.valueOf(goodsID), Integer.valueOf(repositoryID),
+            isSuccess = storageManageService.addNewStorageOLD(Integer.valueOf(goodsID), Integer.valueOf(repositoryID),
                     Integer.valueOf(number)) ? Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
         }
 
@@ -239,7 +239,7 @@ public class StorageManageHandler {
             isAvailable = false;
 
         if (isAvailable) {
-            result = storageManageService.updateStorage(Integer.valueOf(goodsID), Integer.valueOf(repositoryID),
+            result = storageManageService.updateStorageOLD(Integer.valueOf(goodsID), Integer.valueOf(repositoryID),
                     Integer.valueOf(number)) ? Response.RESPONSE_RESULT_SUCCESS : Response.RESPONSE_RESULT_ERROR;
         }
 
