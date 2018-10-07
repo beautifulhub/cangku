@@ -77,6 +77,13 @@
         </property>
     </entity>
 
+    <entity class="com.ken.wms.domain.Location" sheetName="货位信息" boldHeading="true">
+        <property>
+            <field>no</field>
+            <value>货位编号</value>
+        </property>
+    </entity>
+
     <entity class="com.ken.wms.domain.Repository" sheetName="仓库信息" boldHeading="true">
         <property>
             <field>id</field>

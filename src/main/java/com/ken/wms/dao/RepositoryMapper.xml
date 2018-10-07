@@ -25,7 +25,7 @@
 		from
 			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
 	</select>
-	
+
 	<select id="selectUnassign" resultMap="repository">
 		select
 			r.REPO_ID,

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ken.wms.dao.LocationMapper">
+
+	<resultMap type="com.ken.wms.domain.Location" id="location">
+		<id property="id" column="location_id"/>
+		<result property="no" column="location_no"/>
+		<result property="createTime" column="location_create_time"/>
+		<result property="updateTime" column="location_update_time"/>
+		<result property="person" column="location_person"/>
+		<result property="repoID" column="location_repositoryid"/>
+	</resultMap>
+	
+	<select id="selectAll" resultMap="location">
+		select
+			*
+		from
+			wms_location l
+	</select>
+
+	<select id="selectByRepoID" resultMap="location">
+		select
+			*
+		from
+			wms_location l
+		where
+			l.location_repositoryid = #{repoID}
+	</select>
+
+	<select id="selectById" resultMap="location">
+		select
+			*
+		from 
+			wms_location l
+		where
+		    l.location_id = #{id}
+	</select>
+
+	<select id="selectByNo" resultMap="location">
+		select
+			*
+		from
+			wms_location l
+		where
+		   l.location_repositoryid = #{repoID} and
+		   l.location_no like concat(concat("%",#{no},"%"))
+	</select>
+
+	<insert id="insert">
+		insert into wms_location(location_no,location_create_time,location_update_time,location_person,location_repositoryid)
+		values (#{no},#{createTime},#{updateTime},#{person},#{repoID})
+	</insert>
+	
+	<insert id="insertBatch">
+		insert into wms_location(location_no,location_create_time,location_update_time,location_person,location_repositoryid)
+		values
+		<foreach collection="list" item="location" separator=",">
+			(#{location.no},#{location.createTime},#{location.updateTime},#{location.person},#{location.repoID})
+		</foreach>
+	</insert>
+
+	<update id="update">
+		update
+		wms_location
+		set
+		location_no = #{no},
+		<if test="person!=null and person!=''">
+			location_person = #{person},
+		</if>
+		location_update_time = #{updateTime}
+		where
+			location_id = #{id}
+	</update>
+	
+	<delete id="deleteById">
+		delete from wms_location
+		where location_id = #{id}
+	</delete>
+	
+</mapper>

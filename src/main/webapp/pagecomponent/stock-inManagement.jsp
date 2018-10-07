@@ -609,7 +609,6 @@
                         <div style="margin-left:720px" id="stock_in_group">
                             <button type="button" class="btn btn-xs btn-link"  id="add_stock">添加</button>
                         </div>
-                        </form>
 					</div>
 				</div>
             </div>

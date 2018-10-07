@@ -353,7 +353,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6">
+			<%--<div class="col-md-6 col-sm-6">
 				<div class="row">
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
@@ -365,7 +365,7 @@
 						</form>
 					</div>
 				</div>
-			</div>
+			</div>--%>
 		</div>
 		<div class="row visible-md visible-lg">
 			<div class="col-md-12">
@@ -446,64 +446,68 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-6  visible-md visible-lg">
-				<div class="row">
-					<div class="col-md-1 col-sm-1"></div>
-					<div class="col-md-11 col-sm-11">
-						<label for="" class="text-info">货物信息</label>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-1"></div>
-					<div class="col-md-11">
-						<div class="col-md-6">
-							<div style="margin-top:5px">
-								<div class="col-md-6">
-									<span for="" class="pull-right">货物ID：</span>
-								</div>
-								<div class="col-md-6">
-									<span id="info_goods_ID">-</span>
-								</div>
-							</div>
-							<div style="margin-top:5px">
-								<div class="col-md-6">
-									<span for="" class="pull-right">货物类型：</span>
-								</div>
-								<div class="col-md-6">
-									<span id="info_goods_type">-</span>
-								</div>
-							</div>
-							<div style="margin-top:5px">
-								<div class="col-md-6">
-									<span for="" class="pull-right">货物名：</span>
-								</div>
-								<div class="col-md-6">
-									<span id="info_goods_name">-</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div style="margin-top:5px">
-								<div class="col-md-6">
-									<span for="" class="pull-right">货物规格：</span>
-								</div>
-								<div class="col-md-6">
-									<span id="info_goods_size">-</span>
-								</div>
-							</div>
-							<div style="margin-top:5px">
-								<div class="col-md-6">
-									<span for="" class="pull-right">货物价值：</span>
-								</div>
-								<div class="col-md-6">
-									<span id="info_goods_value">-</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-6 col-sm-6">
+                <div class="row">
+                    <div class="col-md-1 col-sm-1"></div>
+                    <div class="col-md-10 col-sm-11">
+                        <form action="" class="form-inline">
+                            <div class="form-group">
+                                <label for="" class="form-label">货物编号：</label>
+                                <input type="text" class="form-control" placeholder="请输入货物编号" id="goods_no" name="goodsNO">
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="form-label">货物名称：</label>
+                                <input type="text" class="form-control" placeholder="请输入货物名称" id="goods_name" name="goodsName">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row visible-md visible-lg">
+                    <div class="col-md-12 col-sm-12">
+                        <div class='pull-right' style="cursor:pointer" id="addDetail-show">
+                            <span>显示添加详情</span>
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </div>
+                        <div class='pull-right hide' style="cursor:pointer" id="addDetail-hidden">
+                            <span>隐藏添加详情</span>
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row hide" id="addDetail" style="margin-bottom:30px">
+                    <div class="col-md-12 col-sm-12  visible-md visible-lg">
+                        <div class="row">
+                            <div class="col-md-1 col-sm-1"></div>
+                            <div class="col-md-10 col-sm-10">
+                                <label for="" class="text-info">出库货物明细</label>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top:5px">
+                            <div class="form-group add-goods-detail">
+                                <label for="" class="col-sm-2 control-label" style="margin-left:95px;margin-top:5px">货物颜色：</label>
+                                <div class="col-md-2">
+                                    <input class="form-control goods-color" style="margin-left: -55px;" type="text" placeholder="货物颜色" name="goodsColor" />
+                                </div>
+                                <label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物尺码：</label>
+                                <div class="col-md-2">
+                                    <input class="form-control goods-size" style="margin-left: -55px;" type="text" placeholder="货物尺码" name="goodsSize" />
+                                </div>
+                                <label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物数量：</label>
+                                <div class="col-md-2">
+                                    <input class="form-control goods-num" style="margin-left: -55px;" type="text" placeholder="货物数量" name="goodsNum" />
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-left:720px" id="stock_in_group">
+                            <button type="button" class="btn btn-xs btn-link"  id="add_stock">添加</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 		<div class="row" style="margin-top:10px">
 			<div class="col-md-6 col-sm-6">
 				<div class="row">
@@ -512,9 +516,6 @@
 						<form action="" class="form-inline">
 							<div class="form-group">
 								<label for="" class="form-label">出库仓库：</label>
-								<!--
-								<input type="text" class="form-control" placeholder="仓库编号">
-							-->
 								<select name="" id="repository_selector" class="form-control">
 								</select>
 							</div>
@@ -523,7 +524,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row" style="margin-top:20px">
+		<%--<div class="row" style="margin-top:20px">
 			<div class="col-md-6 col-sm-6">
 				<div class="row">
 					<div class="col-md-1 col-sm-1"></div>
@@ -540,7 +541,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>--%>
 		<div class="row" style="margin-top:80px"></div>
 	</div>
 	<div class="panel-footer">
