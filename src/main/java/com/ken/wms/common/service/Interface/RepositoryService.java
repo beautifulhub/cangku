@@ -2,6 +2,7 @@ package com.ken.wms.common.service.Interface;
 
 
 import com.ken.wms.domain.Repository;
+import com.ken.wms.exception.LocationManageServiceException;
 import com.ken.wms.exception.RepositoryManageServiceException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -106,4 +107,10 @@ public interface RepositoryService {
      * @return excel 文件
      */
     File exportRepository(List<Repository> repositories);
+
+    /**
+     * 查询所属的仓库
+     * @return
+     */
+    List<Repository> selectOwnRepo(boolean isAdmin, Integer userId) throws RepositoryManageServiceException;
 }

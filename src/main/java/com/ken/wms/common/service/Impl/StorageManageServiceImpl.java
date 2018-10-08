@@ -538,24 +538,26 @@ public class StorageManageServiceImpl implements StorageManageService {
      *
      * @param goodsID      货物ID
      * @param repositoryID 仓库ID
-     * @param number       减少的数量
      * @return 返回一个 boolean 值，若值为 true 表示数目减少成功，否则表示减少失败
      */
     @Override
-    public boolean storageDecrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException {
+    public boolean storageDecrease(Integer goodsID, String goodsNO, String goodsName, List<String> goodsStr, Integer repositoryID) throws StorageManageServiceException {
 
         synchronized (this) {
             // 检查对应的库存记录是否存在
-            /*Storage storage = getStorage(goodsID, repositoryID);
+            String goodsColor = goodsStr.get(0);
+            String goodsSize = goodsStr.get(1);
+            String goodsNum = goodsStr.get(2);
+            Storage storage = getStorage(goodsID, goodsColor, goodsSize, repositoryID);
             if (null != storage) {
                 // 检查库存减少数目的范围是否合理
+                long number = Long.parseLong(goodsNum);
                 if (number < 0 || storage.getGoodsNum() < number)
                     return false;
-
                 long newStorage = storage.getGoodsNum() - number;
-                updateStorage(goodsID, repositoryID, newStorage);
+                updateStorage(storage.getStorageID(), newStorage);
                 return true;
-            } else*/
+            } else
                 return false;
         }
     }

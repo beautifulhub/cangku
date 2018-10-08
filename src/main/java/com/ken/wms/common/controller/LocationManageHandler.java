@@ -74,40 +74,6 @@ public class LocationManageHandler {
     }
 
     /**
-     * 查询登录人员属于的仓库
-     *
-     * @return 返回一个map，其中：key 为 result 的值为操作的结果，包括：success 与 error；key 为 data
-     * 的值为list
-     */
-    @RequestMapping(value = "getOwnRepo", method = RequestMethod.GET)
-    public
-    @ResponseBody
-    Map<String, Object> getOwnRepoInfo() throws LocationManageServiceException {
-        // 初始化 Response
-        Response responseContent = ResponseFactory.newInstance();
-        String result = Response.RESPONSE_RESULT_ERROR;
-        // 获取session中的信息
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession();
-        UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");
-        boolean isAdmin = false;
-        // 设置非管理员请求的仓库ID
-        if (currentUser.hasRole("systemAdmin")) {
-            isAdmin = true;
-        }
-        // 获取货物类型
-        List<Repository> queryResult = locationManageService.selectOwnRepo(isAdmin,userInfo.getUserID());
-        if (queryResult != null) {
-            result = Response.RESPONSE_RESULT_SUCCESS;
-        }
-
-        // 设置 Response
-        responseContent.setResponseResult(result);
-        responseContent.setResponseData(queryResult);
-        return responseContent.generateResponse();
-    }
-
-    /**
      * 搜索货位信息
      *
      * @param searchType 搜索类型

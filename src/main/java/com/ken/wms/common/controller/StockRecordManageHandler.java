@@ -39,18 +39,18 @@ public class StockRecordManageHandler {
      * 货物出库操作
      *
      * @param customerID      客户ID
-     * @param goodsID         货物ID
      * @param repositoryIDStr 仓库ID
-     * @param number          出库数量
      * @return 返回一个map，key为result的值表示操作是否成功
      */
     @RequestMapping(value = "stockOut", method = RequestMethod.POST)
     public
     @ResponseBody
     Map<String, Object> stockOut(@RequestParam("customerID") Integer customerID,
-                                 @RequestParam("goodsID") Integer goodsID,
-                                 @RequestParam(value = "repositoryID", required = false) String repositoryIDStr,
-                                 @RequestParam("number") long number) throws StockRecordManageServiceException {
+                                 @RequestParam("goodsNO") String goodsNO,
+                                 @RequestParam("goodsName") String goodsName,
+                                 @RequestParam("goodsDetail") String goodsDetail,
+                                 @RequestParam(value = "repositoryID", required = false) String repositoryIDStr
+                                 ) throws StockRecordManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
         String result = Response.RESPONSE_RESULT_ERROR;
@@ -86,7 +86,7 @@ public class StockRecordManageHandler {
         }
 
         if (authorizeCheck && argumentCheck) {
-            if (stockRecordManageService.stockOutOperation(customerID, goodsID, repositoryID, number, personInCharge))
+            if (stockRecordManageService.stockOutOperation(customerID, goodsNO, goodsName, goodsDetail, repositoryID, personInCharge))
                 result = Response.RESPONSE_RESULT_SUCCESS;
         }
 

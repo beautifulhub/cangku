@@ -36,14 +36,24 @@ public class StockOutDO {
     private String goodsName;
 
     /**
+     * 商品颜色
+     */
+    private String goodsColor;
+
+    /**
+     * 商品尺码
+     */
+    private String goodsSize;
+
+    /**
+     * 入库数量
+     */
+    private Long goodsNum;
+
+    /**
      * 出库仓库ID
      */
     private Integer repositoryID;
-
-    /**
-     * 商品出库数量
-     */
-    private long number;
 
     /**
      * 出库日期
@@ -54,14 +64,6 @@ public class StockOutDO {
      * 出库经手人
      */
     private String personInCharge;// 经手人
-
-    public Integer getRepositoryID() {
-        return repositoryID;
-    }
-
-    public void setRepositoryID(Integer repositoryID) {
-        this.repositoryID = repositoryID;
-    }
 
     public Integer getId() {
         return id;
@@ -87,28 +89,52 @@ public class StockOutDO {
         this.customerName = customerName;
     }
 
-    public Integer getGoodID() {
+    public Integer getGoodsID() {
         return goodsID;
     }
 
-    public void setGoodID(Integer goodsID) {
+    public void setGoodsID(Integer goodsID) {
         this.goodsID = goodsID;
     }
 
-    public String getGoodName() {
+    public String getGoodsName() {
         return goodsName;
     }
 
-    public void setGoodName(String goodsName) {
+    public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
     }
 
-    public long getNumber() {
-        return number;
+    public String getGoodsColor() {
+        return goodsColor;
     }
 
-    public void setNumber(long number) {
-        this.number = number;
+    public void setGoodsColor(String goodsColor) {
+        this.goodsColor = goodsColor;
+    }
+
+    public String getGoodsSize() {
+        return goodsSize;
+    }
+
+    public void setGoodsSize(String goodsSize) {
+        this.goodsSize = goodsSize;
+    }
+
+    public Long getGoodsNum() {
+        return goodsNum;
+    }
+
+    public void setGoodsNum(Long goodsNum) {
+        this.goodsNum = goodsNum;
+    }
+
+    public Integer getRepositoryID() {
+        return repositoryID;
+    }
+
+    public void setRepositoryID(Integer repositoryID) {
+        this.repositoryID = repositoryID;
     }
 
     public Date getTime() {
@@ -129,9 +155,18 @@ public class StockOutDO {
 
     @Override
     public String toString() {
-        return "StockOutDO [id=" + id + ", customerID=" + customerID + ", customerName=" + customerName + ", goodsID="
-                + goodsID + ", goodsName=" + goodsName + ", repositoryID=" + repositoryID + ", number=" + number
-                + ", time=" + time + ", personInCharge=" + personInCharge + "]";
+        return "StockOutDO{" +
+                "id=" + id +
+                ", customerID=" + customerID +
+                ", customerName='" + customerName + '\'' +
+                ", goodsID=" + goodsID +
+                ", goodsName='" + goodsName + '\'' +
+                ", goodsColor='" + goodsColor + '\'' +
+                ", goodsSize='" + goodsSize + '\'' +
+                ", goodsNum=" + goodsNum +
+                ", repositoryID=" + repositoryID +
+                ", time=" + time +
+                ", personInCharge='" + personInCharge + '\'' +
+                '}';
     }
-
 }

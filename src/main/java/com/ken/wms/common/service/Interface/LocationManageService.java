@@ -98,9 +98,5 @@ public interface LocationManageService {
      */
     File exportLocation(List<Location> location);
 
-    /**
-     * 查询所属的仓库
-     * @return
-     */
-    List<Repository> selectOwnRepo(boolean isAdmin, Integer userId) throws LocationManageServiceException;
+
 }

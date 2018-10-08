@@ -124,10 +124,9 @@ public interface StorageManageService {
      *
      * @param goodsID      货物ID
      * @param repositoryID 仓库ID
-     * @param number       减少的数量
      * @return 返回一个 boolean 值，若值为 true 表示数目减少成功，否则表示增加失败
      */
-    boolean storageDecrease(Integer goodsID, Integer repositoryID, long number) throws StorageManageServiceException;
+    boolean storageDecrease(Integer goodsID, String goodsNO, String goodsName, List<String> goodsStr, Integer repositoryID) throws StorageManageServiceException;
 
     /**
      * 删除一条库存记录

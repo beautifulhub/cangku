@@ -13,7 +13,7 @@
 	   showOwnRepo : function(){
            $.ajax({
                type : "GET",
-               url : "locationManage/getOwnRepo",
+               url : "repositoryManage/getOwnRepo",
                dataType : "json",
                success : function(response) {
                    if (response.result == "success") {

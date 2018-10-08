@@ -7,6 +7,7 @@ import com.ken.wms.common.util.EJConvertor;
 import com.ken.wms.common.util.FileUtil;
 import com.ken.wms.dao.*;
 import com.ken.wms.domain.*;
+import com.ken.wms.exception.LocationManageServiceException;
 import com.ken.wms.exception.RepositoryManageServiceException;
 import com.ken.wms.util.aop.UserOperation;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -373,6 +374,28 @@ public class RepositoryManageServiceImpl implements RepositoryService {
         resultSet.put("data", repositories);
         resultSet.put("total", total);
         return resultSet;
+    }
+
+    @Override
+    public List<Repository> selectOwnRepo(boolean isAdmin, Integer userId) throws RepositoryManageServiceException {
+        List<Repository> repositories = new ArrayList<>();
+        //query
+        try {
+            if(isAdmin){
+                repositories = repositoryMapper.selectAll();
+            }else{
+                RepositoryAdmin repositoryAdmin ;
+                repositoryAdmin = repositoryAdminMapper.selectByID(userId); //一个人管理一个仓库
+                Repository repo = new Repository();
+                if(repositoryAdmin != null){
+                    repo = repositoryMapper.selectByID(repositoryAdmin.getRepositoryBelongID());
+                }
+                repositories.add(repo);
+            }
+        } catch (PersistenceException e) {
+            throw new RepositoryManageServiceException(e);
+        }
+        return repositories;
     }
 
 }

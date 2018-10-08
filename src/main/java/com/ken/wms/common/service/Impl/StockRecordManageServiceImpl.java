@@ -101,40 +101,46 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      * 货物出库操作
      *
      * @param customerID   客户ID
-     * @param goodsID      货物ID
      * @param repositoryID 出库仓库ID
-     * @param number       出库数量
      * @return 返回一个boolean值，若值为true表示出库成功，否则表示出库失败
      */
     @UserOperation(value = "货物出库")
     @Override
-    public boolean stockOutOperation(Integer customerID, Integer goodsID, Integer repositoryID, long number, String personInCharge) throws StockRecordManageServiceException {
+    public boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge) throws StockRecordManageServiceException {
 
         // 检查ID对应的记录是否存在
-        if (!(customerValidate(customerID) && goodsValidate(goodsID) && repositoryValidate(repositoryID)))
+        if (!(customerValidate(customerID) && goodsNOValidate(goodsNO) && repositoryValidate(repositoryID)))
             return false;
 
         // 检查出库数量范围是否有效
-        if (number < 0)
-            return false;
+        /*if (number < 0)
+            return false;*/
 
         try {
             // 更新库存信息
-            boolean isSuccess;
-            isSuccess = storageManageService.storageDecrease(goodsID, repositoryID, number);
-
-            // 保存出库记录
-            if (isSuccess) {
-                StockOutDO stockOutDO = new StockOutDO();
-                stockOutDO.setCustomerID(customerID);
-                stockOutDO.setGoodID(goodsID);
-                stockOutDO.setNumber(number);
-                stockOutDO.setPersonInCharge(personInCharge);
-                stockOutDO.setRepositoryID(repositoryID);
-                stockOutDO.setTime(new Date());
-                stockOutMapper.insert(stockOutDO);
+            boolean isSuccess = false;
+            //根据货物编号查询货物ID
+            Integer goodsID = goodsMapper.selectIDByNO(goodsNO);
+            //组装批量录入的货物信息
+            List<String> goodsSingle = SPLIT_SEMICOLON.splitToList(goodsDetail);
+            for(String goodss : goodsSingle){
+                List<String> goodsStr = SPLIT_COMMA.splitToList(goodss);
+                isSuccess = storageManageService.storageDecrease(goodsID, goodsNO, goodsName, goodsStr, repositoryID);
+                // 保存出库记录
+                if (isSuccess) {
+                    StockOutDO stockOutDO = new StockOutDO();
+                    stockOutDO.setCustomerID(customerID);
+                    stockOutDO.setGoodsID(goodsID);
+                    stockOutDO.setGoodsName(goodsName);
+                    stockOutDO.setGoodsColor(goodsStr.get(0));
+                    stockOutDO.setGoodsSize(goodsStr.get(1));
+                    stockOutDO.setGoodsNum(Long.parseLong(goodsStr.get(2)));
+                    stockOutDO.setPersonInCharge(personInCharge);
+                    stockOutDO.setRepositoryID(repositoryID);
+                    stockOutDO.setTime(new Date());
+                    stockOutMapper.insert(stockOutDO);
+                }
             }
-
             return isSuccess;
         } catch (PersistenceException | StorageManageServiceException e) {
             throw new StockRecordManageServiceException(e);
@@ -384,7 +390,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setRecordID(stockOutDO.getId());
         stockRecordDTO.setSupplierOrCustomerName(stockOutDO.getCustomerName());
         stockRecordDTO.setGoodsName(stockOutDO.getCustomerName());
-        stockRecordDTO.setNumber(stockOutDO.getNumber());
+        stockRecordDTO.setNumber(stockOutDO.getGoodsNum());
         stockRecordDTO.setTime(dateFormat.format(stockOutDO.getTime()));
         stockRecordDTO.setRepositoryID(stockOutDO.getRepositoryID());
         stockRecordDTO.setPersonInCharge(stockOutDO.getPersonInCharge());

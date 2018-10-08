@@ -115,7 +115,7 @@ pageEncoding="UTF-8"%>
                     </div>
                     <div id="collapse2" class="panel-collapse collapse collapseBody in">
                         <div class="panel-body">
-                            <shiro:hasRole name="systemAdmin">
+                            <%--<shiro:hasRole name="systemAdmin">--%>
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
@@ -126,8 +126,8 @@ pageEncoding="UTF-8"%>
                                            name="pagecomponent/stock-outManagement.jsp">货物出库</a>
                                     </li>
                                 </ul>
-                            </shiro:hasRole>
-                            <shiro:hasRole name="commonsAdmin">
+                            <%--</shiro:hasRole>--%>
+                            <%--<shiro:hasRole name="commonsAdmin">
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
@@ -138,7 +138,7 @@ pageEncoding="UTF-8"%>
                                            name="pagecomponent/stock-outManagementCommon.jsp">货物出库</a>
                                     </li>
                                 </ul>
-                            </shiro:hasRole>
+                            </shiro:hasRole>--%>
                         </div>
                     </div>
                 </div>

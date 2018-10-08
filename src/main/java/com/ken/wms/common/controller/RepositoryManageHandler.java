@@ -4,8 +4,13 @@ import com.ken.wms.common.service.Interface.RepositoryService;
 import com.ken.wms.common.util.Response;
 import com.ken.wms.common.util.ResponseFactory;
 import com.ken.wms.domain.Repository;
+import com.ken.wms.domain.UserInfoDTO;
+import com.ken.wms.exception.LocationManageServiceException;
 import com.ken.wms.exception.RepositoryManageServiceException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +72,40 @@ public class RepositoryManageHandler {
         }
 
         return queryResult;
+    }
+
+    /**
+     * 查询登录人员属于的仓库
+     *
+     * @return 返回一个map，其中：key 为 result 的值为操作的结果，包括：success 与 error；key 为 data
+     * 的值为list
+     */
+    @RequestMapping(value = "getOwnRepo", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> getOwnRepoInfo() throws RepositoryManageServiceException {
+        // 初始化 Response
+        Response responseContent = ResponseFactory.newInstance();
+        String result = Response.RESPONSE_RESULT_ERROR;
+        // 获取session中的信息
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession();
+        UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");
+        boolean isAdmin = false;
+        // 设置非管理员请求的仓库ID
+        if (currentUser.hasRole("systemAdmin")) {
+            isAdmin = true;
+        }
+        // 获取货物类型
+        List<Repository> queryResult = repositoryService.selectOwnRepo(isAdmin,userInfo.getUserID());
+        if (queryResult != null) {
+            result = Response.RESPONSE_RESULT_SUCCESS;
+        }
+
+        // 设置 Response
+        responseContent.setResponseResult(result);
+        responseContent.setResponseData(queryResult);
+        return responseContent.generateResponse();
     }
 
     /**

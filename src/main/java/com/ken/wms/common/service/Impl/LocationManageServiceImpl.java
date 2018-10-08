@@ -364,26 +364,5 @@ public class LocationManageServiceImpl implements LocationManageService {
         return ejConvertor.excelWriter(Location.class, location);
     }
 
-    @Override
-    public List<Repository> selectOwnRepo(boolean isAdmin, Integer userId) throws LocationManageServiceException{
-        List<Repository> repositories = new ArrayList<>();
-        //query
-        try {
-            if(isAdmin){
-                repositories = repositoryMapper.selectAll();
-            }else{
-                RepositoryAdmin repositoryAdmin ;
-                repositoryAdmin = repositoryAdminMapper.selectByID(userId); //一个人管理一个仓库
-                Repository repo = new Repository();
-                if(repositoryAdmin != null){
-                    repo = repositoryMapper.selectByID(repositoryAdmin.getRepositoryBelongID());
-                }
-                repositories.add(repo);
-            }
-        } catch (PersistenceException e) {
-            throw new LocationManageServiceException(e);
-        }
-        return repositories;
-    }
 
 }

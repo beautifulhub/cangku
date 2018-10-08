@@ -15,16 +15,16 @@
         addStockDetail : function(){
             //绑定添加子入库
             $('#add_stock').unbind("click").click(function(){
-                var n=$(".goods-color").length;
+                var n=$(".goods_color_selector").length;
                 var addAttr = '<div class="row" style="margin-top:5px">\n' +
                     '<div class="form-group add-goods-detail">\n' +
                     '<label for="" class="col-sm-2 control-label" style="margin-left:95px;margin-top:5px">货物颜色：</label>\n' +
                     '<div class="col-md-2">\n' +
-                    '<input class="form-control goods-color" style="margin-left: -55px;" type="text" placeholder="货物颜色" name="goodsColor['+n+']" />\n' +
+                    '<select name="goodsColor['+n+']" id="" class="form-control goods_color_selector" style="margin-left: -55px;"></select>'+
                     '</div>\n' +
                     '<label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物尺码：</label>\n' +
                     '<div class="col-md-2">\n' +
-                    '<input class="form-control goods-size" style="margin-left: -55px;" type="text" placeholder="货物尺码" name="goodsSize['+n+']" />\n' +
+                    '<select name="goodsSize['+n+']" id="" class="form-control goods_size_selector"" style="margin-left: -55px;"></select>' +
                     '</div>\n' +
                     '<label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物数量：</label>\n' +
                     '<div class="col-md-2">\n' +
@@ -34,35 +34,13 @@
                     '</div>\n' +
                     '</div>';
                 $("#stock_in_group").before(addAttr);
-                $('#stockin_form').bootstrapValidator('addField', 'goodsColor['+n+']', {
-                    validators: {
-                        notEmpty: {
-                            message: '颜色不能为空'
-                        }
-                    }
-                });
-                $('#stockin_form').bootstrapValidator('addField', 'goodsSize['+n+']', {
-                    validators: {
-                        notEmpty: {
-                            message: '尺码不能为空'
-                        }
-                    }
-                });
-                $('#stockin_form').bootstrapValidator('addField', 'goodsNum['+n+']', {
-                    validators: {
-                        notEmpty: {
-                            message: '数量不能为空'
-                        }
-                    }
-                });
+                //下拉框赋值
+                var colorOption = $(".goods_color_selector:eq(0)").html();
+                var sizeOption = $(".goods_size_selector:eq(0)").html();
+                $("[name='goodsColor["+n+"]']").append(colorOption);
+                $("[name='goodsSize["+n+"]']").append(sizeOption);
                 //动态添加-绑定删除动作
                 $('.del_stock_in').click(function() {
-                    var roleName1 = $(this).prev().find('input[type]').attr("name");
-                    var roleName2 = $(this).parent().prev().prev().children('input[type]').attr("name");
-                    var roleName3 = $(this).parent().prev().prev().prev().prev().children('input[type]').attr("name");
-                    $("#stockin_form").bootstrapValidator('removeField',roleName1);
-                    $("#stockin_form").bootstrapValidator('removeField',roleName2);
-                    $("#stockin_form").bootstrapValidator('removeField',roleName3);
                     $(this).parent("div").parent("div").parent("div").remove();
                 });
             });
@@ -85,7 +63,6 @@
 
 	// 数据校验
 	function dataValidateInit(){
-        debugger
 		$('#stockin_form').bootstrapValidator({
             message : 'This is not valid',
             feedbackIcons : {
@@ -126,7 +103,7 @@
 
 	// 货物信息自动匹配
 	function goodsAutocomplete(){
-		$('#goods_input').autocomplete({
+		$('#goods_no').autocomplete({
 			minLength : 0,
 			delay : 500,
 			source : function(request, response){
@@ -139,27 +116,28 @@
 						offset : -1,
 						limit : -1,
 						keyWord : request.term,
-						searchType : 'searchByName'
+						searchType : 'searchByNO'
 					},
 					success : function(data){
 						var autoCompleteInfo = new Array();
 						$.each(data.rows, function(index,elem){
+                            goodsCache = new Array();
 							goodsCache.push(elem);
-							autoCompleteInfo.push({label:elem.name,value:elem.id});
+							autoCompleteInfo.push({label:elem.no,value:elem.id});
 						});
 						response(autoCompleteInfo);
 					}
 				});
 			},
 			focus : function(event, ui){
-				$('#goods_input').val(ui.item.label);
+				$('#goods_no').val(ui.item.label);
 				return false;
 			},
 			select : function(event, ui){
-				$('#goods_input').val(ui.item.label);
+				$('#goods_no').val(ui.item.label);
 				stockin_goods = ui.item.value;
-				//goodsInfoSet(stockin_goods);
-				loadStorageInfo();
+				goodsInfoSet(stockin_goods);
+				//loadStorageInfo();
 				return false;
 			}
 		})
@@ -248,38 +226,53 @@
 	}
 
 	// 填充货物详细信息
-	function goodsInfoSet(goodsID){
-		var detailInfo;
-		$.each(goodsCache,function(index,elem){
-			if(elem.id == goodsID){
-				detailInfo = elem;
-				if(detailInfo.id==null)
-					$('#info_goods_ID').text('-');
-				else
-					$('#info_goods_ID').text(detailInfo.id);
-				
-				if(detailInfo.name==null)
-					$('#info_goods_name').text('-');
-				else
-					$('#info_goods_name').text(detailInfo.name);
-				
-				if(detailInfo.type==null)
-					$('#info_goods_type').text('-');
-				else
-					$('#info_goods_type').text(detailInfo.type);
-				
-				if(detailInfo.size==null)
-					$('#info_goods_size').text('-');
-				else
-					$('#info_goods_size').text(detailInfo.size);
-				
-				if(detailInfo.value==null)
-					$('#info_goods_value').text('-');
-				else
-					$('#info_goods_value').text(detailInfo.value);
-			}
-		})
-	}
+    function goodsInfoSet(goodsID){
+        var detailInfo;
+        $.each(goodsCache,function(index,elem){
+
+            if(elem.id == goodsID){
+                detailInfo = elem;
+
+                if(detailInfo.name==null)
+                    $('#goods_name').val('-');
+                else
+                    $('#goods_name').val(detailInfo.name);
+
+                if(detailInfo.colors==null){
+                    $(".goods_color_selector").each(function(i,item){
+                        $(item).empty();
+                        $(item).append("<option value='-1'>请选择</option>");
+                    })
+                }else{
+                    $(".goods_color_selector").each(function(i,item){
+                        $(item).empty();
+                        var goodsColors = detailInfo.colors.replace(/，/ig,','); //统一将中英文逗号处理成英文
+                        var colorsArr = goodsColors.split(",");
+                        for(var i=0 ; i<colorsArr.length; i++){
+                            $(item).append("<option value='" + colorsArr[i] + "'>" + colorsArr[i] +"</option>");
+                        }
+                    })
+                }
+
+                if(detailInfo.sizes==null){
+                    $(".goods_size_selector").each(function(i,item){
+                        $(item).empty();
+                        $(item).append("<option value='-1'>请选择</option>");
+                    })
+                }else{
+                    $(".goods_size_selector").each(function(i,item){
+                        $(item).empty();
+                        var goodsSizes = detailInfo.sizes.replace(/，/ig,','); //统一将中英文逗号处理成英文
+                        var sizesArr = goodsSizes.split(",");
+                        for(var i=0 ; i<sizesArr.length; i++){
+                            $(item).append("<option value='" + sizesArr[i] + "'>" + sizesArr[i] +"</option>");
+                        }
+                    })
+                }
+
+            }
+        })
+    }
 
 	// 详细信息显示与隐藏
 	function detilInfoToggle(){
@@ -313,29 +306,30 @@
 	}
 
 	// 仓库下拉列表初始化
-	function repositorySelectorInit(){
-		$.ajax({
-			type : 'GET',
-			url : 'repositoryManage/getRepositoryList',
-			dataType : 'json',
-			contentType : 'application/json',
-			data : {
-				searchType : 'searchAll',
-				keyWord : '',
-				offset : -1,
-				limit : -1
-			},
-			success : function(response){
-				$.each(response.rows,function(index,elem){
-					$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
-				});
-			},
-			error : function(response){
-				$('#repository_selector').append("<option value='-1'>加载失败</option>");
-			}
-			
-		})
-	}
+    function repositorySelectorInit(){
+        $.ajax({
+            type : 'GET',
+            url : 'repositoryManage/getOwnRepo',
+            dataType : 'json',
+            contentType : 'application/json',
+            data : {
+                searchType : 'searchAll',
+                keyWord : '',
+                offset : -1,
+                limit : -1
+            },
+            success : function(response){
+                stockin_repository = response.data[0].id
+                $.each(response.data,function(index,elem){
+                    $('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+                });
+            },
+            error : function(response){
+                $('#repository_selector').append("<option value='-1'>加载失败</option>");
+            }
+
+        })
+    }
 
 	// 获取仓库当前库存量
 	function fetchStorage(){
@@ -377,7 +371,6 @@
 	// 执行货物入库操作
 	function stockInOption(){
 		$('#submit').click(function(){
-		    debugger
 			// data validate
 			$('#stockin_form').data('bootstrapValidator').validate();
 			if (!$('#stockin_form').data('bootstrapValidator').isValid()) {
@@ -386,8 +379,8 @@
 			//获取入库获取的明细
             var addGoodsDetail = "";
             $(".add-goods-detail").each(function(i,item){
-                var goodsColor = $(item).find('.goods-color').val().trim()
-                var goodsSize = $(item).find('.goods-size').val().trim()
+                var goodsColor = $(item).find('.goods_color_selector').val()
+                var goodsSize = $(item).find('.goods_size_selector').val()
                 var goodsNum = $(item).find('.goods-num').val().trim()
                 addGoodsDetail += goodsColor + "," + goodsSize + "," + goodsNum +";"
             })
@@ -431,21 +424,26 @@
 	// 页面重置
 	function inputReset(){
 		$('#supplier_input').val('');
-		$('#goods_input').val('');
-		/*$('#stockin_input').val('');*/
-		$('#info_supplier_ID').text('-');
-		$('#info_supplier_name').text('-');
-		$('#info_supplier_tel').text('-');
-		$('#info_supplier_address').text('-');
-		$('#info_supplier_email').text('-');
-		$('#info_supplier_person').text('-');
-		/*$('#info_goods_ID').text('-');
-		$('#info_goods_name').text('-');
-		$('#info_goods_size').text('-');
-		$('#info_goods_type').text('-');
-		$('#info_goods_value').text('-');*/
-		$('#info_storage').text('-');
-		$('#stockin_form').bootstrapValidator("resetForm",true); 
+		$('#goods_no').val('');
+        $('#goods_name').val('');
+        $(".goods_color_selector").each(function(i,item){
+            $(item).empty();
+		})
+        $(".goods_size_selector").each(function(i,item){
+            $(item).empty();
+		})
+        $(".goods-num").each(function(i,item){
+            $(item).val('');
+		})
+        $('#addDetail-hidden').click()
+        /*$('#stockin_input').val('');*/
+        $('#info_supplier_ID').text('-');
+        $('#info_supplier_name').text('-');
+        $('#info_supplier_tel').text('-');
+        $('#info_supplier_address').text('-');
+        $('#info_supplier_email').text('-');
+        $('#info_supplier_person').text('-');
+		$('#stockin_form').bootstrapValidator("resetForm",true);
 	}
 
 </script>
@@ -456,7 +454,7 @@
 		<li>货物入库</li>
 	</ol>
 	<div class="panel-body">
-        <form class="form-horizontal" role="form" id="stockin_form">
+        <form class="form-inline" role="form" id="stockin_form">
 		<div class="row">
 			<div class="col-md-6 col-sm-6">
 				<div class="row">
@@ -464,7 +462,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline">
 							<div class="form-group">
-								<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商：</label>
+								<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;供应商：</label>
 								<input type="text" class="form-control" id="supplier_input" placeholder="请输入供应商名称">
 							</div>
 						</form>
@@ -475,11 +473,11 @@
 		<div class="row visible-md visible-lg">
 			<div class="col-md-12 col-sm-12">
 				<div class='pull-right' style="cursor:pointer" id="info-show">
-					<span>显示详细信息</span>
+					<span>显示供应商详细信息</span>
 					<span class="glyphicon glyphicon-chevron-down"></span>
 				</div>
 				<div class='pull-right hide' style="cursor:pointer" id="info-hidden">
-					<span>隐藏详细信息</span>
+					<span>隐藏供应商详细信息</span>
 					<span class="glyphicon glyphicon-chevron-up"></span>
 				</div>
 			</div>
@@ -564,7 +562,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="" class="form-label">货物名称：</label>
-								<input type="text" class="form-control" placeholder="请输入货物名称" id="goods_name" name="goodsName">
+								<input type="text" class="form-control" placeholder="请输入货物名称" id="goods_name" name="goodsName" readonly>
                             </div>
                         </form>
                     </div>
@@ -572,11 +570,11 @@
 				<div class="row visible-md visible-lg">
 					<div class="col-md-12 col-sm-12">
 						<div class='pull-right' style="cursor:pointer" id="addDetail-show">
-							<span>显示添加详情</span>
+							<span>显示入库详情</span>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</div>
 						<div class='pull-right hide' style="cursor:pointer" id="addDetail-hidden">
-							<span>隐藏添加详情</span>
+							<span>隐藏入库详情</span>
 							<span class="glyphicon glyphicon-chevron-up"></span>
 						</div>
 					</div>
@@ -594,11 +592,13 @@
 							<div class="form-group add-goods-detail">
 								<label for="" class="col-sm-2 control-label" style="margin-left:95px;margin-top:5px">货物颜色：</label>
 								<div class="col-md-2">
-									<input class="form-control goods-color" style="margin-left: -55px;" type="text" placeholder="货物颜色" name="goodsColor" />
+									<select name="goodsColor" id="" class="form-control goods_color_selector" style="margin-left: -55px;">
+									</select>
 								</div>
 								<label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物尺码：</label>
 								<div class="col-md-2">
-									<input class="form-control goods-size" style="margin-left: -55px;" type="text" placeholder="货物尺码" name="goodsSize" />
+									<select name="goodsSize" id="" class="form-control goods_size_selector"" style="margin-left: -55px;">
+									</select>
 								</div>
 								<label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物数量：</label>
 								<div class="col-md-2">
@@ -622,7 +622,7 @@
                             <div class="form-group">
                                 <label for="" class="form-label">入库仓库：</label>
                                 <select name="" id="repository_selector" class="form-control">
-									<option value='-1'>请选择仓库</option>
+									<%--<option value='-1'>请选择仓库</option>--%>
                                 </select>
                             </div>
                         </form>

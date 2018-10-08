@@ -139,8 +139,8 @@
 	</select>
 		
 	<insert id="insert">
-		insert into wms_record_out(RECORD_CUSTOMERID,RECORD_GOODSID,RECORD_NUMBER,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
-		values(#{customerID},#{goodsID},#{number},#{time},#{personInCharge},#{repositoryID})
+		insert into wms_record_out(RECORD_CUSTOMERID,RECORD_GOODS_ID,RECORD_GOODS_COLOR,RECORD_GOODS_SIZE,RECORD_GOODS_NUM,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
+		values(#{customerID},#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{time},#{personInCharge},#{repositoryID})
 	</insert>
 	
 	<update id="update">
