@@ -4,6 +4,8 @@
 <script>
 	var search_type_storage = "none";
 	var search_keyWord = "";
+	var search_color = "";
+	var search_size = "";
 	var search_repository = "";
 	var select_goodsID;
 	var select_repositoryID;
@@ -14,8 +16,9 @@
 		storageListInit();
 		bootstrapValidatorInit();
 		repositoryOptionInit();
+		colorSizeSearchInit();
 
-		addStorageAction();
+		// addStorageAction();
 		editStorageAction();
 		deleteStorageAction();
 		importStorageAction();
@@ -30,23 +33,23 @@
 			if (type == "所有") {
 				$("#search_input_type").attr("readOnly", "true");
 				search_type_storage = "searchAll";
-			} else if (type == "货物ID") {
+			} else if (type == "货物编号") {
 				$("#search_input_type").removeAttr("readOnly");
-				search_type_storage = "searchByGoodsID";
+				search_type_storage = "searchByGoodsNO";
 			} else if (type == "货物名称") {
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsName";
-			} else if(type = "货物类型"){
+			} /*else if(type = "货物类型"){
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsType";
-			}else {
+			}*/else {
 				$("#search_input_type").removeAttr("readOnly");
 			}
-
 			$("#search_type").text(type);
 			$("#search_input_type").attr("placeholder", type);
-		})
-	}
+            commonUtil.goodsAutocomplete(search_type_storage);
+        })
+    }
 
 	// 仓库下拉框数据初始化
 	function repositoryOptionInit(){
@@ -73,10 +76,17 @@
 		$('#search_input_repository').append("<option value='all'>所有仓库</option>");
 	}
 
+	function colorSizeSearchInit(){
+        $('#search_input_color').append("<option value=''>所有颜色</option>");
+        $('#search_input_size').append("<option value=''>所有尺码</option>");
+	}
+
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input_type').val();
+			search_color = $('#search_input_color').val();
+			search_size = $('#search_input_size').val();
 			search_repository = $('#search_input_repository').val();
 			tableRefresh();
 		})
@@ -88,6 +98,8 @@
 			limit : params.limit,
 			offset : params.offset,
 			searchType : search_type_storage,
+			selectColor : search_color,
+			selectSize : search_size,
 			repositoryBelong : search_repository,
 			keyword : search_keyWord
 		}
@@ -102,7 +114,13 @@
 							columns : [
 									{
 										field : 'goodsID',
-										title : '货物ID'
+										title : '货物ID',
+										visible : false
+									//sortable: true
+									},
+									{
+										field : 'goodsNO',
+										title : '货物编号'
 									//sortable: true
 									},
 									{
@@ -110,26 +128,20 @@
 										title : '货物名称'
 									},
 									{
-										field : 'goodsType',
-										title : '货物类型'
+										field : 'goodsColor',
+										title : '货物颜色'
 									},
 									{
 										field : 'goodsSize',
-										title : '货物尺寸',
-										visible : false
+										title : '货物尺码'
 									},
 									{
-										field : 'goodsValue',
-										title : '货物价值',
-										visible : false
+										field : 'goodsNum',
+										title : '货物数量'
 									},
 									{
 										field : 'repositoryID',
 										title : '仓库ID'
-									},
-									{
-										field : 'number',
-										title : '库存数量'
 									},
 									{
 										field : 'operation',
@@ -281,7 +293,7 @@
 				"goodsID" : select_goodsID,
 				"repositoryID" : select_repositoryID
 			}
-			
+
 			// ajax
 			$.ajax({
 				type : "GET",
@@ -309,7 +321,7 @@
 					handleAjaxError(xhr.status);
 				}
 			})
-			
+
 			$('#deleteWarning_modal').modal('hide');
 		})
 	}
@@ -504,7 +516,7 @@
 			$('#next').addClass("hide");
 			$('#submit').removeClass("hide");
 		})
-		
+
 		import_step = 1;
 	}
 
@@ -522,9 +534,8 @@
 						<span id="search_type">查询方式</span> <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0)" class="dropOption">货物ID</a></li>
+						<li><a href="javascript:void(0)" class="dropOption">货物编号</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">货物名称</a></li>
-						<li><a href="javascript:void(0)" class="dropOption">货物类型</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
@@ -532,10 +543,18 @@
 			<div class="col-md-9 col-sm-9">
 				<div>
 					<div class="col-md-3 col-sm-3">
-						<input id="search_input_type" type="text" class="form-control"
-							placeholder="货物ID">
+						<input id="search_input_type" type="text" class="form-control" readOnly
+							placeholder="库存查询">
 					</div>
-					<div class="col-md-3 col-sm-4">
+					<div class="col-md-2 col-sm-4">
+						<select class="form-control" id="search_input_color">
+						</select>
+					</div>
+					<div class="col-md-2 col-sm-4">
+						<select class="form-control" id="search_input_size">
+						</select>
+					</div>
+					<div class="col-md-2 col-sm-4">
 						<select class="form-control" id="search_input_repository">
 						</select>
 					</div>
@@ -550,9 +569,9 @@
 
 		<div class="row" style="margin-top: 25px">
 			<div class="col-md-5">
-				<button class="btn btn-sm btn-default" id="add_storage">
+				<%--<button class="btn btn-sm btn-default" id="add_storage">
 					<span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
-				</button>
+				</button>--%>
 				<button class="btn btn-sm btn-default" id="import_storage">
 					<span class="glyphicon glyphicon-import"></span> <span>导入</span>
 				</button>
@@ -572,7 +591,7 @@
 </div>
 
 <!-- 添加库存信息模态框 -->
-<div id="add_modal" class="modal fade" table-index="-1" role="dialog"
+<%--<div id="add_modal" class="modal fade" table-index="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true"
 	data-backdrop="static">
 	<div class="modal-dialog">
@@ -628,7 +647,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div>--%>
 
 <!-- 导入库存信息模态框 -->
 <div class="modal fade" id="import_modal" table-index="-1" role="dialog"
@@ -684,7 +703,7 @@
 								<div style="margin-top: 30px; margin-buttom: 15px">
 									<span class="btn btn-info btn-file"> <span> <span
 											class="glyphicon glyphicon-upload"></span> <span>上传文件</span>
-									</span> 
+									</span>
 									<form id="import_file_upload"><input type="file" id="file" name="file"></form>
 									</span>
 								</div>

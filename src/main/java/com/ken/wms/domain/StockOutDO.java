@@ -31,6 +31,11 @@ public class StockOutDO {
     private Integer goodsID;
 
     /**
+     * 商品编号
+     */
+    private String goodsNO;
+
+    /**
      * 商品名称
      */
     private String goodsName;
@@ -97,6 +102,14 @@ public class StockOutDO {
         this.goodsID = goodsID;
     }
 
+    public String getGoodsNO() {
+        return goodsNO;
+    }
+
+    public void setGoodsNO(String goodsNO) {
+        this.goodsNO = goodsNO;
+    }
+
     public String getGoodsName() {
         return goodsName;
     }
@@ -160,6 +173,7 @@ public class StockOutDO {
                 ", customerID=" + customerID +
                 ", customerName='" + customerName + '\'' +
                 ", goodsID=" + goodsID +
+                ", goodsNO='" + goodsNO + '\'' +
                 ", goodsName='" + goodsName + '\'' +
                 ", goodsColor='" + goodsColor + '\'' +
                 ", goodsSize='" + goodsSize + '\'' +

@@ -35,6 +35,13 @@ public interface GoodsMapper {
 	/**
 	 * 选择指定 no 的 Goods
 	 * @param no 货物的编号
+	 * @return 返回执行NO对应的Goods
+	 */
+	List<Goods> selectByLikeNo(String no);
+
+	/**
+	 * 选择指定 no 的 Goods
+	 * @param no 货物的编号
 	 * @return 返回执行NO对应的GoodsID
 	 */
 	Integer selectIDByNO(String no);

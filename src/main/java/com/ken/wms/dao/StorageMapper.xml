@@ -35,11 +35,11 @@
 	<select id="selectAllAndRepositoryID" resultMap="storage">
 		select
 			r.REPO_ID as repositoryID,
-			s.RECORD_NUMBER as number,
+			s.RECORD_GOODS_NUM as number,
 			g.GOODS_ID as goodsID,
 			g.GOODS_NAME as goodsName,
 			g.GOODS_TYPEID as goodsType,
-			g.GOODS_SIZE as goodsSize,
+			s.RECORD_GOODS_SIZE as goodsSize,
 			g.GOODS_VALUE as goodsValue
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
@@ -54,11 +54,11 @@
 	<select id="selectByGoodsIDAndRepositoryID" resultMap="storage">
 		select
 			r.REPO_ID as repositoryID,
-			s.RECORD_NUMBER as number,
+			s.RECORD_GOODS_NUM as number,
 			g.GOODS_ID as goodsID,
 			g.GOODS_NAME as goodsName,
 			g.GOODS_TYPEID as goodsType,
-			g.GOODS_SIZE as goodsSize,
+			s.RECORD_GOODS_SIZE as goodsSize,
 			g.GOODS_VALUE as goodsValue
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
@@ -71,18 +71,44 @@
 		 	</if>
 	</select>
 
+	<select id="selectByGoodsNOAndRepositoryID" resultMap="storage">
+		select
+			r.REPO_ID as repositoryID,
+			g.GOODS_ID as goodsID,
+			g.GOODS_NO as goodsNO,
+			g.GOODS_NAME as goodsName,
+			s.RECORD_GOODS_COLOR as goodsColor,
+			s.RECORD_GOODS_SIZE as goodsSize,
+			s.RECORD_GOODS_NUM as number
+		from
+			wms_record_storage s,wms_respository r, wms_goods g
+		where
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
+		 	s.RECORD_REPOSITORY = r.REPO_ID and
+		 	g.GOODS_NO = #{goodsNO}
+		 	<if test="repositoryID > 0">
+		 		and r.REPO_ID = #{repositoryID}
+		 	</if>
+		 	<if test="selectColor != null and selectColor != '' ">
+		 		and s.RECORD_GOODS_COLOR = #{selectColor}
+		 	</if>
+		 	<if test="selectSize != null and selectSize != '' ">
+		 		and s.RECORD_GOODS_SIZE = #{selectSize}
+		 	</if>
+	</select>
+
 	<select id="selectByGoodsInfoAndRepositoryID" resultMap="storage">
 		select
-		s.record_storage_id as storageID,
-        r.REPO_ID as repositoryID,
-        s.record_GOODS_COLOR as goodsColor,
-        s.record_GOODS_SIZE as goodsSize,
-        s.record_goods_num as number,
-        g.GOODS_NO as goodsNO,
-        g.GOODS_NAME as goodsName,
-        g.GOODS_ID as goodsID
+			s.record_storage_id as storageID,
+			r.REPO_ID as repositoryID,
+			s.record_GOODS_COLOR as goodsColor,
+			s.record_GOODS_SIZE as goodsSize,
+			s.record_goods_num as number,
+			g.GOODS_NO as goodsNO,
+			g.GOODS_NAME as goodsName,
+			g.GOODS_ID as goodsID
 		from
-        wms_record_storage s,wms_respository r, wms_goods g
+        	wms_record_storage s,wms_respository r, wms_goods g
 		where
 		 	s.RECORD_GOODS_ID = g.GOODS_ID and
 		 	s.RECORD_REPOSITORY = r.REPO_ID and
@@ -97,31 +123,37 @@
 	<select id="selectByGoodsNameAndRepositoryID" resultMap="storage">
 		select
 			r.REPO_ID as repositoryID,
-			s.RECORD_NUMBER as number,
 			g.GOODS_ID as goodsID,
+			g.GOODS_NO as goodsNO,
 			g.GOODS_NAME as goodsName,
-			g.GOODS_TYPEID as goodsType,
-			g.GOODS_SIZE as goodsSize,
-			g.GOODS_VALUE as goodsValue
+			s.RECORD_GOODS_COLOR as goodsColor,
+			s.RECORD_GOODS_SIZE as goodsSize,
+			s.RECORD_GOODS_NUM as number
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
-		 	s.RECORD_GOODS_ID = g.GOODS_ID and
-		 	s.RECORD_REPOSITORY = r.REPO_ID and
-		 	g.GOODS_NAME like concat("%",concat(#{goodsName},"%"))
-		 	<if test="repositoryID > 0">
-		 		and r.REPO_ID = #{repositoryID}
-		 	</if>
+			s.RECORD_GOODS_ID = g.GOODS_ID and
+			s.RECORD_REPOSITORY = r.REPO_ID and
+			g.GOODS_NAME like concat("%",concat(#{goodsName},"%"))
+			<if test="repositoryID > 0">
+				and r.REPO_ID = #{repositoryID}
+			</if>
+			<if test="selectColor != null and selectColor != '' ">
+				and s.RECORD_GOODS_COLOR = #{selectColor}
+			</if>
+			<if test="selectSize != null and selectSize != '' ">
+				and s.RECORD_GOODS_SIZE = #{selectSize}
+			</if>
 	</select>
 	
 	<select id="selectByGoodsTypeAndRepositoryID" resultMap="storage">
 		select
 			r.REPO_ID as repositoryID,
-			s.RECORD_NUMBER as number,
+			s.RECORD_GOODS_NUM as number,
 			g.GOODS_ID as goodsID,
 			g.GOODS_NAME as goodsName,
 			g.GOODS_TYPEID as goodsType,
-			g.GOODS_SIZE as goodsSize,
+			s.RECORD_GOODS_SIZE as goodsSize,
 			g.GOODS_VALUE as goodsValue
 		from
 			wms_record_storage s,wms_respository r, wms_goods g

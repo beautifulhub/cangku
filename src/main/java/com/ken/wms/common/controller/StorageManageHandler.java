@@ -39,6 +39,7 @@ public class StorageManageHandler {
     private StockRecordManageService stockRecordManageService;
 
     private static final String SEARCH_BY_GOODS_ID = "searchByGoodsID";
+    private static final String SEARCH_BY_GOODS_NO = "searchByGoodsNO";
     private static final String SEARCH_BY_GOODS_NAME = "searchByGoodsName";
     private static final String SEARCH_BY_GOODS_TYPE = "searchByGoodsType";
     private static final String SEARCH_ALL = "searchAll";
@@ -53,7 +54,7 @@ public class StorageManageHandler {
      * @param limit            分页大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    private Map<String, Object> query(String searchType, String keyword, String repositoryBelong, int offset,
+    private Map<String, Object> query(String searchType, String keyword, String selectColor, String selectSize, String repositoryBelong, int offset,
                                       int limit) throws StorageManageServiceException {
         Map<String, Object> queryResult = null;
 
@@ -76,6 +77,13 @@ public class StorageManageHandler {
                         queryResult = storageManageService.selectByGoodsID(goodsID, -1, offset, limit);
                 }
                 break;
+            case SEARCH_BY_GOODS_NO:
+                if (StringUtils.isNumeric(repositoryBelong)) {
+                    Integer repositoryID = Integer.valueOf(repositoryBelong);
+                    queryResult = storageManageService.selectByGoodsNO(keyword, selectColor, selectSize, repositoryID, offset, limit);
+                } else
+                    queryResult = storageManageService.selectByGoodsNO(keyword, selectColor, selectSize, -1, offset, limit);
+                break;
             case SEARCH_BY_GOODS_TYPE:
                 if (StringUtils.isNumeric(repositoryBelong)) {
                     Integer repositoryID = Integer.valueOf(repositoryBelong);
@@ -86,9 +94,9 @@ public class StorageManageHandler {
             case SEARCH_BY_GOODS_NAME:
                 if (StringUtils.isNumeric(repositoryBelong)) {
                     Integer repositoryID = Integer.valueOf(repositoryBelong);
-                    queryResult = storageManageService.selectByGoodsName(keyword, repositoryID, offset, limit);
+                    queryResult = storageManageService.selectByGoodsName(keyword, selectColor, selectSize, repositoryID, offset, limit);
                 } else
-                    queryResult = storageManageService.selectByGoodsName(keyword, -1, offset, limit);
+                    queryResult = storageManageService.selectByGoodsName(keyword, selectColor, selectSize, -1, offset, limit);
                 break;
             default:
                 // do other thing
@@ -113,7 +121,10 @@ public class StorageManageHandler {
     public
     @ResponseBody
     Map<String, Object> getStorageListWithRepoID(@RequestParam("keyword") String keyword,
-                                                 @RequestParam("searchType") String searchType, @RequestParam("repositoryBelong") String repositoryBelong,
+                                                 @RequestParam("searchType") String searchType,
+                                                 @RequestParam("selectColor") String selectColor,
+                                                 @RequestParam("selectSize") String selectSize,
+                                                 @RequestParam("repositoryBelong") String repositoryBelong,
                                                  @RequestParam("offset") int offset, @RequestParam("limit") int limit) throws StorageManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
@@ -122,7 +133,7 @@ public class StorageManageHandler {
         long total = 0;
 
         // query
-        Map<String, Object> queryResult = query(searchType, keyword, repositoryBelong, offset, limit);
+        Map<String, Object> queryResult = query(searchType, keyword, selectColor, selectSize, repositoryBelong, offset, limit);
         if (queryResult != null) {
             rows = (List<Storage>) queryResult.get("data");
             total = (long) queryResult.get("total");
@@ -162,7 +173,7 @@ public class StorageManageHandler {
         UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");
         Integer repositoryID = userInfo.getRepositoryBelong();
         if (repositoryID > 0) {
-            Map<String, Object> queryResult = query(searchType, keyword, repositoryID.toString(), offset, limit);
+            Map<String, Object> queryResult = query(searchType, keyword, null, null, repositoryID.toString(), offset, limit);
             if (queryResult != null) {
                 rows = (List<Storage>) queryResult.get("data");
                 total = (long) queryResult.get("total");
@@ -328,6 +339,8 @@ public class StorageManageHandler {
     @RequestMapping(value = "exportStorageRecord", method = RequestMethod.GET)
     public void exportStorageRecord(@RequestParam("searchType") String searchType,
                                     @RequestParam("keyword") String keyword,
+                                    @RequestParam("selectColor") String selectColor,
+                                    @RequestParam("selectSize") String selectSize,
                                     @RequestParam(value = "repositoryBelong", required = false) String repositoryBelong,
                                     HttpServletRequest request, HttpServletResponse response) throws StorageManageServiceException, IOException {
         String fileName = "storageRecord.xlsx";
@@ -339,7 +352,7 @@ public class StorageManageHandler {
             repositoryBelong = sessionRepositoryBelong.toString();
 
         List<Storage> storageList = null;
-        Map<String, Object> queryResult = query(searchType, keyword, repositoryBelong, -1, -1);
+        Map<String, Object> queryResult = query(searchType, keyword, selectColor, selectSize, repositoryBelong, -1, -1);
         if (queryResult != null)
             storageList = (List<Storage>) queryResult.get("data");
 

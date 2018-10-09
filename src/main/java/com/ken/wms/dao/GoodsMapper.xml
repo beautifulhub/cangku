@@ -64,6 +64,23 @@
 		    and g.goods_no = #{no}
 	</select>
 
+	<select id="selectByLikeNo" resultMap="goods">
+		select
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
+		from
+			wms_goods g, wms_goods_type gt
+		where
+		    g.goods_typeid = gt.goods_type_id
+		    <!--and g.goods_no = #{no}-->
+		    and g.goods_no like concat(concat('%',#{no}),'%')
+	</select>
+
 	<select id="selectIDByNO" resultType="java.lang.Integer">
 		select
 		g.goods_id

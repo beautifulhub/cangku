@@ -7,6 +7,10 @@
     search_start_date = null
     search_end_date = null
 
+    var stockRecordManage = {
+
+    }
+
     $(function(){
         repositoryOptionInit();
         datePickerInit();
@@ -62,7 +66,8 @@
 							columns : [
 									{
 										field : 'recordID',
-										title : '记录ID'
+										title : '记录ID',
+                                        //visible : false
 									//sortable: true
 									},
 									{
@@ -70,23 +75,38 @@
 										title : '供应商/客户名称'
 									},
 									{
+										field : 'goodsNO',
+										title : '商品编号'
+									},
+									{
 										field : 'goodsName',
 										title : '商品名称'
 									},
 									{
-										field : 'repositoryID',
-										title : '出/入库仓库ID',
-										//visible : false
+										field : 'goodsColor',
+										title : '商品颜色'
 									},
 									{
-										field : 'number',
+										field : 'goodsSize',
+										title : '商品尺码'
+									},
+									{
+										field : 'goodsNum',
 										title : '数量',
 										//visible : false
 									},
 									{
 										field : 'time',
-										title : '日期'
+										title : '日期',
+                                        formatter: function (value, row, index) {
+                                            return commonUtil.changeDateFormat(value);
+                                        }
 									},
+                                    {
+                                        field : 'repositoryID',
+                                        title : '出/入库仓库ID',
+                                        //visible : false
+                                    },
 									{
 										field : 'personInCharge',
 										title : '经手人'
@@ -95,32 +115,6 @@
 										field : 'type',
 										title : '记录类型'
 									}
-									<!--,-->
-									<!--{-->
-										<!--field : 'operation',-->
-										<!--title : '操作',-->
-										<!--formatter : function(value, row, index) {-->
-											<!--var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';-->
-											<!--var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';-->
-											<!--var fun = '';-->
-											<!--return s + ' ' + d;-->
-										<!--},-->
-										<!--events : {-->
-											<!--// 操作列中编辑按钮的动作-->
-											<!--'click .edit' : function(e, value,-->
-													<!--row, index) {-->
-												<!--//selectID = row.id;-->
-												<!--rowEditOperation(row);-->
-											<!--},-->
-											<!--'click .delete' : function(e,-->
-													<!--value, row, index) {-->
-												<!--select_goodsID = row.goodsID;-->
-												<!--select_repositoryID = row.repositoryID-->
-												<!--$('#deleteWarning_modal').modal(-->
-														<!--'show');-->
-											<!--}-->
-										<!--}-->
-									<!--}-->
 									 ],
 							url : 'stockRecordManage/searchStockRecord',
 							onLoadError:function(status){

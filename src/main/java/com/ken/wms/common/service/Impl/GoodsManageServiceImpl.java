@@ -88,20 +88,14 @@ public class GoodsManageServiceImpl implements GoodsManageService {
         long total = 0;
 
         // 查询
-        Goods goods;
         try {
-            goods = goodsMapper.selectByNo(goodsNo);
+            goodsList = goodsMapper.selectByLikeNo(goodsNo);
         } catch (PersistenceException e) {
             throw new GoodsManageServiceException(e);
         }
 
-        if (goods != null) {
-            goodsList.add(goods);
-            total = 1;
-        }
-
         resultSet.put("data", goodsList);
-        resultSet.put("total", total);
+        resultSet.put("total", (long)goodsList.size());
         return resultSet;
     }
 

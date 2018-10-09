@@ -29,6 +29,17 @@ public interface StorageMapper {
 												 @Param("repositoryID") Integer repositoryID);
 
 	/**
+	 * 选择指定货物编号和仓库ID的库存信息
+	 * @param goodsNO 货物编号
+	 * @param repositoryID 库存ID
+	 * @return 返回所有指定货物ID和仓库ID的库存信息
+	 */
+	List<Storage> selectByGoodsNOAndRepositoryID(@Param("goodsNO") String goodsNO,
+												 @Param("selectColor") String selectColor,
+												 @Param("selectSize") String selectSize,
+												 @Param("repositoryID") Integer repositoryID);
+
+	/**
 	 * 选择指定货物ID和仓库ID的库存信息
 	 * @param goodsID 货物ID
 	 * @param repositoryID 库存ID
@@ -43,6 +54,8 @@ public interface StorageMapper {
 	 * @return 返回所有指定货物名称的库存信息
 	 */
 	List<Storage> selectByGoodsNameAndRepositoryID(@Param("goodsName") String goodsName,
+												   @Param("selectColor") String selectColor,
+												   @Param("selectSize") String selectSize,
 												   @Param("repositoryID") Integer repositoryID);
 	
 	/**

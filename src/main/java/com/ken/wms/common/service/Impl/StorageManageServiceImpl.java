@@ -155,26 +155,26 @@ public class StorageManageServiceImpl implements StorageManageService {
     }
 
     /**
-     * 返回指定货物名称的库存记录
+     * 返回指定货物编号的库存记录
      *
-     * @param goodsName 货物名称
+     * @param goodsNO 指定的货物编号
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByGoodsName(String goodsName, Integer repository) throws StorageManageServiceException {
-        return selectByGoodsName(goodsName, repository, -1, -1);
+    public Map<String, Object> selectByGoodsNO(String goodsNO, String selectColor, String selectSize, Integer repository) throws StorageManageServiceException {
+        return selectByGoodsNO(goodsNO,selectColor, selectSize,repository, -1, -1);
     }
 
     /**
-     * 分页返回指定货物名称的库存记录
+     * 分页返回指定的货物库存记录
      *
-     * @param goodsName 货物名称
-     * @param offset    分页偏移值
-     * @param limit     分页大小
+     * @param goodsNO 指定的货物编号
+     * @param offset  分页偏移值
+     * @param limit   分页大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID, int offset, int limit) throws StorageManageServiceException {
+    public Map<String, Object> selectByGoodsNO(String goodsNO, String selectColor, String selectSize, Integer repositoryID, int offset, int limit) throws StorageManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Storage> storageList;
@@ -189,14 +189,71 @@ public class StorageManageServiceImpl implements StorageManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName, repositoryID);
+                storageList = storageMapper.selectByGoodsNOAndRepositoryID(goodsNO, selectColor, selectSize, repositoryID);
                 if (storageList != null) {
                     PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
                     total = pageInfo.getTotal();
                 } else
                     storageList = new ArrayList<>();
             } else {
-                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName, repositoryID);
+                storageList = storageMapper.selectByGoodsNOAndRepositoryID(goodsNO, selectColor, selectSize, repositoryID);
+                if (storageList != null)
+                    total = storageList.size();
+                else
+                    storageList = new ArrayList<>();
+            }
+        } catch (PersistenceException e) {
+            throw new StorageManageServiceException(e);
+        }
+
+        resultSet.put("data", storageList);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
+    /**
+     * 返回指定货物名称的库存记录
+     *
+     * @param goodsName 货物名称
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectByGoodsName(String goodsName, String selectColor, String selectSize, Integer repository) throws StorageManageServiceException {
+        return selectByGoodsName(goodsName,selectColor, selectSize, repository, -1, -1);
+    }
+
+    /**
+     * 分页返回指定货物名称的库存记录
+     *
+     * @param goodsName 货物名称
+     * @param offset    分页偏移值
+     * @param limit     分页大小
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectByGoodsName(String goodsName, String selectColor, String selectSize, Integer repositoryID, int offset, int limit) throws StorageManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Storage> storageList;
+        long total = 0;
+        boolean isPagination = true;
+
+        // validate
+        if (offset < 0 || limit < 0)
+            isPagination = false;
+
+        // query
+        try {
+            if (isPagination) {
+                PageHelper.offsetPage(offset, limit);
+                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName,selectColor,selectSize, repositoryID);
+                if (storageList != null) {
+                    PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
+                    total = pageInfo.getTotal();
+                } else
+                    storageList = new ArrayList<>();
+            } else {
+                storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName,selectColor,selectSize, repositoryID);
                 if (storageList != null)
                     total = storageList.size();
                 else

@@ -51,12 +51,29 @@ public interface StorageManageService {
     Map<String, Object> selectByGoodsID(Integer goodsID, Integer repositoryID, int offset, int limit) throws StorageManageServiceException;
 
     /**
+     * 返回指定货物ID的库存记录
+     * @param goodsNO 指定的货物编号
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    Map<String, Object> selectByGoodsNO(String goodsNO, String selectColor, String selectSize, Integer repositoryID) throws StorageManageServiceException;
+
+    /**
+     * 分页返回指定的货物库存记录
+     *
+     * @param goodsNO 指定的货物编号
+     * @param offset  分页偏移值
+     * @param limit   分页大小
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    Map<String, Object> selectByGoodsNO(String goodsNO, String selectColor, String selectSize, Integer repositoryID, int offset, int limit) throws StorageManageServiceException;
+
+    /**
      * 返回指定货物名称的库存记录
      *
      * @param goodsName 货物名称
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID) throws StorageManageServiceException;
+    Map<String, Object> selectByGoodsName(String goodsName,String selectColor, String selectSize, Integer repositoryID) throws StorageManageServiceException;
 
     /**
      * 分页返回指定货物名称的库存记录
@@ -66,7 +83,7 @@ public interface StorageManageService {
      * @param limit     分页大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByGoodsName(String goodsName, Integer repositoryID, int offset, int limit) throws StorageManageServiceException;
+    Map<String, Object> selectByGoodsName(String goodsName, String selectColor, String selectSize, Integer repositoryID, int offset, int limit) throws StorageManageServiceException;
 
     /**
      * 返回指定货物类型的库存记录
