@@ -82,13 +82,13 @@ pageEncoding="UTF-8"%>
                     <div id="collapse1" class="panel-collapse collapse collapseBody">
                         <div class="panel-body">
                             <ul class="list-group">
-                                <shiro:hasRole name="commonsAdmin">
+                                <%--<shiro:hasRole name="commonsAdmin">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
                                            name="pagecomponent/storageManagementCommon.jsp">库存查询</a>
                                     </li>
-                                </shiro:hasRole>
-                                <shiro:hasRole name="systemAdmin">
+                                </shiro:hasRole>--%>
+                                <%--<shiro:hasRole name="systemAdmin">--%>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
                                            name="pagecomponent/storageManagement.jsp">库存查询</a>
@@ -98,7 +98,7 @@ pageEncoding="UTF-8"%>
                                            class="menu_item"
                                            name="pagecomponent/stockRecordManagement.jsp">出入库记录</a>
                                     </li>
-                                </shiro:hasRole>
+                                <%--</shiro:hasRole>--%>
                             </ul>
                         </div>
                     </div>

@@ -18,6 +18,7 @@
 		<result property="time" column="STOCKIN_TIME"/>
 		<result property="personInCharge" column="STOCKIN_PERSON"/>
 		<result property="repositoryID" column="STOCKIN_REPOSITORY_ID"/>
+		<result property="remark" column="STOCKIN_REMARK"/>
 	</resultMap>
 	
 	<select id="selectAll" resultMap="stockInDO">
@@ -30,7 +31,8 @@
 			r.RECORD_NUMBER as STOCKIN_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKIN_REMARK
 		from
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
@@ -48,7 +50,8 @@
 			r.RECORD_NUMBER as STOCKIN_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKIN_REMARK
 		from
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
@@ -67,7 +70,8 @@
 			r.RECORD_NUMBER as STOCKIN_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKIN_REMARK
 		from
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
@@ -86,7 +90,8 @@
 			r.RECORD_NUMBER as STOCKIN_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKIN_REMARK
 		from
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
@@ -105,7 +110,8 @@
 			r.RECORD_NUMBER as STOCKIN_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKIN_TIME,
 			r.RECORD_PERSON as STOCKIN_PERSON,
-			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKIN_REMARK
 		from
 			wms_record_in r,wms_goods g,wms_supplier s
 		where
@@ -127,7 +133,8 @@
             r.RECORD_GOODS_NUM as STOCKIN_GOODS_NUMBER,
             r.RECORD_TIME as STOCKIN_TIME,
             r.RECORD_PERSON as STOCKIN_PERSON,
-            r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID
+            r.RECORD_REPOSITORYID as STOCKIN_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKIN_REMARK
         from
             wms_record_in r,wms_goods g,wms_supplier s
         where
@@ -145,8 +152,8 @@
 	</select>
 	
 	<insert id="insert">
-		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODS_ID,RECORD_GOODS_COLOR,RECORD_GOODS_SIZE,RECORD_GOODS_NUM,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
-		values(#{supplierID},#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{time},#{personInCharge},#{repositoryID})
+		insert into wms_record_in(RECORD_SUPPLIERID,RECORD_GOODS_ID,RECORD_GOODS_COLOR,RECORD_GOODS_SIZE,RECORD_GOODS_NUM,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_REMARK)
+		values(#{supplierID},#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{time},#{personInCharge},#{repositoryID},#{remark})
 	</insert>
 	
 	<update id="update">

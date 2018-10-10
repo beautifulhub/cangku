@@ -18,6 +18,7 @@
 		<result property="time" column="STOCKOUT_TIME"/>
 		<result property="personInCharge" column="STOCKOUT_PERSON"/>
 		<result property="repositoryID" column="STOCKOUT_REPOSITORY_ID"/>
+		<result property="remark" column="STOCKOUT_REMARK"/>
 	</resultMap>
 	
 	<select id="selectAll" resultMap="stockOutDO">
@@ -30,7 +31,8 @@
 			r.RECORD_NUMBER as STOCKOUT_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
-			r.RECORD_REPOSITORYID asSTOCKOUT_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKOUT_REMARK
 		from
 			wms_record_out r,wms_goods g,wms_customer c
 		where
@@ -48,7 +50,8 @@
 			r.RECORD_NUMBER as STOCKOUT_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
-			r.RECORD_REPOSITORYID asSTOCKOUT_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKOUT_REMARK
 		from
 			wms_record_out r,wms_goods g,wms_customer c
 		where
@@ -67,7 +70,8 @@
 			r.RECORD_NUMBER as STOCKOUT_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
-			r.RECORD_REPOSITORYID asSTOCKOUT_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKOUT_REMARK
 		from
 			wms_record_out r,wms_goods g,wms_customer c
 		where
@@ -86,7 +90,8 @@
 			r.RECORD_NUMBER as STOCKOUT_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
-			r.RECORD_REPOSITORYID asSTOCKOUT_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKOUT_REMARK
 		from
 			wms_record_out r,wms_goods g,wms_customer c
 		where
@@ -105,7 +110,8 @@
 			r.RECORD_NUMBER as STOCKOUT_GOODS_NUMBER,
 			r.RECORD_TIME as STOCKOUT_TIME,
 			r.RECORD_PERSON as STOCKOUT_PERSON,
-			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID
+			r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
+			r.RECORD_REMARK as STOCKOUT_REMARK
 		from
 			wms_record_out r,wms_goods g,wms_customer c
 		where
@@ -127,7 +133,8 @@
 			r.RECORD_GOODS_NUM as STOCKOUT_GOODS_NUMBER,
             r.RECORD_TIME as STOCKOUT_TIME,
             r.RECORD_PERSON as STOCKOUT_PERSON,
-            r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID
+            r.RECORD_REPOSITORYID as STOCKOUT_REPOSITORY_ID,
+		    r.RECORD_REMARK as STOCKOUT_REMARK
         from
             wms_record_out r,wms_goods g,wms_customer c
         where
@@ -145,8 +152,8 @@
 	</select>
 		
 	<insert id="insert">
-		insert into wms_record_out(RECORD_CUSTOMERID,RECORD_GOODS_ID,RECORD_GOODS_COLOR,RECORD_GOODS_SIZE,RECORD_GOODS_NUM,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID)
-		values(#{customerID},#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{time},#{personInCharge},#{repositoryID})
+		insert into wms_record_out(RECORD_CUSTOMERID,RECORD_GOODS_ID,RECORD_GOODS_COLOR,RECORD_GOODS_SIZE,RECORD_GOODS_NUM,RECORD_TIME,RECORD_PERSON,RECORD_REPOSITORYID,RECORD_REMARK)
+		values(#{customerID},#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{time},#{personInCharge},#{repositoryID},#{remark})
 	</insert>
 	
 	<update id="update">

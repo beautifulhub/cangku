@@ -161,6 +161,11 @@
 											},
 											'click .delete' : function(e,
 													value, row, index) {
+											    if(row.goodsNum > 0){
+                                                    $('#not_deleteWarning_modal').modal(
+                                                        'show');
+                                                    return
+												}
 												select_goodsID = row.goodsID;
 												select_repositoryID = row.repositoryID
 												$('#deleteWarning_modal').modal(
@@ -197,9 +202,13 @@
 
 		// load info
 		$('#storage_form_edit').bootstrapValidator("resetForm", true);
-		$('#storage_goodsID_edit').text(row.goodsID);
+		$('#storage_goodsID_edit').val(row.goodsID);
+		$('#storage_goodsNO_edit').text(row.goodsNO);
+		$('#storage_goodsName_edit').text(row.goodsName);
+		$('#storage_goodsColor_edit').text(row.goodsColor);
+		$('#storage_goodsSize_edit').text(row.goodsSize);
 		$('#storage_repositoryID_edit').text(row.repositoryID);
-		$('#storage_number_edit').val(row.number);
+		$('#storage_number_edit').val(row.goodsNum);
 	}
 
 	// 添加供应商模态框数据校验
@@ -248,9 +257,8 @@
 							.isValid()) {
 						return;
 					}
-
 					var data = {
-						goodsID : $('#storage_goodsID_edit').text(),
+						goodsID : $('#storage_goodsID_edit').val(),
 						repositoryID : $('#storage_repositoryID_edit').text(),
 						number : $('#storage_number_edit').val(),
 					}
@@ -839,6 +847,32 @@
 	</div>
 </div>
 
+<!-- 不能删除提示模态框 -->
+<div class="modal fade" id="not_deleteWarning_modal" table-index="-1"
+	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">警告</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-3 col-sm-3" style="text-align: center;">
+						<img src="media/icons/warning-icon.png" alt=""
+							style="width: 70px; height: 70px; margin-top: 20px;">
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<br>
+						<h3>该库存数量大于0，不能删除</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- 编辑库存模态框 -->
 <div id="edit_modal" class="modal fade" table-index="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true"
@@ -857,11 +891,33 @@
 					<div class="col-md-8 col-sm-8">
 						<form class="form-horizontal" role="form" id="storage_form_edit"
 							style="margin-top: 25px">
+							<input type="hidden" id="storage_goodsID_edit" name="goodsID"/>
 							<div class="form-group">
-								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物ID：</span>
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物编号：</span>
 								</label>
 								<div class="col-md-4 col-sm-4">
-									<p id="storage_goodsID_edit" class="form-control-static"></p>
+									<p id="storage_goodsNO_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物名称：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_goodsName_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物颜色：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_goodsColor_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物尺码：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_goodsSize_edit" class="form-control-static"></p>
 								</div>
 							</div>
 							<div class="form-group">

@@ -64,6 +64,11 @@ public class StockRecordDTO {
      */
     private String personInCharge;
 
+    /**
+     * 备注说明
+     */
+    private String remark;
+
     public Integer getRecordID() {
         return recordID;
     }
@@ -152,6 +157,14 @@ public class StockRecordDTO {
         this.personInCharge = personInCharge;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "StockRecordDTO{" +
@@ -166,6 +179,7 @@ public class StockRecordDTO {
                 ", repositoryID=" + repositoryID +
                 ", time='" + time + '\'' +
                 ", personInCharge='" + personInCharge + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

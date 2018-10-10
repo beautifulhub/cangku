@@ -49,7 +49,8 @@ public class StockRecordManageHandler {
                                  @RequestParam("goodsNO") String goodsNO,
                                  @RequestParam("goodsName") String goodsName,
                                  @RequestParam("goodsDetail") String goodsDetail,
-                                 @RequestParam(value = "repositoryID", required = false) String repositoryIDStr
+                                 @RequestParam(value = "repositoryID", required = false) String repositoryIDStr,
+                                 @RequestParam("remark") String remark
                                  ) throws StockRecordManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
@@ -86,7 +87,7 @@ public class StockRecordManageHandler {
         }
 
         if (authorizeCheck && argumentCheck) {
-            if (stockRecordManageService.stockOutOperation(customerID, goodsNO, goodsName, goodsDetail, repositoryID, personInCharge))
+            if (stockRecordManageService.stockOutOperation(customerID, goodsNO, goodsName, goodsDetail, repositoryID, personInCharge, remark))
                 result = Response.RESPONSE_RESULT_SUCCESS;
         }
 
@@ -111,7 +112,8 @@ public class StockRecordManageHandler {
                                 @RequestParam("goodsNO") String goodsNO,
                                 @RequestParam("goodsName") String goodsName,
                                 @RequestParam("goodsDetail") String goodsDetail,
-                                @RequestParam(value = "repositoryID", required = false) String repositoryIDStr
+                                @RequestParam(value = "repositoryID", required = false) String repositoryIDStr,
+                                @RequestParam("remark") String remark
                                 ) throws StockRecordManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
@@ -149,7 +151,7 @@ public class StockRecordManageHandler {
 
         // 执行 Service
         if (authorizeCheck && argumentCheck) {
-            if (stockRecordManageService.stockInOperation(supplierID, goodsNO, goodsName, goodsDetail, repositoryID, personInCharge)) {
+            if (stockRecordManageService.stockInOperation(supplierID, goodsNO, goodsName, goodsDetail, repositoryID, personInCharge, remark)) {
                 result = Response.RESPONSE_RESULT_SUCCESS;
             }
         }

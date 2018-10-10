@@ -134,7 +134,7 @@
     <bean id="kickOutSessionControlFilter" class="com.ken.wms.security.filter.KickoutSessionControlFilter">
         <property name="kickOutUrl" value="/login"/>
         <property name="kickOutAfter" value="false"/>
-        <property name="maxSessionNum" value="1"/>
+        <property name="maxSessionNum" value="2"/>
         <property name="sessionManager" ref="sessionManager"/>
         <property name="cacheManager" ref="cacheManager"/>
     </bean>

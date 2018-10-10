@@ -53,7 +53,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      */
     @UserOperation(value = "货物入库")
     @Override
-    public boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge) throws StockRecordManageServiceException {
+    public boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException {
 
         // ID对应的记录是否存在
         if (!(supplierValidate(supplierID) && goodsNOValidate(goodsNO) && repositoryValidate(repositoryID)))
@@ -88,6 +88,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                     stockInDO.setPersonInCharge(personInCharge);
                     stockInDO.setTime(new Date());
                     stockInDO.setRepositoryID(repositoryID);
+                    stockInDO.setRemark(remark);
                     stockinMapper.insert(stockInDO);
                 }
             }
@@ -106,7 +107,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      */
     @UserOperation(value = "货物出库")
     @Override
-    public boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge) throws StockRecordManageServiceException {
+    public boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException {
 
         // 检查ID对应的记录是否存在
         if (!(customerValidate(customerID) && goodsNOValidate(goodsNO) && repositoryValidate(repositoryID)))
@@ -138,6 +139,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                     stockOutDO.setPersonInCharge(personInCharge);
                     stockOutDO.setRepositoryID(repositoryID);
                     stockOutDO.setTime(new Date());
+                    stockOutDO.setRemark(remark);
                     stockOutMapper.insert(stockOutDO);
                 }
             }
@@ -378,6 +380,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setTime(stockInDO.getTime());
         stockRecordDTO.setRepositoryID(stockInDO.getRepositoryID());
         stockRecordDTO.setPersonInCharge(stockInDO.getPersonInCharge());
+        stockRecordDTO.setRemark(stockInDO.getRemark());
         stockRecordDTO.setType("入库");
         return stockRecordDTO;
     }
@@ -400,6 +403,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setTime(stockOutDO.getTime());
         stockRecordDTO.setRepositoryID(stockOutDO.getRepositoryID());
         stockRecordDTO.setPersonInCharge(stockOutDO.getPersonInCharge());
+        stockRecordDTO.setRemark(stockOutDO.getRemark());
         stockRecordDTO.setType("出库");
         return stockRecordDTO;
     }

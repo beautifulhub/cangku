@@ -16,24 +16,43 @@
             //绑定添加子入库
             $('#add_out_stock').unbind("click").click(function(){
                 var n=$(".goods_color_selector").length;
-                var addAttr = '<div class="row" style="margin-top:5px">\n' +
-                    '<div class="form-group out-goods-detail">\n' +
-                    '<label for="" class="col-sm-2 control-label" style="margin-left:95px;margin-top:5px">货物颜色：</label>\n' +
-                    '<div class="col-md-2">\n' +
-					'<select name="goodsColor['+n+']" id="" class="form-control goods_color_selector" style="margin-left: -55px;"></select>'+
+                var addAttr = '<div class="row" style="margin-top:5px;width:1500px">\n' +
+                    '<div class="col-md-12 col-sm-11 out-goods-detail" style="margin-left:60px">\n' +
+                    '<div class="col-md-6 form-group" style="width:20%">\n' +
+                    '<label for=""  class="col-md-5 control-label" style="margin-top:6px">货物颜色：</label>\n' +
+                    '<div class="col-md-7" style="margin-left: -40px;">\n' +
+                    '<select name="goodsColor['+n+']" class="form-control goods_color_selector" style="width:100%;">\n' +
+                    '</select>\n' +
                     '</div>\n' +
-                    '<label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物尺码：</label>\n' +
-                    '<div class="col-md-2">\n' +
-                    '<select name="goodsSize['+n+']" id="" class="form-control goods_size_selector"" style="margin-left: -55px;"></select>' +
                     '</div>\n' +
-                    '<label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物数量：</label>\n' +
-                    '<div class="col-md-2">\n' +
-                    '<input class="form-control goods-num" style="margin-left: -55px;" type="text" placeholder="货物数量" name="goodsNum['+n+']" />\n' +
-                    ' <button type="button" class="btn btn-xs btn-link del_stock_out" style="margin-left:74px;margin-top:-27px">删除</button>\n' +
+                    '<div class="col-md-6 form-group" style="width:20%;margin-left:-70px">\n' +
+                    '<label for="" class="col-md-5 control-label" style="margin-top:6px">货物尺码：</label>\n' +
+                    '<div class="col-md-5" style="margin-left: -40px;">\n' +
+                    '<select name="goodsSize['+n+']" class="form-control goods_size_selector" style="width:100%;">\n' +
+                    '</select>\n' +
+                    '</div>\n' +
+                    '</div>\n' +
+                    '<div class="col-md-6 form-group" style="width:20%;margin-left:-110px">\n' +
+                    '<label for="" class="col-md-5 control-label" style="margin-top:6px">货物数量：</label>\n' +
+                    '<div class="col-md-6" style="margin-left: -40px;">\n' +
+                    '<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum['+n+']" style="width:110%;" />\n' +
+                    '<button type="button" class="btn btn-xs btn-link del_stock_out" style="margin-left:150px;margin-top:-27px">删除</button>\n' +
+                    '</div>\n' +
                     '</div>\n' +
                     '</div>\n' +
                     '</div>';
                 $("#stock_out_group").before(addAttr);
+                $('#stockout_form').bootstrapValidator('addField', 'goodsNum['+n+']', {
+                    validators : {
+                        notEmpty : {
+                            message : '数量只能为数字'
+                        },
+                        greaterThan: {
+                            value: 0,
+                            message: '数量不能小于0'
+                        }
+                    }
+                });
                 //下拉框赋值
 				var colorOption = $(".goods_color_selector:eq(0)").html();
                 var sizeOption = $(".goods_size_selector:eq(0)").html();
@@ -41,6 +60,8 @@
                 $("[name='goodsSize["+n+"]']").append(sizeOption);
                 //动态添加-绑定删除动作
                 $('.del_stock_out').click(function() {
+                    var roleName = $(this).parent("div").find('input[type]').attr("name");
+                    $("#stockout_form").bootstrapValidator('removeField',roleName);
                     $(this).parent("div").parent("div").parent("div").remove();
                 });
             });
@@ -66,14 +87,28 @@
 			message : 'This is not valid',
 			
 			fields : {
-				stockout_input : {
+                customerInput : {
+                    validators : {
+                        notEmpty : {
+                            message : '请输入对应的客户'
+                        }
+                    }
+                },
+                goodsNO : {
+                    validators : {
+                        notEmpty : {
+                            message : '货物编号不能为空'
+                        }
+                    }
+                },
+                goodsNum : {
 					validators : {
 						notEmpty : {
-							message : '入库数量不能为空'
+							message : '数量不能为空'
 						},
 						greaterThan: {
 	                        value: 0,
-	                        message: '入库数量不能小于0'
+	                        message: '数量不能小于0'
 	                    }
 					}
 				}
@@ -364,6 +399,7 @@
                 goodsName : $("#goods_name").val().trim(),
                 goodsDetail : outGoodsDetail,
                 repositoryID : stockout_repository,
+                remark : $("#remark").val().trim()
                 // number : $('#stockin_input').val(),
             }
 
@@ -408,7 +444,13 @@
         $(".goods-num").each(function(i,item){
             $(item).val('');
         })
+        $(".out-goods-detail:gt(0)").each(function(i,item){
+            var roleName = $(this).find('.goods-num').attr("name");
+            $("#stockout_form").bootstrapValidator('removeField',roleName);
+            $(item).remove()
+        })
         $('#outDetail-hidden').click()
+        $('#remark').val('');
 
 		$('#info_customer_ID').text('-');
 		$('#info_customer_name').text('-');
@@ -432,12 +474,10 @@
 				<div class="row">
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
-						<form action="" class="form-inline">
-							<div class="form-group">
-								<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户：</label>
-								<input type="text" class="form-control" id="customer_input" placeholder="请输入客户名称">
-							</div>
-						</form>
+						<div class="form-group">
+							<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户：</label>
+							<input type="text" class="form-control" id="customer_input" name="customerInput" placeholder="请输入客户名称">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -537,23 +577,21 @@
 		</div>
         <div class="row" style="margin-top: 10px">
             <div class="col-md-6 col-sm-6">
-                <div class="row">
+                <div class="row" style="width:760px">
                     <div class="col-md-1 col-sm-1"></div>
                     <div class="col-md-10 col-sm-11">
-                        <form action="" class="form-inline">
-                            <div class="form-group">
-                                <label for="" class="form-label">货物编号：</label>
-                                <input type="text" class="form-control" placeholder="请输入货物编号" id="goods_no" name="goodsNO">
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="form-label">货物名称：</label>
-                                <input type="text" class="form-control" placeholder="请输入货物名称" id="goods_name" name="goodsName" readonly>
-                            </div>
-                           <%-- <div class="form-group">
-                                <label for="" class="form-label">库存数量：</label>
-                                <input type="text" class="form-control" placeholder="请输入货物名称" id="goods_total_num" name="goodsTotalNum" readonly>
-                            </div>--%>
-                        </form>
+						<div class="form-group">
+							<label for="" class="form-label">货物编号：</label>
+							<input type="text" class="form-control" placeholder="请输入货物编号" id="goods_no" name="goodsNO">
+						</div>
+						<div class="form-group">
+							<label for="" class="form-label">货物名称：</label>
+							<input type="text" class="form-control" placeholder="请输入货物名称" id="goods_name" name="goodsName" readonly>
+						</div>
+					   <%-- <div class="form-group">
+							<label for="" class="form-label">库存数量：</label>
+							<input type="text" class="form-control" placeholder="请输入货物名称" id="goods_total_num" name="goodsTotalNum" readonly>
+						</div>--%>
                     </div>
                 </div>
                 <div class="row visible-md visible-lg">
@@ -577,25 +615,32 @@
                             </div>
                         </div>
 
-                        <div class="row" style="margin-top:5px">
-                            <div class="form-group out-goods-detail">
-                                <label for="" class="col-sm-2 control-label" style="margin-left:95px;margin-top:5px">货物颜色：</label>
-                                <div class="col-md-2">
-									<select name="goodsColor" id="" class="form-control goods_color_selector" style="margin-left: -55px;">
-									</select>
-                                </div>
-                                <label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物尺码：</label>
-                                <div class="col-md-2">
-									<select name="goodsSize" id="" class="form-control goods_size_selector"" style="margin-left: -55px;">
-									</select>
-                                </div>
-                                <label for="" class="col-sm-2 control-label" style="margin-left:-50px;margin-top:5px">货物数量：</label>
-                                <div class="col-md-2">
-                                    <input class="form-control goods-num" style="margin-left: -55px;" type="text" placeholder="货物数量" name="goodsNum" />
-                                </div>
-                            </div>
-                        </div>
-                        <div style="margin-left:720px" id="stock_out_group">
+						<div class="row" style="margin-top:5px;width:1500px">
+							<div class="col-md-12 col-sm-11 out-goods-detail" style="margin-left:60px">
+								<div class="col-md-6 form-group" style="width:20%">
+									<label for=""  class="col-md-5 control-label" style="margin-top:6px">货物颜色：</label>
+									<div class="col-md-7" style="margin-left: -40px;">
+										<select name="goodsColor" class="form-control goods_color_selector" style="width:100%;">
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6 form-group" style="width:20%;margin-left:-70px">
+									<label for="" class="col-md-5 control-label" style="margin-top:6px">货物尺码：</label>
+									<div class="col-md-5" style="margin-left: -40px;">
+										<select name="goodsSize" class="form-control goods_size_selector" style="width:100%;">
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6 form-group" style="width:20%;margin-left:-110px">
+									<label for="" class="col-md-5 control-label" style="margin-top:6px">货物数量：</label>
+									<div class="col-md-6" style="margin-left: -40px;">
+										<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum" style="width:110%;" />
+									</div>
+								</div>
+							</div>
+						</div>
+
+                        <div style="margin-left:720px;margin-top:5px" id="stock_out_group">
                             <button type="button" class="btn btn-xs btn-link"  id="add_out_stock">添加</button>
                         </div>
                     </div>
@@ -607,13 +652,24 @@
 				<div class="row">
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
-						<form action="" class="form-inline">
-							<div class="form-group">
-								<label for="" class="form-label">出库仓库：</label>
-								<select name="" id="repository_selector" class="form-control">
-								</select>
-							</div>
-						</form>
+						<div class="form-group">
+							<label for="" class="form-label">出库仓库：</label>
+							<select name="" id="repository_selector" class="form-control">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin-top:20px">
+			<div class="col-md-6 col-sm-6">
+				<div class="row">
+					<div class="col-md-1 col-sm-1"></div>
+					<div class="col-md-10 col-sm-11">
+						<div class="form-group">
+							<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：</label>
+							<input type="text" class="form-control" id="remark" placeholder="备注说明">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -623,7 +679,7 @@
 				<div class="row">
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
-						<form action="" class="form-inline" id="stockout_form">
+						<form action="" class="form-inline" id="">
 							<div class="form-group">
 								<label for="" class="form-label">出库数量：</label>
 								<input type="text" class="form-control" placeholder="请输入数量" id="stockout_input" name="stockout_input">
@@ -636,7 +692,6 @@
 				</div>
 			</div>
 		</div>--%>
-		<div class="row" style="margin-top:80px"></div>
 		</form>
 	</div>
 	<div class="panel-footer">

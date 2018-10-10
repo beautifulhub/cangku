@@ -93,6 +93,16 @@ var commonUtil={
                 }
             }
         })
+    },
+    //实现鼠标悬停，显示详细信息
+    paramsMatter : function (param) {
+        var values = param;//获取当前字段的值
+        // 替换空格，因为字符串拼接的时候如果遇到空格，会自动将后面的部分截掉，所有这里用html的转义符
+        // &nbsp;代替
+        if(values){
+            values = values.replace(/\s+/g,'&nbsp;');
+            return "<span title="+values+">"+param+"</span>"
+        }
     }
 
 }

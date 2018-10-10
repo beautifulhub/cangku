@@ -22,7 +22,7 @@ public interface StockRecordManageService {
      * @param personInCharge 入库人员
      * @return 返回一个boolean 值，若值为true表示入库成功，否则表示入库失败
      */
-    boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge) throws StockRecordManageServiceException;
+    boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException;
 
     /**
      * 货物出库操作
@@ -31,7 +31,7 @@ public interface StockRecordManageService {
      * @param repositoryID 出库仓库ID
      * @return 返回一个boolean值，若值为true表示出库成功，否则表示出库失败
      */
-    boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge) throws StockRecordManageServiceException;
+    boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException;
 
     /**
      * 查询出入库记录

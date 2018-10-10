@@ -35,12 +35,12 @@
 	<select id="selectAllAndRepositoryID" resultMap="storage">
 		select
 			r.REPO_ID as repositoryID,
-			s.RECORD_GOODS_NUM as number,
 			g.GOODS_ID as goodsID,
+			g.GOODS_NO as goodsNO,
 			g.GOODS_NAME as goodsName,
-			g.GOODS_TYPEID as goodsType,
+			s.RECORD_GOODS_COLOR as goodsColor,
 			s.RECORD_GOODS_SIZE as goodsSize,
-			g.GOODS_VALUE as goodsValue
+			s.RECORD_GOODS_NUM as number
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
@@ -53,13 +53,11 @@
 	
 	<select id="selectByGoodsIDAndRepositoryID" resultMap="storage">
 		select
+			s.RECORD_STORAGE_ID as storageID,
 			r.REPO_ID as repositoryID,
 			s.RECORD_GOODS_NUM as number,
 			g.GOODS_ID as goodsID,
-			g.GOODS_NAME as goodsName,
-			g.GOODS_TYPEID as goodsType,
-			s.RECORD_GOODS_SIZE as goodsSize,
-			g.GOODS_VALUE as goodsValue
+			g.GOODS_NAME as goodsName
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where

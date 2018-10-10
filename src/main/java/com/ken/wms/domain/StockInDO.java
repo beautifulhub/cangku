@@ -70,6 +70,11 @@ public class StockInDO {
      */
     private String personInCharge;
 
+    /**
+     * 备注说明
+     */
+    private String remark;
+
     public Integer getId() {
         return id;
     }
@@ -166,6 +171,14 @@ public class StockInDO {
         this.personInCharge = personInCharge;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "StockInDO{" +
@@ -181,6 +194,7 @@ public class StockInDO {
                 ", repositoryID=" + repositoryID +
                 ", time=" + time +
                 ", personInCharge='" + personInCharge + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

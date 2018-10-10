@@ -1,4 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<style type="text/css">
+    .table tbody tr td{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    table{
+        table-layout:fixed;
+    }
+</style>
 
 <script>
     // 出入库记录查询参数
@@ -72,7 +82,12 @@
 									},
 									{
 										field : 'supplierOrCustomerName',
-										title : '供应商/客户名称'
+										title : '供应商/客户名称',
+                                        width : 200,
+                                        sortable: true,
+                                        formatter : function (value, row, index) {
+                                            return commonUtil.paramsMatter(row.supplierOrCustomerName)
+                                        }
 									},
 									{
 										field : 'goodsNO',
@@ -93,11 +108,12 @@
 									{
 										field : 'goodsNum',
 										title : '数量',
-										//visible : false
+                                        sortable: true
 									},
 									{
 										field : 'time',
 										title : '日期',
+                                        width : 150,
                                         formatter: function (value, row, index) {
                                             return commonUtil.changeDateFormat(value);
                                         }
@@ -114,6 +130,14 @@
 									{
 										field : 'type',
 										title : '记录类型'
+									},
+									{
+										field : 'remark',
+										title : '备注说明',
+                                        width : 100,
+                                        formatter : function (value, row, index) {
+                                            return commonUtil.paramsMatter(row.remark)
+                                        }
 									}
 									 ],
 							url : 'stockRecordManage/searchStockRecord',
@@ -208,7 +232,7 @@
         </div>
         <div class="row" style="margin-top:50px">
             <div class="col-md-12">
-                <table id="stockRecords" class="table table-striped"></table>
+                <table id="stockRecords" class="table table-striped" ></table>
             </div>
         </div>
     </div>
