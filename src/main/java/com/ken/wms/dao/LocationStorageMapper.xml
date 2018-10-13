@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ken.wms.dao.LocationStorageMapper">
+	
+	<!-- 结果映射 -->
+	<resultMap type="com.ken.wms.domain.LocationStorage" id="locationStorage">
+		<id property="storageID" column="storageID"/>
+		<id property="goodsID" column="goodsID"/>
+		<result property="goodsNO" column="goodsNO"/>
+		<result property="goodsName" column="goodsName"/>
+		<result property="goodsColor" column="goodsColor"/>
+		<result property="goodsSize" column="goodsSize"/>
+		<result property="goodsType" column="goodsType"/>
+        <result property="goodsNum" column="number"/>
+        <result property="goodsValue" column="goodsValue"/>
+        <result property="locationNO" column="locationNO"/>
+        <result property="repositoryID" column="repositoryID"/>
+		<!--
+		<association property="goodsInfo" javaType="com.ken.Goods" resultMap="goods"/>
+		 -->
+	</resultMap>
+
+	<sql id="commonSelectFrom">
+		select
+		ls.Location_Storage_id as storageID,
+		g.GOODS_ID as goodsID,
+		g.GOODS_NO as goodsNO,
+		g.GOODS_NAME as goodsName,
+		ls.LOCATION_GOODS_COLOR as goodsColor,
+		ls.LOCATION_GOODS_SIZE as goodsSize,
+		ls.LOCATION_GOODS_NUM as number,
+		ls.LOCATION_NO as locationNO,
+		ls.LOCATION_REPOSITORY_ID as repositoryID
+		from
+		wms_location_storage ls,wms_goods g
+	</sql>
+
+	<select id="selectByID" resultMap="locationStorage">
+		<include refid="commonSelectFrom"></include>
+		where
+		ls.LOCATION_GOODS_ID = g.GOODS_ID AND
+		ls.LOCATION_STORAGE_ID = #{storageID}
+	</select>
+
+	<select id="selectBySearch" resultMap="locationStorage">
+		<include refid="commonSelectFrom"></include>
+		where
+		ls.LOCATION_GOODS_ID = g.GOODS_ID
+		<if test="goodsNO != null and goodsNO != ''">
+			and g.GOODS_NO = #{goodsNO}
+		</if>
+		<if test="goodsName != null and goodsName != ''">
+			and g.GOODS_NAME = #{goodsName}
+		</if>
+		<if test="goodsColor != null and goodsColor != ''">
+			and ls.LOCATION_GOODS_COLOR = #{goodsColor}
+		</if>
+		<if test="goodsSize != null and goodsSize != ''">
+			and ls.LOCATION_GOODS_SIZE = #{goodsSize}
+		</if>
+		<if test="repositoryID > 0">
+			and ls.LOCATION_REPOSITORY_ID = #{repositoryID}
+		</if>
+	</select>
+
+	<select id="selectByGoodsParam" resultMap="locationStorage">
+		SELECT
+			ls.Location_Storage_id as storageID,
+			g.GOODS_NO as goodsNO,
+			g.GOODS_NAME as goodsName,
+			ls.LOCATION_GOODS_NUM as number
+		FROM wms_location_storage ls,wms_goods g
+		where
+			ls.LOCATION_GOODS_ID = g.GOODS_ID AND
+			ls.location_goods_id = #{goodsID}  AND
+			ls.location_goods_color = #{goodsColor} AND
+			ls.location_goods_size = #{goodsSize} AND
+			ls.location_no = #{locationNO} AND
+			ls.LOCATION_REPOSITORY_ID = #{repositoryID}
+	</select>
+
+	<insert id="insert">
+		INSERT into wms_location_storage(location_goods_id,location_goods_color,location_goods_size,location_goods_num,location_no,location_repository_id)
+		VALUES (#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{locationNO},#{repositoryID})
+	</insert>
+
+	<insert id="insertBatch">
+		INSERT into wms_location_storage(location_goods_id,location_goods_color,location_goods_size,location_goods_num,location_no,location_repository_id)
+		value
+		<foreach collection="list" item="locationStorage" separator=",">
+			(#{locationStorage.goodsID},#{locationStorage.goodsColor},#{locationStorage.goodsSize},#{locationStorage.goodsNum},#{locationStorage.locationNO},#{locationStorage.repositoryID})
+		</foreach>
+	</insert>
+
+	<update id="update">
+		update wms_location_storage ls
+		set ls.location_goods_num = #{goodsNum}
+		where
+			ls.LOCATION_STORAGE_ID = #{storageID}
+	</update>
+
+	<delete id="delete">
+		DELETE  FROM  wms_location_storage
+		where LOCATION_STORAGE_ID = #{storageID}
+	</delete>
+
+
+</mapper>

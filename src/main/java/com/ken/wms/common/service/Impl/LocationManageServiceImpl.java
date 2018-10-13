@@ -81,20 +81,39 @@ public class LocationManageServiceImpl implements LocationManageService {
     public Map<String, Object> selectByNo(Integer repoID, String locationNo) throws LocationManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
+        Location location ;
+        long total = 0;
+
+        // 查询
+        try {
+            location = locationMapper.selectByNo(repoID, locationNo);
+        } catch (PersistenceException e) {
+            throw new LocationManageServiceException(e);
+        }
+
+        resultSet.put("data", location);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+    /**
+     * 返回指定location NO模糊 的货位记录
+     *
+     * @param locationNo 货位ID
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectByLikeNo(Integer repoID, String locationNo) throws LocationManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
         List<Location> locationList = new ArrayList<>();
         long total = 0;
 
         // 查询
         try {
-            locationList = locationMapper.selectByNo(repoID, locationNo);
+            locationList = locationMapper.selectByLikeNo(repoID, locationNo);
         } catch (PersistenceException e) {
             throw new LocationManageServiceException(e);
         }
-
-        /*if (location != null) {
-            locationList.add(location);
-            total = 1;
-        }*/
 
         resultSet.put("data", locationList);
         resultSet.put("total", total);

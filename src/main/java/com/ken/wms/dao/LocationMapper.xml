@@ -46,6 +46,16 @@
 			wms_location l
 		where
 		   l.location_repositoryid = #{repoID} and
+		   l.location_no = #{no}
+	</select>
+
+	<select id="selectByLikeNo" resultMap="location">
+		select
+			*
+		from
+			wms_location l
+		where
+		   l.location_repositoryid = #{repoID} and
 		   l.location_no like concat(concat("%",#{no},"%"))
 	</select>
 

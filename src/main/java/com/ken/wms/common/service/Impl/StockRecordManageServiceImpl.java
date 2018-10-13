@@ -206,17 +206,17 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         List<StockOutDO> stockOutRecordDOS = null;
         switch (searchType) {
             case "all": {
-                if (offset < 0 || limit < 0) {
+                if (offset < 0 || limit < 0) { //不分页
                     stockInTemp = selectStockInRecord(repositoryID, startDate, endDate, offset, limit);
                     stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, offset, limit);
                     stockInRecordDOS = (List<StockInDO>) stockInTemp.get("data");
                     stockOutRecordDOS = (List<StockOutDO>) stockOutTemp.get("data");
                 } else {
-                    int stockInRecordOffset = offset / 2;
-                    int stockOutRecordOffset = stockInRecordOffset * 2 < offset ? stockInRecordOffset + 1 : stockInRecordOffset;
-                    int stockInRecordLimit = limit / 2;
-                    int stockOutRecordLimit = stockInRecordLimit * 2 < limit ? stockInRecordLimit + 1 : stockInRecordLimit;
-
+                    int stockInRecordOffset = offset / 2; //求整数部分
+                    int stockOutRecordOffset = stockInRecordOffset * 2 < offset ? stockInRecordOffset + 1 : stockInRecordOffset;//0:0 0; 1:0 1; 2:1 1;
+                    int stockInRecordLimit = limit / 2; //求整数部分
+                    int stockOutRecordLimit = stockInRecordLimit * 2 < limit ? stockInRecordLimit + 1 : stockInRecordLimit;//5:2 3; 10:5 5;
+                    //合理分配分页与条数
                     stockInTemp = selectStockInRecord(repositoryID, startDate, endDate, stockInRecordOffset, limit);
                     stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, stockOutRecordOffset, limit);
 
@@ -236,7 +236,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                         int appendSize = (stockInRecordDosSize - stockInRecordLimit) > (stockOutRecordLimit - stockOutRecordDoSize) ?
                                 (stockOutRecordLimit - stockOutRecordDoSize) : (stockInRecordDosSize - stockInRecordLimit);
                         stockInRecordDOS = stockInRecordDOS.subList(0, stockInRecordLimit + appendSize);
-                    }
+                    }//以上查询上下架数目，最大程度地满足所需条数。
                 }
                 long stockInRecordDOSTotal = (long) stockInTemp.get("total");
                 long stockOutRecordDOSTotal = (long) stockOutTemp.get("total");

@@ -37,7 +37,14 @@ public interface LocationMapper {
 	 * @param no 货位的编号
 	 * @return 返回执行NO对应的Location
 	 */
-	List<Location> selectByNo(@Param("repoID")Integer repoID, @Param("no") String no);
+	Location selectByNo(@Param("repoID")Integer repoID, @Param("no") String no);
+
+	/**
+	 * 选择指定 no 的 Location
+	 * @param no 货位的编号
+	 * @return 返回执行NO对应的Location
+	 */
+	List<Location> selectByLikeNo(@Param("repoID")Integer repoID, @Param("no") String no);
 
 	/**
 	 * 插入一条新的记录到数据库

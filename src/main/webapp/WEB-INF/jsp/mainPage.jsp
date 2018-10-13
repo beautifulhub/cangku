@@ -142,6 +142,33 @@ pageEncoding="UTF-8"%>
                         </div>
                     </div>
                 </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse3_1" data-toggle="collapse" data-parent="#accordion"
+                               class="parentMenuTitle collapseHead">上下架管理</a>
+                            <div class="pull-right	">
+                                <span class="caret"></span>
+                            </div>
+                        </h4>
+                    </div>
+                    <div id="collapse3_1" class="panel-collapse collapse collapseBody">
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id="" class="menu_item"
+                                       name="pagecomponent/location-upManagement.jsp">货物上架</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id="" class="menu_item"
+                                       name="pagecomponent/location-downManagement.jsp">货物下架</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <shiro:hasRole name="systemAdmin">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -208,14 +235,14 @@ pageEncoding="UTF-8"%>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a href="#collapse4" data-toggle="collapse" data-parent="#accordion"
+                                <a href="#collapse4_1" data-toggle="collapse" data-parent="#accordion"
                                    class="parentMenuTitle collapseHead">基础数据</a>
                                 <div class="pull-right	">
                                     <span class="caret"></span>
                                 </div>
                             </h4>
                         </div>
-                        <div id="collapse4" class="panel-collapse collapse collapseBody">
+                        <div id="collapse4_1" class="panel-collapse collapse collapseBody">
                             <div class="panel-body">
                                 <ul class="list-group">
                                     <li class="list-group-item">

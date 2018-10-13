@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ken.wms.dao.LocationUpMapper">
+	
+	<resultMap type="com.ken.wms.domain.LocationUpDO" id="locationUpDO">
+		<id property="id" column="LOCATIONUP_ID"/>
+		<result property="goodsID" column="LOCATIONUP_GOODS_ID"/>
+		<result property="goodsNO" column="LOCATIONUP_GOODS_NO"/>
+		<result property="goodsName" column="LOCATIONUP_GOODS_NAME"/>
+		<result property="goodsColor" column="LOCATIONUP_GOODS_COLOR"/>
+		<result property="goodsSIZE" column="LOCATIONUP_GOODS_SIZE"/>
+		<result property="goodsNum" column="LOCATIONUP_GOODS_NUM"/>
+		<result property="locationNO" column="LOCATIONUP_NO"/>
+		<result property="updateTime" column="LOCATIONUP_UPDATE_TIME"/>
+		<result property="personID" column="LOCATIONUP_PERSON_ID"/>
+		<result property="personName" column="LOCATIONUP_PERSON_NAME"/>
+		<result property="repositoryID" column="LOCATIONUP_REPOSITORY_ID"/>
+		<result property="remark" column="LOCATIONUP_REMARK"/>
+	</resultMap>
+
+	<insert id="insert">
+		insert into wms_location_up(LOCATIONUP_GOODS_ID,LOCATIONUP_GOODS_COLOR,LOCATIONUP_GOODS_SIZE,LOCATIONUP_GOODS_NUM,LOCATIONUP_NO,LOCATIONUP_UPDATE_TIME,LOCATIONUP_PERSON_ID,LOCATIONUP_REPOSITORY_ID,REMARK)
+		values (#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{locationNO},#{updateTime},#{personID},#{repositoryID},#{remark})
+	</insert>
+
+	<insert id="insertBatch">
+		insert into wms_location_up(LOCATIONUP_GOODS_ID,LOCATIONUP_GOODS_COLOR,LOCATIONUP_GOODS_SIZE,LOCATIONUP_GOODS_NUM,LOCATIONUP_NO,LOCATIONUP_UPDATE_TIME,LOCATIONUP_PERSON_ID,LOCATIONUP_REPOSITORY_ID,REMARK)
+		values
+		<foreach collection="list" item="locationup" separator=",">
+			(#{locationup.goodsID},#{locationup.goodsColor},#{locationup.goodsSize},#{locationup.goodsNum},#{locationup.locationNO},#{locationup.updateTime},#{locationup.personID},#{locationup.repositoryID},#{locationup.remark})
+		</foreach>
+	</insert>
+
+	<sql id="commonSelectFrom">
+		select
+		lu.LOCATIONUP_ID as LOCATIONUP_ID,
+		g.GOODS_ID as LOCATIONUP_GOODS_ID,
+		g.GOODS_NO as LOCATIONUP_GOODS_NO,
+		g.GOODS_NAME as LOCATIONUP_GOODS_NAME,
+		lu.LOCATIONUP_GOODS_COLOR as LOCATIONUP_GOODS_COLOR,
+		lu.LOCATIONUP_GOODS_SIZE as LOCATIONUP_GOODS_SIZE,
+		lu.LOCATIONUP_GOODS_NUM as LOCATIONUP_GOODS_NUM,
+		lu.LOCATIONUP_NO as LOCATIONUP_NO,
+		lu.LOCATIONUP_TIME as LOCATIONUP_UPDATE_TIME,
+		u.user_username as LOCATIONUP_PERSON_NAME,
+		lu.LOCATIONUP_REPOSITORY_ID as LOCATIONUP_REPOSITORY_ID
+		from
+		wms_location_up lu,wms_goods g,wms_user u
+	</sql>
+
+	<select id="selectBySearch" resultMap="locationUpDO">
+		<include refid="commonSelectFrom"></include>
+		where
+		lu.LOCATIONUP_PERSON_ID = u.USER_ID and
+		lu.LOCATIONUP_GOODS_ID = g.GOODS_ID
+		<if test="goodsNO != null and goodsNO != ''">
+			and g.GOODS_NO = #{goodsNO}
+		</if>
+		<if test="goodsName != null and goodsName != ''">
+			and g.GOODS_NAME = #{goodsName}
+		</if>
+		<if test="goodsColor != null and goodsColor != ''">
+			and lu.LOCATIONUP_GOODS_COLOR = #{goodsColor}
+		</if>
+		<if test="goodsSize != null and goodsSize != ''">
+			and lu.LOCATIONUP_GOODS_SIZE = #{goodsSize}
+		</if>
+		<if test="repositoryID > 0">
+			and lu.LOCATIONUP_REPOSITORYID = #{repositoryID}
+		</if>
+		<if test="startDate != null">
+			and lu.LOCATIONUP_UPDATE_TIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+			and lu.LOCATIONUP_UPDATE_TIME &lt;= #{endDate}
+		</if>
+	</select>
+
+	<!--<select id="selectByID" resultMap="locationUpDO">
+		select
+		lu.LOCATIONUP_ID as LOCATIONUP_ID,
+		g.GOODS_ID as LOCATIONUP_GOODS_ID,
+		g.GOODS_NO as LOCATIONUP_GOODS_NO,
+		g.GOODS_NAME as LOCATIONUP_GOODS_NAME,
+		lu.LOCATIONUP_GOODS_COLOR as LOCATIONUP_GOODS_COLOR,
+		lu.LOCATIONUP_GOODS_SIZE as LOCATIONUP_GOODS_SIZE,
+		lu.LOCATIONUP_GOODS_NUM as LOCATIONUP_GOODS_NUM,
+		lu.LOCATIONUP_NO as LOCATIONUP_NO,
+		lu.LOCATIONUP_REPOSITORY_ID as LOCATIONUP_REPOSITORY_ID
+		from
+		wms_location_up lu,wms_goods g
+		where
+		lu.LOCATIONUP_GOODS_ID = g.GOODS_ID AND
+		lu.LOCATIONUP_ID = #{locationupID}
+	</select>-->
+
+</mapper>

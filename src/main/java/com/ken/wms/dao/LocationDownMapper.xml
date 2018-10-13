@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ken.wms.dao.LocationDownMapper">
+	
+	<resultMap type="com.ken.wms.domain.LocationDownDO" id="locationDownDO">
+		<id property="id" column="LOCATIONDOWN_ID"/>
+		<result property="goodsID" column="LOCATIONDOWN_GOODS_ID"/>
+		<result property="goodsNO" column="LOCATIONDOWN_GOODS_NO"/>
+		<result property="goodsName" column="LOCATIONDOWN_GOODS_NAME"/>
+		<result property="goodsColor" column="LOCATIONDOWN_GOODS_COLOR"/>
+		<result property="goodsSIZE" column="LOCATIONDOWN_GOODS_SIZE"/>
+		<result property="goodsNum" column="LOCATIONDOWN_GOODS_NUM"/>
+		<result property="locationNO" column="LOCATIONDOWN_NO"/>
+		<result property="updateTime" column="LOCATIONDOWN_UPDATE_TIME"/>
+		<result property="personID" column="LOCATIONDOWN_PERSON_ID"/>
+		<result property="personName" column="LOCATIONDOWN_PERSON_NAME"/>
+		<result property="repositoryID" column="LOCATIONDOWN_REPOSITORY_ID"/>
+		<result property="remark" column="LOCATIONDOWN_REMARK"/>
+	</resultMap>
+
+	<insert id="insert">
+		insert into wms_location_down(LOCATIONDOWN_GOODS_ID,LOCATIONDOWN_GOODS_COLOR,LOCATIONDOWN_GOODS_SIZE,LOCATIONDOWN_GOODS_NUM,LOCATIONDOWN_NO,LOCATIONDOWN_UPDATE_TIME,LOCATIONDOWN_PERSON_ID,LOCATIONDOWN_REPOSITORY_ID,REMARK)
+		values(#{goodsID},#{goodsColor},#{goodsSize},#{goodsNum},#{locationNO},#{updateTime},#{personID},#{repositoryID},#{remark})
+	</insert>
+
+	<insert id="insertBatch">
+		insert into wms_location_down(LOCATIONDOWN_GOODS_ID,LOCATIONDOWN_GOODS_COLOR,LOCATIONDOWN_GOODS_SIZE,LOCATIONDOWN_GOODS_NUM,LOCATIONDOWN_NO,LOCATIONDOWN_UPDATE_TIME,LOCATIONDOWN_PERSON_ID,LOCATIONDOWN_REPOSITORY_ID,REMARK)
+		value
+		<foreach collection="list" item="locationdown" separator=",">
+			(#{locationdown.goodsID},#{locationdown.goodsColor},#{locationdown.goodsSize},#{locationdown.goodsNum},#{locationdown.locationNO},#{locationdown.updateTime},#{locationdown.personID},#{locationdown.repositoryID},#{locationdown.remark})
+		</foreach>
+	</insert>
+
+	<sql id="commonSelectFrom">
+		select
+		ld.LOCATIONDOWN_ID as LOCATIONDOWN_ID,
+		g.GOODS_ID as LOCATIONDOWN_GOODS_ID,
+		g.GOODS_NO as LOCATIONDOWN_GOODS_NO,
+		g.GOODS_NAME as LOCATIONDOWN_GOODS_NAME,
+		ld.LOCATIONDOWN_GOODS_COLOR as LOCATIONDOWN_GOODS_COLOR,
+		ld.LOCATIONDOWN_GOODS_SIZE as LOCATIONDOWN_GOODS_SIZE,
+		ld.LOCATIONDOWN_GOODS_NUM as LOCATIONDOWN_GOODS_NUM,
+		ld.LOCATIONDOWN_NO as LOCATIONDOWN_NO,
+		ld.LOCATIONDOWN_TIME as LOCATIONDOWN_UPDATE_TIME,
+		u.user_username as LOCATIONDOWN_PERSON_NAME,
+		ld.LOCATIONDOWN_REPOSITORY_ID as LOCATIONDOWN_REPOSITORY_ID
+		from
+		wms_location_down ld,wms_goods g,wms_user u
+	</sql>
+
+	<select id="selectBySearch" resultMap="locationDownDO">
+		<include refid="commonSelectFrom"></include>
+		where
+		ld.LOCATIONDOWN_PERSON_ID = u.USER_ID and
+		ld.LOCATIONDOWN_GOODS_ID = g.GOODS_ID
+		<if test="goodsNO != null and goodsNO != ''">
+			and g.GOODS_NO = #{goodsNO}
+		</if>
+		<if test="goodsName != null and goodsName != ''">
+			and g.GOODS_NAME = #{goodsName}
+		</if>
+		<if test="goodsColor != null and goodsColor != ''">
+			and ld.LOCATIONDOWN_GOODS_COLOR = #{goodsColor}
+		</if>
+		<if test="goodsSize != null and goodsSize != ''">
+			and ld.LOCATIONDOWN_GOODS_SIZE = #{goodsSize}
+		</if>
+		<if test="repositoryID > 0">
+			and ld.LOCATIONDOWN_REPOSITORYID = #{repositoryID}
+		</if>
+		<if test="startDate != null">
+			and ld.LOCATIONDOWN_UPDATE_TIME &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+			and ld.LOCATIONDOWN_UPDATE_TIME &lt;= #{endDate}
+		</if>
+	</select>
+
+	<!--<select id="selectByID" resultMap="locationDownDO">
+		select
+		ld.LOCATIONDOWN_ID as LOCATIONDOWN_ID,
+		g.GOODS_ID as LOCATIONDOWN_GOODS_ID,
+		g.GOODS_NO as LOCATIONDOWN_GOODS_NO,
+		g.GOODS_NAME as LOCATIONDOWN_GOODS_NAME,
+		ld.LOCATIONDOWN_GOODS_COLOR as LOCATIONDOWN_GOODS_COLOR,
+		ld.LOCATIONDOWN_GOODS_SIZE as LOCATIONDOWN_GOODS_SIZE,
+		ld.LOCATIONDOWN_GOODS_NUM as LOCATIONDOWN_GOODS_NUM,
+		ld.LOCATIONDOWN_NO as LOCATIONDOWN_NO,
+		ld.LOCATIONDOWN_REPOSITORY_ID as LOCATIONDOWN_REPOSITORY_ID
+		from
+		wms_location_down ld,wms_goods g
+		where
+		ld.LOCATIONDOWN_GOODS_ID = g.GOODS_ID AND
+		ld.LOCATIONDOWN_ID = #{locationdownID}
+	</select>-->
+
+</mapper>

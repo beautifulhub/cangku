@@ -1,24 +1,24 @@
 package com.ken.wms.domain;
 
-
 import java.util.Date;
 
 /**
- * 下架记录
+ * 下架/上架记录DO
  *
  * @author Ken
+ * @since 2017/4/5.
  */
-public class LocationOutDO {
+public class LocationRecordDTO {
 
     /**
-     * 下架记录
+     * 记录ID
      */
-    private Integer id;
+    private Integer recordID;
 
     /**
-     * 商品ID
+     * 记录的类型（下架/上架）
      */
-    private Integer goodsID;
+    private String type;
 
     /**
      * 商品编号
@@ -34,56 +34,55 @@ public class LocationOutDO {
      * 商品颜色
      */
     private String goodsColor;
-
     /**
      * 商品尺码
      */
     private String goodsSize;
 
     /**
-     * 下架数量
+     * 下架或上架数量
      */
-    private Long goodsNum;
+    private long goodsNum;
 
     /**
-     * 下架货位
+     * 下架或上架数量
      */
     private String locationNO;
 
     /**
-     * 下架仓库ID
+     * 下架或上架仓库ID
      */
     private Integer repositoryID;
 
     /**
-     * 下架更新日期
+     * 下架或上架时间
      */
-    private Date updateTime;
+    private Date time;
 
     /**
-     * 下架经手人ID
+     * 下架或上架经手人
      */
-    private String personID;
+    private String personInCharge;
 
     /**
-     * 下架经手人姓名
+     * 备注说明
      */
-    private String personName;
+    private String remark;
 
-    public Integer getId() {
-        return id;
+    public Integer getRecordID() {
+        return recordID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setRecordID(Integer recordID) {
+        this.recordID = recordID;
     }
 
-    public Integer getGoodsID() {
-        return goodsID;
+    public String getType() {
+        return type;
     }
 
-    public void setGoodsID(Integer goodsID) {
-        this.goodsID = goodsID;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getGoodsNO() {
@@ -118,11 +117,11 @@ public class LocationOutDO {
         this.goodsSize = goodsSize;
     }
 
-    public Long getGoodsNum() {
+    public long getGoodsNum() {
         return goodsNum;
     }
 
-    public void setGoodsNum(Long goodsNum) {
+    public void setGoodsNum(long goodsNum) {
         this.goodsNum = goodsNum;
     }
 
@@ -142,45 +141,45 @@ public class LocationOutDO {
         this.repositoryID = repositoryID;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getTime() {
+        return time;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
-    public String getPersonID() {
-        return personID;
+    public String getPersonInCharge() {
+        return personInCharge;
     }
 
-    public void setPersonID(String personID) {
-        this.personID = personID;
+    public void setPersonInCharge(String personInCharge) {
+        this.personInCharge = personInCharge;
     }
 
-    public String getPersonName() {
-        return personName;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setPersonName(String personName) {
-        this.personName = personName;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override
     public String toString() {
-        return "LocationInDO{" +
-                "id=" + id +
-                ", goodsID=" + goodsID +
+        return "LocationRecordDTO{" +
+                "recordID=" + recordID +
+                ", type='" + type + '\'' +
                 ", goodsNO='" + goodsNO + '\'' +
                 ", goodsName='" + goodsName + '\'' +
                 ", goodsColor='" + goodsColor + '\'' +
                 ", goodsSize='" + goodsSize + '\'' +
                 ", goodsNum=" + goodsNum +
-                ", locationNO='" + locationNO + '\'' +
+                ", locationNO=" + locationNO +
                 ", repositoryID=" + repositoryID +
-                ", updateTime=" + updateTime +
-                ", personID='" + personID + '\'' +
-                ", personName='" + personName + '\'' +
+                ", time=" + time +
+                ", personInCharge='" + personInCharge + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

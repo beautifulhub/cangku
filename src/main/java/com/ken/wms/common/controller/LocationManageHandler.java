@@ -8,6 +8,7 @@ import com.ken.wms.domain.Repository;
 import com.ken.wms.domain.Supplier;
 import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.LocationManageServiceException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -60,7 +61,7 @@ public class LocationManageHandler {
                     queryResult = locationManageService.selectById(Integer.valueOf(keyWord));
                 break;*/
             case SEARCH_BY_NO:
-                queryResult = locationManageService.selectByNo(repoID, keyWord);
+                queryResult = locationManageService.selectByLikeNo(repoID, keyWord);
                 break;
             case SEARCH_ALL:
                 queryResult = locationManageService.selectAllByRepoID(repoID ,offset, limit);

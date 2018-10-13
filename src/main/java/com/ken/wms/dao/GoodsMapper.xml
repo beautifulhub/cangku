@@ -129,7 +129,7 @@
 	
 	<insert id="insertBatch">
 		insert into wms_goods(goods_no,goods_name,goods_typeid,goods_sizes,goods_colors)
-		values
+		value
 		<foreach collection="list" item="goods" separator=",">
 			(#{goods.no},#{goods.name},#{goods.type},#{goods.sizes},#{goods.colors})
 		</foreach>

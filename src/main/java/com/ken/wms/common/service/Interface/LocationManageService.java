@@ -34,6 +34,14 @@ public interface LocationManageService {
     Map<String, Object> selectByNo(Integer repoID, String locationNo) throws LocationManageServiceException;
 
     /**
+     * 返回指定location NO模糊 的货位记录
+     *
+     * @param locationNo 货位ID
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    Map<String, Object> selectByLikeNo(Integer repoID, String locationNo) throws LocationManageServiceException;
+
+    /**
      * 分页查询货位记录
      *
      * @param offset 分页的偏移值

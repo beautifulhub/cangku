@@ -8,7 +8,7 @@ import java.util.Date;
  *
  * @author Ken
  */
-public class LocationInDO {
+public class LocationUpDO {
 
     /**
      * 上架记录
@@ -63,12 +63,17 @@ public class LocationInDO {
     /**
      * 上架经手人ID
      */
-    private String personID;
+    private Integer personID;
 
     /**
      * 上架经手人姓名
      */
     private String personName;
+
+    /**
+     * 上架备注说明
+     */
+    private String remark;
 
     public Integer getId() {
         return id;
@@ -150,11 +155,11 @@ public class LocationInDO {
         this.updateTime = updateTime;
     }
 
-    public String getPersonID() {
+    public Integer getPersonID() {
         return personID;
     }
 
-    public void setPersonID(String personID) {
+    public void setPersonID(Integer personID) {
         this.personID = personID;
     }
 
@@ -166,9 +171,17 @@ public class LocationInDO {
         this.personName = personName;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
-        return "LocationInDO{" +
+        return "LocationUpDO{" +
                 "id=" + id +
                 ", goodsID=" + goodsID +
                 ", goodsNO='" + goodsNO + '\'' +
@@ -181,6 +194,7 @@ public class LocationInDO {
                 ", updateTime=" + updateTime +
                 ", personID='" + personID + '\'' +
                 ", personName='" + personName + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }
