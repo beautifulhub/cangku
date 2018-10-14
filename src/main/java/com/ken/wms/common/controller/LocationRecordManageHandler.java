@@ -175,8 +175,8 @@ public class LocationRecordManageHandler {
                                           @RequestParam("goodsName") String goodsName,
                                           @RequestParam("goodsColor") String goodsColor,
                                           @RequestParam("goodsSize") String goodsSize,
-                                          @RequestParam("personID") String personIDStr,
                                           @RequestParam("repositoryID") String repositoryIDStr,
+                                          @RequestParam("personID") String personIDStr,
                                           @RequestParam("startDate") String startDateStr,
                                           @RequestParam("endDate") String endDateStr,
                                        @RequestParam("limit") int limit,
@@ -190,17 +190,15 @@ public class LocationRecordManageHandler {
         String regex = "([0-9]{4})-([0-9]{2})-([0-9]{2})";
         boolean startDateFormatCheck = (StringUtils.isEmpty(startDateStr) || startDateStr.matches(regex));
         boolean endDateFormatCheck = (StringUtils.isEmpty(endDateStr) || endDateStr.matches(regex));
-        boolean personIDCheck = (StringUtils.isEmpty(personIDStr) || StringUtils.isNumeric(personIDStr));
-        boolean repositoryIDCheck = (StringUtils.isEmpty(repositoryIDStr) || StringUtils.isNumeric(repositoryIDStr));
 
-        if (startDateFormatCheck && endDateFormatCheck && personIDCheck && repositoryIDCheck) {
-            Integer personID = -1;
+        if (startDateFormatCheck && endDateFormatCheck) {
             Integer repositoryID = -1;
-            if (StringUtils.isNumeric(personIDStr)) {
-                personID = Integer.valueOf(personIDStr);
-            }
+            Integer personID = -1;
             if (StringUtils.isNumeric(repositoryIDStr)) {
                 repositoryID = Integer.valueOf(repositoryIDStr);
+            }
+            if (StringUtils.isNumeric(personIDStr)) {
+                personID = Integer.valueOf(personIDStr);
             }
 
             // 转到 Service 执行查询

@@ -26,6 +26,17 @@
 			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
 	</select>
 
+	<select id="selectAllRepo" resultMap="repository">
+		select
+			r.REPO_ID,
+			r.REPO_ADDRESS,
+			r.REPO_STATUS,
+			r.REPO_AREA,
+			r.REPO_DESC
+		from
+			wms_respository r
+	</select>
+
 	<select id="selectUnassign" resultMap="repository">
 		select
 			r.REPO_ID,
@@ -45,20 +56,33 @@
 		)
 	</select>
 	
+	<!--<select id="selectByID" resultMap="repository">-->
+		<!--select-->
+			<!--r.REPO_ID,-->
+			<!--r.REPO_ADDRESS,-->
+			<!--r.REPO_STATUS,-->
+			<!--r.REPO_AREA,-->
+			<!--r.REPO_DESC,-->
+			<!--ra.REPO_ADMIN_NAME-->
+		<!--from-->
+			<!--wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)-->
+		<!--where-->
+			<!--r.REPO_ID = #{repositoryID}-->
+	<!--</select>-->
+
 	<select id="selectByID" resultMap="repository">
 		select
 			r.REPO_ID,
 			r.REPO_ADDRESS,
 			r.REPO_STATUS,
 			r.REPO_AREA,
-			r.REPO_DESC,
-			ra.REPO_ADMIN_NAME
+			r.REPO_DESC
 		from
-			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
+			wms_respository r
 		where
 			r.REPO_ID = #{repositoryID}
 	</select>
-	
+
 	<select id="selectByAddress" resultMap="repository">
 		select
 			r.REPO_ID,

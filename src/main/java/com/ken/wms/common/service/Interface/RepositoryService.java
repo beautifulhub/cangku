@@ -55,6 +55,13 @@ public interface RepositoryService {
     Map<String, Object> selectAll(int offset, int limit) throws RepositoryManageServiceException;
 
     /**
+     * 查询所有仓库记录不关联
+     *
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    Map<String, Object> selectAllRepo() throws RepositoryManageServiceException;
+
+    /**
      * 查询所有的仓库记录
      *
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量

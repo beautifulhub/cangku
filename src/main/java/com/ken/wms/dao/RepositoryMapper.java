@@ -18,6 +18,12 @@ public interface RepositoryMapper {
 	List<Repository> selectAll();
 
 	/**
+	 * 选择全部的 Repository 记录 (不管联到仓库员)
+	 * @return 返回全部的 Repository
+	 */
+	List<Repository> selectAllRepo();
+
+	/**
 	 * 选择全部的未分配的 repository 记录
 	 * @return 返回所有未分配的 Repository
 	 */

@@ -37,7 +37,7 @@ public interface RepositoryAdminMapper {
 	 * @param repositoryID 指派的仓库ID
 	 * @return 返回已指派指定 repositoryID 的仓库管理员信息
 	 */
-	RepositoryAdmin selectByRepositoryID(Integer repositoryID);
+	List<RepositoryAdmin> selectByRepositoryID(Integer repositoryID);
 	
 	/**
 	 * 插入一条仓库管理员信息

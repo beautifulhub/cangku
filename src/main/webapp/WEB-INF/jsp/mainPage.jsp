@@ -69,6 +69,7 @@ pageEncoding="UTF-8"%>
             <!--  此处加载左侧导航栏 -->
             <!-- 左侧导航栏  -->
             <div class="panel-group" id="accordion">
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -103,6 +104,42 @@ pageEncoding="UTF-8"%>
                         </div>
                     </div>
                 </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse1-1" data-toggle="collapse" data-parent="#accordion"
+                               class="parentMenuTitle collapseHead">上下架库存</a>
+                            <div class="pull-right">
+                                <span class="caret"></span>
+                            </div>
+                        </h4>
+                    </div>
+                    <div id="collapse1-1" class="panel-collapse collapse collapseBody">
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <%--<shiro:hasRole name="commonsAdmin">
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item"
+                                           name="pagecomponent/storageManagementCommon.jsp">库存查询</a>
+                                    </li>
+                                </shiro:hasRole>--%>
+                                <%--<shiro:hasRole name="systemAdmin">--%>
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item"
+                                           name="pagecomponent/locationStorageManagement.jsp">架位库存查询</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id=""
+                                           class="menu_item"
+                                           name="pagecomponent/locationRecordManagement.jsp">上下架记录</a>
+                                    </li>
+                                <%--</shiro:hasRole>--%>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">

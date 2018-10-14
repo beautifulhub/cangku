@@ -232,9 +232,17 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
 
                 // 若有指派的仓库则检查
                 if (repositoryAdmin.getRepositoryBelongID() != null) {
-                    RepositoryAdmin rAdminFromDB = repositoryAdminMapper.selectByRepositoryID(repositoryAdmin.getRepositoryBelongID());
-                    if (rAdminFromDB != null && !Objects.equals(rAdminFromDB.getId(), repositoryAdmin.getId()))
-                        return false;
+                    List<RepositoryAdmin> rAdminFromDB = repositoryAdminMapper.selectByRepositoryID(repositoryAdmin.getRepositoryBelongID());
+
+                    if (rAdminFromDB != null){
+                        List<Integer> ids = new ArrayList<>();
+                        for(int i = 0 ; i < rAdminFromDB.size(); i++){
+                            ids.add(rAdminFromDB.get(i).getId());
+                        }
+                        if(!ids.contains(repositoryAdmin.getId())){
+                            return false;
+                        }
+                    }
                 }
 
                 // 更新
@@ -387,16 +395,14 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
         long total = 0;
 
         // 查询
-        RepositoryAdmin repositoryAdmin;
         try {
-            repositoryAdmin = repositoryAdminMapper.selectByRepositoryID(repositoryID);
+            repositoryAdmins = repositoryAdminMapper.selectByRepositoryID(repositoryID);
         } catch (PersistenceException e) {
             throw new RepositoryAdminManageServiceException(e);
         }
 
-        if (repositoryAdmin != null) {
-            repositoryAdmins.add(repositoryAdmin);
-            total = 1;
+        if (repositoryAdmins.size() > 0 ) {
+            total = repositoryAdmins.size();
         }
 
         resultSet.put("data", repositoryAdmins);

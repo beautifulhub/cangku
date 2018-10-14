@@ -196,7 +196,6 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
             List<LocationStorage> locationStorageList = ejConvertor.excelReader(LocationStorage.class, FileUtil.convertMultipartFileToFile(file));
             if (locationStorageList != null) {
                 total = locationStorageList.size();
-                boolean isAvailable;
                 List<LocationStorage> availableList = new ArrayList<>();
                 Goods goods;
                 Location location;
@@ -205,36 +204,37 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
                 for (LocationStorage locationStorage : locationStorageList) {
                     i++;
                     if (locationStorage.getGoodsNum() < 0) {
-                        errorTip = "第"+i+"行货位的数量应该是大于等于0";
+                        errorTip = "第"+i+"行的货物数量应该是大于等于0";
                         break;
                     }
                     goods = goodsMapper.selectByNo(locationStorage.getGoodsNO());
                     if (goods == null) {
-                        errorTip = "第"+i+"行货位对应的货物编号不存在";
+                        errorTip = "第"+i+"行的货物编号不存在";
                         break;
                     }else{
                         if(!goods.getColors().contains(locationStorage.getGoodsColor())){
-                            errorTip = "第"+i+"行货位对应的货物颜色不存在";
+                            errorTip = "第"+i+"行的货物颜色不存在";
                             break;
                         }else if(!goods.getSizes().contains(locationStorage.getGoodsSize())){
-                                errorTip = "第"+i+"行货位对应的货物尺码不存在";
+                                errorTip = "第"+i+"行的货物尺码不存在";
                                 break;
                         }
+                        locationStorage.setGoodsID(goods.getId());
                     }
                     repository = repositoryMapper.selectByID(locationStorage.getRepositoryID());
                     if (repository == null) {
-                        errorTip = "第"+i+"行货位对应的仓库编号不存在";
+                        errorTip = "第"+i+"行对应的仓库编号不存在";
                         break;
                     }
                     location = locationMapper.selectByNo(locationStorage.getRepositoryID(),locationStorage.getLocationNO());
                     if (location == null) {
-                        errorTip = "第"+i+"行货位对应的货位编号不存在";
+                        errorTip = "第"+i+"行所在的货位编号不存在";
                         break;
                     }
                     availableList.add(locationStorage);
                 }
                 // 保存到数据库
-                if(i == locationStorageList.size() +1 && i > 1){//所有校验都合格
+                if(i == availableList.size() +1 && i > 1){//所有校验都合格
                     available = availableList.size();
                     locationStorageMapper.insertBatch(availableList);
                 }
@@ -246,6 +246,17 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
         resultSet.put("total", total);
         resultSet.put("available", available);
         return resultSet;
+    }
+
+    public static void main(String[] args) {
+        String s = "M";
+        String ss = "s,m，l";
+        if(ss.contains(s)){
+            System.out.println("ok");
+        }else{
+            System.out.println("no");
+        }
+
     }
 
     /**

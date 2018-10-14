@@ -174,8 +174,8 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
         switch (upOrDown) {
             case "all": {
                 if (offset < 0 || limit < 0) {
-                    locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate, offset, limit);
-                    locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate, offset, limit);
+                    locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, offset, limit);
+                    locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, offset, limit);
                     locationUpRecordDOS = (List<LocationUpDO>) locationUpTemp.get("data");
                     locationDownRecordDOS = (List<LocationDownDO>) locationDownTemp.get("data");
                 } else {
@@ -184,8 +184,8 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
                     int locationUpRecordLimit = limit / 2;
                     int locationDownRecordLimit = locationUpRecordLimit * 2 < limit ? locationUpRecordLimit + 1 : locationUpRecordLimit;
 
-                    locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate, locationUpRecordOffset, limit);
-                    locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate, locationDownRecordOffset, limit);
+                    locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, locationUpRecordOffset, limit);
+                    locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate, locationDownRecordOffset, limit);
 
                     locationUpRecordDOS = (List<LocationUpDO>) locationUpTemp.get("data");
                     locationDownRecordDOS = (List<LocationDownDO>) locationDownTemp.get("data");
@@ -211,13 +211,13 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
                 break;
             }
             case "up": {
-                locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate, offset, limit);
+                locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate, offset, limit);
                 total = (long) locationUpTemp.get("total");
                 locationUpRecordDOS = (List<LocationUpDO>) locationUpTemp.get("data");
                 break;
             }
             case "down": {
-                locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate, offset, limit);
+                locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, offset, limit);
                 total = (long) locationDownTemp.get("total");
                 locationDownRecordDOS = (List<LocationDownDO>) locationDownTemp.get("data");
                 break;
@@ -262,7 +262,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
      * @param limit        分页大小
      * @return 返回所有符合要求的上架记录
      */
-    private Map<String, Object> selectLocationUpRecord(String goodsNo, String goodsName, String goodsColor, String goodsSize, Integer repositoryID, Date startDate, Date endDate, int offset, int limit) throws LocationRecordManageServiceException {
+    private Map<String, Object> selectLocationUpRecord(String goodsNo, String goodsName, String goodsColor, String goodsSize, Integer repositoryID,Integer personID, Date startDate, Date endDate, int offset, int limit) throws LocationRecordManageServiceException {
         Map<String, Object> result = new HashMap<>();
         List<LocationUpDO> locationUpRecords;
         long locationUpTotal = 0;
@@ -276,13 +276,13 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                locationUpRecords = locationUpMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,startDate,startDate);
+                locationUpRecords = locationUpMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID,startDate,endDate);
                 if (locationUpRecords != null)
                     locationUpTotal = new PageInfo<>(locationUpRecords).getTotal();
                 else
                     locationUpRecords = new ArrayList<>(10);
             } else {
-                locationUpRecords = locationUpMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,startDate,startDate);
+                locationUpRecords = locationUpMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID,startDate,endDate);
                 if (locationUpRecords != null)
                     locationUpTotal = locationUpRecords.size();
                 else
@@ -307,7 +307,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
      * @param limit        分页大小
      * @return 返回所有符合要求的下架记录
      */
-    private Map<String, Object> selectLocationDownRecord(String goodsNo, String goodsName, String goodsColor, String goodsSize,Integer repositoryID, Date startDate, Date endDate, int offset, int limit) throws LocationRecordManageServiceException {
+    private Map<String, Object> selectLocationDownRecord(String goodsNo, String goodsName, String goodsColor, String goodsSize,Integer repositoryID,Integer personID, Date startDate, Date endDate, int offset, int limit) throws LocationRecordManageServiceException {
         Map<String, Object> result = new HashMap<>();
         List<LocationDownDO> locationDownRecords;
         long locationDownRecordTotal = 0;
@@ -321,13 +321,13 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                locationDownRecords = locationDownMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate);
+                locationDownRecords = locationDownMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate);
                 if (locationDownRecords != null)
                     locationDownRecordTotal = new PageInfo<>(locationDownRecords).getTotal();
                 else
                     locationDownRecords = new ArrayList<>(10);
             } else {
-                locationDownRecords = locationDownMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, startDate, endDate);
+                locationDownRecords = locationDownMapper.selectBySearch(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate);
                 if (locationDownRecords != null)
                     locationDownRecordTotal = locationDownRecords.size();
                 else

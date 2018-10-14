@@ -32,15 +32,9 @@
 	function repositoryOptionInit(){
 		$.ajax({
 			type : 'GET',
-			url : 'repositoryManage/getRepositoryList',
+			url : 'repositoryManage/getOnlyRepositoryList',
 			dataType : 'json',
 			contentType : 'application/json',
-			data:{
-				searchType : "searchAll",
-				keyWord : "",
-				offset : -1,
-				limit : -1
-			},
 			success : function(response){
 				$.each(response.rows,function(index,elem){
 					$('#search_repository_ID').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
@@ -86,7 +80,7 @@
                                         width : 200,
                                         sortable: true,
                                         formatter : function (value, row, index) {
-                                            return commonUtil.paramsMatter(row.supplierOrCustomerName)
+                                            return commonUtil.showParamDetail(row.supplierOrCustomerName)
                                         }
 									},
 									{
@@ -136,7 +130,7 @@
 										title : '备注说明',
                                         width : 100,
                                         formatter : function (value, row, index) {
-                                            return commonUtil.paramsMatter(row.remark)
+                                            return commonUtil.showParamDetail(row.remark)
                                         }
 									}
 									 ],

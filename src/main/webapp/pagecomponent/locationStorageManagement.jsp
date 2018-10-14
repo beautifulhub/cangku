@@ -4,6 +4,8 @@
 <script>
 	var search_type_storage = "none";
 	var search_keyWord = "";
+	var search_color = "";
+	var search_size = "";
 	var search_repository = "";
 	var select_goodsID;
 	var select_repositoryID;
@@ -14,8 +16,9 @@
 		storageListInit();
 		bootstrapValidatorInit();
 		repositoryOptionInit();
+		colorSizeSearchInit();
 
-		addStorageAction();
+		// addStorageAction();
 		editStorageAction();
 		deleteStorageAction();
 		importStorageAction();
@@ -30,23 +33,23 @@
 			if (type == "所有") {
 				$("#search_input_type").attr("readOnly", "true");
 				search_type_storage = "searchAll";
-			} else if (type == "货物ID") {
+			} else if (type == "货物编号") {
 				$("#search_input_type").removeAttr("readOnly");
-				search_type_storage = "searchByGoodsID";
+				search_type_storage = "searchByGoodsNO";
 			} else if (type == "货物名称") {
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsName";
-			} else if(type = "货物类型"){
+			} /*else if(type = "货物类型"){
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsType";
-			}else {
+			}*/else {
 				$("#search_input_type").removeAttr("readOnly");
 			}
-
 			$("#search_type").text(type);
 			$("#search_input_type").attr("placeholder", type);
-		})
-	}
+            commonUtil.goodsAutocomplete(search_type_storage);
+        })
+    }
 
 	// 仓库下拉框数据初始化
 	function repositoryOptionInit(){
@@ -67,10 +70,17 @@
 		$('#search_input_repository').append("<option value='all'>所有仓库</option>");
 	}
 
+	function colorSizeSearchInit(){
+        $('#search_input_color').append("<option value=''>所有颜色</option>");
+        $('#search_input_size').append("<option value=''>所有尺码</option>");
+	}
+
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input_type').val();
+			search_color = $('#search_input_color').val();
+			search_size = $('#search_input_size').val();
 			search_repository = $('#search_input_repository').val();
 			tableRefresh();
 		})
@@ -82,6 +92,8 @@
 			limit : params.limit,
 			offset : params.offset,
 			searchType : search_type_storage,
+			selectColor : search_color,
+			selectSize : search_size,
 			repositoryBelong : search_repository,
 			keyword : search_keyWord
 		}
@@ -95,8 +107,14 @@
 						{
 							columns : [
 									{
-										field : 'goodsID',
-										title : '货物ID'
+										field : 'locationStorageID',
+										title : '货位库存ID',
+										visible : false
+									//sortable: true
+									},
+									{
+										field : 'goodsNO',
+										title : '货物编号'
 									//sortable: true
 									},
 									{
@@ -104,26 +122,24 @@
 										title : '货物名称'
 									},
 									{
-										field : 'goodsType',
-										title : '货物类型'
+										field : 'goodsColor',
+										title : '货物颜色'
 									},
 									{
 										field : 'goodsSize',
-										title : '货物尺寸',
-										visible : false
+										title : '货物尺码'
 									},
 									{
-										field : 'goodsValue',
-										title : '货物价值',
-										visible : false
+										field : 'goodsNum',
+										title : '货物数量'
+									},
+									{
+										field : 'locationNO',
+										title : '所在货位'
 									},
 									{
 										field : 'repositoryID',
 										title : '仓库ID'
-									},
-									{
-										field : 'number',
-										title : '库存数量'
 									},
 									{
 										field : 'operation',
@@ -143,6 +159,11 @@
 											},
 											'click .delete' : function(e,
 													value, row, index) {
+											    if(row.goodsNum > 0){
+                                                    $('#not_deleteWarning_modal').modal(
+                                                        'show');
+                                                    return
+												}
 												select_goodsID = row.goodsID;
 												select_repositoryID = row.repositoryID
 												$('#deleteWarning_modal').modal(
@@ -150,7 +171,7 @@
 											}
 										}
 									} ],
-							url : 'storageManage/getStorageListWithRepository',
+							url : 'locationStorageManage/getLocationStorageList',
 							onLoadError:function(status){
 								handleAjaxError(status);
 							},
@@ -179,9 +200,14 @@
 
 		// load info
 		$('#storage_form_edit').bootstrapValidator("resetForm", true);
-		$('#storage_goodsID_edit').text(row.goodsID);
+		$('#location_storage_id').val(row.storageID);
+		$('#storage_goodsNO_edit').text(row.goodsNO);
+		$('#storage_goodsName_edit').text(row.goodsName);
+		$('#storage_goodsColor_edit').text(row.goodsColor);
+		$('#storage_goodsSize_edit').text(row.goodsSize);
+		$('#location_no_edit').text(row.locationNO);
 		$('#storage_repositoryID_edit').text(row.repositoryID);
-		$('#storage_number_edit').val(row.number);
+		$('#storage_number_edit').val(row.goodsNum);
 	}
 
 	// 添加供应商模态框数据校验
@@ -230,17 +256,15 @@
 							.isValid()) {
 						return;
 					}
-
 					var data = {
-						goodsID : $('#storage_goodsID_edit').text(),
-						repositoryID : $('#storage_repositoryID_edit').text(),
+                        locationStorageID : $('#location_storage_id').val(),
 						number : $('#storage_number_edit').val(),
 					}
-
+					debugger
 					// ajax
 					$.ajax({
 						type : "POST",
-						url : 'storageManage/updateStorageRecord',
+						url : 'locationStorageManage/updateLocationStorageRecord',
 						dataType : "json",
 						contentType : "application/json",
 						data : JSON.stringify(data),
@@ -272,14 +296,13 @@
 	function deleteStorageAction(){
 		$('#delete_confirm').click(function(){
 			var data = {
-				"goodsID" : select_goodsID,
-				"repositoryID" : select_repositoryID
+				"locationStorageID" : $('#location_storage_id').val()
 			}
-			
+
 			// ajax
 			$.ajax({
 				type : "GET",
-				url : "storageManage/deleteStorageRecord",
+				url : "locationStorageManage/deleteLocationStorageRecord",
 				dataType : "json",
 				contentType : "application/json",
 				data : data,
@@ -303,7 +326,7 @@
 					handleAjaxError(xhr.status);
 				}
 			})
-			
+
 			$('#deleteWarning_modal').modal('hide');
 		})
 	}
@@ -323,7 +346,7 @@
 			// ajax
 			$.ajax({
 				type : "POST",
-				url : "storageManage/addStorageRecord",
+				url : "locationStorageManage/addStorageRecord",
 				dataType : "json",
 				contentType : "application/json",
 				data : JSON.stringify(data),
@@ -405,7 +428,7 @@
 
 			// ajax
 			$.ajaxFileUpload({
-				url : "storageManage/importStorageRecord",
+				url : "locationStorageManage/importLocationStorageRecord",
 				secureuri: false,
 				dataType: 'json',
 				fileElementId:"file",
@@ -417,16 +440,18 @@
 					var info;
 
 					$('#import_progress_bar').addClass("hide");
-					if(data.result == "success"){
-						total = data.total;
+                    total = data.total;
+                    if(data.result == "success"){
 						available = data.available;
 						info = msg1;
-						$('#import_success').removeClass('hide');
-					}else{
-						info = msg2
-						$('#import_error').removeClass('hide');
-					}
-					info = info + ",总条数：" + total + ",有效条数:" + available;
+                        info = info + ",总条数：" + total + ",有效条数:" + available;
+                        $('#import_success').removeClass('hide');
+                    }else{
+						var errorTip = data.errorTip;
+                        info = msg2
+                        $('#import_error').removeClass('hide');
+                        info = info + ",总条数：" + total +",错误信息:"+ errorTip;
+                    }
 					$('#import_result').removeClass('hide');
 					$('#import_info').text(info);
 					$('#confirm').removeClass('disabled');
@@ -452,11 +477,13 @@
 
 		$('#export_storage_download').click(function(){
 			var data = {
-				searchType : search_type_storage,
-				repositoryBelong : search_repository,
-				keyword : search_keyWord
+                searchType : search_type_storage,
+                selectColor : search_color,
+                selectSize : search_size,
+                repositoryBelong : search_repository,
+                keyword : search_keyWord
 			}
-			var url = "storageManage/exportStorageRecord?" + $.param(data)
+			var url = "locationStorageManage/exportLocationStorageRecord?" + $.param(data)
 			window.open(url, '_blank');
 			$('#export_modal').modal("hide");
 		})
@@ -498,7 +525,7 @@
 			$('#next').addClass("hide");
 			$('#submit').removeClass("hide");
 		})
-		
+
 		import_step = 1;
 	}
 
@@ -516,9 +543,8 @@
 						<span id="search_type">查询方式</span> <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0)" class="dropOption">货物ID</a></li>
+						<li><a href="javascript:void(0)" class="dropOption">货物编号</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">货物名称</a></li>
-						<li><a href="javascript:void(0)" class="dropOption">货物类型</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
@@ -526,10 +552,18 @@
 			<div class="col-md-9 col-sm-9">
 				<div>
 					<div class="col-md-3 col-sm-3">
-						<input id="search_input_type" type="text" class="form-control"
-							placeholder="货物ID">
+						<input id="search_input_type" type="text" class="form-control" readOnly
+							placeholder="库存查询">
 					</div>
-					<div class="col-md-3 col-sm-4">
+					<div class="col-md-2 col-sm-4">
+						<select class="form-control" id="search_input_color">
+						</select>
+					</div>
+					<div class="col-md-2 col-sm-4">
+						<select class="form-control" id="search_input_size">
+						</select>
+					</div>
+					<div class="col-md-2 col-sm-4">
 						<select class="form-control" id="search_input_repository">
 						</select>
 					</div>
@@ -544,9 +578,9 @@
 
 		<div class="row" style="margin-top: 25px">
 			<div class="col-md-5">
-				<button class="btn btn-sm btn-default" id="add_storage">
+				<%--<button class="btn btn-sm btn-default" id="add_storage">
 					<span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
-				</button>
+				</button>--%>
 				<button class="btn btn-sm btn-default" id="import_storage">
 					<span class="glyphicon glyphicon-import"></span> <span>导入</span>
 				</button>
@@ -566,7 +600,7 @@
 </div>
 
 <!-- 添加库存信息模态框 -->
-<div id="add_modal" class="modal fade" table-index="-1" role="dialog"
+<%--<div id="add_modal" class="modal fade" table-index="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true"
 	data-backdrop="static">
 	<div class="modal-dialog">
@@ -622,7 +656,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div>--%>
 
 <!-- 导入库存信息模态框 -->
 <div class="modal fade" id="import_modal" table-index="-1" role="dialog"
@@ -645,7 +679,7 @@
 							</div>
 							<div style="margin-top: 30px; margin-buttom: 15px">
 								<a class="btn btn-info"
-									href="commons/fileSource/download/storageRecord.xlsx"
+									href="commons/fileSource/download/locationStorageRecord.xlsx"
 									target="_blank"> <span class="glyphicon glyphicon-download"></span>
 									<span>下载</span>
 								</a>
@@ -678,7 +712,7 @@
 								<div style="margin-top: 30px; margin-buttom: 15px">
 									<span class="btn btn-info btn-file"> <span> <span
 											class="glyphicon glyphicon-upload"></span> <span>上传文件</span>
-									</span> 
+									</span>
 									<form id="import_file_upload"><input type="file" id="file" name="file"></form>
 									</span>
 								</div>
@@ -814,6 +848,32 @@
 	</div>
 </div>
 
+<!-- 不能删除提示模态框 -->
+<div class="modal fade" id="not_deleteWarning_modal" table-index="-1"
+	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">警告</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-3 col-sm-3" style="text-align: center;">
+						<img src="media/icons/warning-icon.png" alt=""
+							style="width: 70px; height: 70px; margin-top: 20px;">
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<br>
+						<h3>该库存数量大于0，不能删除</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- 编辑库存模态框 -->
 <div id="edit_modal" class="modal fade" table-index="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true"
@@ -832,11 +892,40 @@
 					<div class="col-md-8 col-sm-8">
 						<form class="form-horizontal" role="form" id="storage_form_edit"
 							style="margin-top: 25px">
+							<input type="hidden" id="location_storage_id" name="locationStorageID"/>
 							<div class="form-group">
-								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物ID：</span>
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物编号：</span>
 								</label>
 								<div class="col-md-4 col-sm-4">
-									<p id="storage_goodsID_edit" class="form-control-static"></p>
+									<p id="storage_goodsNO_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物名称：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_goodsName_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物颜色：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_goodsColor_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物尺码：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_goodsSize_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>所在货位：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="location_no_edit" class="form-control-static"></p>
 								</div>
 							</div>
 							<div class="form-group">

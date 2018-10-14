@@ -55,15 +55,9 @@
 	function repositoryOptionInit(){
 		$.ajax({
 			type : 'GET',
-			url : 'repositoryManage/getRepositoryList',
+			url : 'repositoryManage/getOnlyRepositoryList',
 			dataType : 'json',
 			contentType : 'application/json',
-			data:{
-				searchType : "searchAll",
-				keyWord : "",
-				offset : -1,
-				limit : -1
-			},
 			success : function(response){
 				$.each(response.rows,function(index,elem){
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
@@ -575,21 +569,21 @@
 			</div>
 		</div>
 
-		<div class="row" style="margin-top: 25px">
-			<div class="col-md-5">
-				<%--<button class="btn btn-sm btn-default" id="add_storage">
-					<span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
-				</button>--%>
-				<button class="btn btn-sm btn-default" id="import_storage">
-					<span class="glyphicon glyphicon-import"></span> <span>导入</span>
-				</button>
-				<button class="btn btn-sm btn-default" id="export_storage">
-					<span class="glyphicon glyphicon-export"></span> <span>导出</span>
-				</button>
-			</div>
-			<div class="col-md-5"></div>
-		</div>
 
+		<%--<div class="row" style="margin-top: 25px">
+                    <div class="col-md-5">
+                        &lt;%&ndash;<button class="btn btn-sm btn-default" id="add_storage">
+                            <span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
+                        </button>&ndash;%&gt;
+                        <button class="btn btn-sm btn-default" id="import_storage">
+                            <span class="glyphicon glyphicon-import"></span> <span>导入</span>
+                        </button>
+                        <button class="btn btn-sm btn-default" id="export_storage">
+                            <span class="glyphicon glyphicon-export"></span> <span>导出</span>
+                        </button>
+                    </div>
+                    <div class="col-md-5"></div>
+                </div>--%>
 		<div class="row" style="margin-top: 15px">
 			<div class="col-md-12">
 				<table id="storageList" class="table table-striped"></table>

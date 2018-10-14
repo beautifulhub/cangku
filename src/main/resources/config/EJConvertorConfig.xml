@@ -176,4 +176,31 @@
             <value>库存数量</value>
         </property>
     </entity>
+
+    <entity class="com.ken.wms.domain.LocationStorage" sheetName="货位库存信息" boldHeading="true">
+        <property>
+            <field>goodsNO</field>
+            <value>货物编号</value>
+        </property>
+        <property>
+            <field>goodsColor</field>
+            <value>货物颜色</value>
+        </property>
+        <property>
+            <field>goodsSize</field>
+            <value>货物尺码</value>
+        </property>
+        <property>
+            <field>goodsNum</field>
+            <value>货物数量</value>
+        </property>
+        <property>
+            <field>locationNO</field>
+            <value>所在货位</value>
+        </property>
+        <property>
+            <field>repositoryID</field>
+            <value>仓库ID</value>
+        </property>
+    </entity>
 </configuration>

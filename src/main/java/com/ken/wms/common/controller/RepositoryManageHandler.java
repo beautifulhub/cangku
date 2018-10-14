@@ -145,6 +145,36 @@ public class RepositoryManageHandler {
     }
 
     /**
+     * 查询仓库信息不关联
+     *
+     * @return 返回一个Map，其中key=rows，表示查询出来的记录；key=total，表示记录的总条数
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getOnlyRepositoryList", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> getOnlyRepositoryList() throws RepositoryManageServiceException {
+        // 初始化 Response
+        Response responseContent = ResponseFactory.newInstance();
+
+        List<Repository> rows = null;
+        long total = 0;
+
+        // 查询
+        Map<String, Object> queryResult = repositoryService.selectAllRepo();
+
+        if (queryResult != null) {
+            rows = (List<Repository>) queryResult.get("data");
+            total = (long) queryResult.get("total");
+        }
+
+        // 设置 Response
+        responseContent.setCustomerInfo("rows", rows);
+        responseContent.setResponseTotal(total);
+        return responseContent.generateResponse();
+    }
+
+    /**
      * 查询所有未指派管理员的仓库
      *
      * @return 返回一个 map，其中key=data表示查询的记录，key=total表示记录的条数

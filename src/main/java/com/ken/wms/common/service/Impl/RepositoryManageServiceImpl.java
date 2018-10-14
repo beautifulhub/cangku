@@ -177,6 +177,34 @@ public class RepositoryManageServiceImpl implements RepositoryService {
     }
 
     /**
+     * 查询所有仓库记录不关联
+     *
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectAllRepo() throws RepositoryManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Repository> repositories;
+        long total = 0;
+
+        //query
+        try {
+            repositories = repositoryMapper.selectAllRepo();
+            if (repositories != null)
+                total = repositories.size();
+            else
+                repositories = new ArrayList<>();
+        } catch (PersistenceException e) {
+            throw new RepositoryManageServiceException(e);
+        }
+
+        resultSet.put("data", repositories);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
+    /**
      * 查询所有的仓库记录
      *
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
@@ -276,7 +304,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
                 return false;
 
             // 检查是否已指派仓库管理员
-            RepositoryAdmin repositoryAdmin = repositoryAdminMapper.selectByRepositoryID(repositoryId);
+            List<RepositoryAdmin> repositoryAdmin = repositoryAdminMapper.selectByRepositoryID(repositoryId);
             if (repositoryAdmin != null)
                 return false;
 
@@ -385,7 +413,7 @@ public class RepositoryManageServiceImpl implements RepositoryService {
                 repositories = repositoryMapper.selectAll();
             }else{
                 RepositoryAdmin repositoryAdmin ;
-                repositoryAdmin = repositoryAdminMapper.selectByID(userId); //一个人管理一个仓库
+                repositoryAdmin = repositoryAdminMapper.selectByID(userId); //找到自己管理的仓库
                 Repository repo = new Repository();
                 if(repositoryAdmin != null){
                     repo = repositoryMapper.selectByID(repositoryAdmin.getRepositoryBelongID());

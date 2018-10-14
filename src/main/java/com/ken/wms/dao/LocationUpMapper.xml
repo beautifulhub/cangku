@@ -11,7 +11,7 @@
 		<result property="goodsNO" column="LOCATIONUP_GOODS_NO"/>
 		<result property="goodsName" column="LOCATIONUP_GOODS_NAME"/>
 		<result property="goodsColor" column="LOCATIONUP_GOODS_COLOR"/>
-		<result property="goodsSIZE" column="LOCATIONUP_GOODS_SIZE"/>
+		<result property="goodsSize" column="LOCATIONUP_GOODS_SIZE"/>
 		<result property="goodsNum" column="LOCATIONUP_GOODS_NUM"/>
 		<result property="locationNO" column="LOCATIONUP_NO"/>
 		<result property="updateTime" column="LOCATIONUP_UPDATE_TIME"/>
@@ -44,7 +44,7 @@
 		lu.LOCATIONUP_GOODS_SIZE as LOCATIONUP_GOODS_SIZE,
 		lu.LOCATIONUP_GOODS_NUM as LOCATIONUP_GOODS_NUM,
 		lu.LOCATIONUP_NO as LOCATIONUP_NO,
-		lu.LOCATIONUP_TIME as LOCATIONUP_UPDATE_TIME,
+		lu.LOCATIONUP_UPDATE_TIME as LOCATIONUP_UPDATE_TIME,
 		u.user_username as LOCATIONUP_PERSON_NAME,
 		lu.LOCATIONUP_REPOSITORY_ID as LOCATIONUP_REPOSITORY_ID
 		from
@@ -69,7 +69,10 @@
 			and lu.LOCATIONUP_GOODS_SIZE = #{goodsSize}
 		</if>
 		<if test="repositoryID > 0">
-			and lu.LOCATIONUP_REPOSITORYID = #{repositoryID}
+			and lu.LOCATIONUP_REPOSITORY_ID = #{repositoryID}
+		</if>
+		<if test="personID > 0">
+			and lu.LOCATIONUP_person_ID = #{personID}
 		</if>
 		<if test="startDate != null">
 			and lu.LOCATIONUP_UPDATE_TIME &gt;= #{startDate}

@@ -217,15 +217,9 @@
 	function repositorySelectorInit(){
 		$.ajax({
 			type : 'GET',
-			url : 'repositoryManage/getRepositoryList',
+			url : 'repositoryManage/getOnlyRepositoryList',
 			dataType : 'json',
 			contentType : 'application/json',
-			data : {
-				searchType : 'searchAll',
-				keyWord : '',
-				offset : -1,
-				limit : -1
-			},
 			success : function(response){
 				$.each(response.rows,function(index,elem){
 					$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");

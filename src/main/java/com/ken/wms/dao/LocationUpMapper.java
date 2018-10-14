@@ -23,7 +23,7 @@ public interface LocationUpMapper {
      */
     List<LocationUpDO> selectBySearch(@Param("goodsNO") String goodsNO,@Param("goodsName") String goodsName,
                                       @Param("goodsColor") String goodsColor,@Param("goodsSize") String goodsSize,
-                                      @Param("repositoryID") Integer repositoryID,
+                                      @Param("repositoryID") Integer repositoryID,@Param("personID") Integer personID,
                                       @Param("startDate") Date startDate,@Param("endDate") Date endDate);
 
     /**

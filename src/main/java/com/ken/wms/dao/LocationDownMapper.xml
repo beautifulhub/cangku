@@ -11,7 +11,7 @@
 		<result property="goodsNO" column="LOCATIONDOWN_GOODS_NO"/>
 		<result property="goodsName" column="LOCATIONDOWN_GOODS_NAME"/>
 		<result property="goodsColor" column="LOCATIONDOWN_GOODS_COLOR"/>
-		<result property="goodsSIZE" column="LOCATIONDOWN_GOODS_SIZE"/>
+		<result property="goodsSize" column="LOCATIONDOWN_GOODS_SIZE"/>
 		<result property="goodsNum" column="LOCATIONDOWN_GOODS_NUM"/>
 		<result property="locationNO" column="LOCATIONDOWN_NO"/>
 		<result property="updateTime" column="LOCATIONDOWN_UPDATE_TIME"/>
@@ -44,7 +44,7 @@
 		ld.LOCATIONDOWN_GOODS_SIZE as LOCATIONDOWN_GOODS_SIZE,
 		ld.LOCATIONDOWN_GOODS_NUM as LOCATIONDOWN_GOODS_NUM,
 		ld.LOCATIONDOWN_NO as LOCATIONDOWN_NO,
-		ld.LOCATIONDOWN_TIME as LOCATIONDOWN_UPDATE_TIME,
+		ld.LOCATIONDOWN_UPDATE_TIME as LOCATIONDOWN_UPDATE_TIME,
 		u.user_username as LOCATIONDOWN_PERSON_NAME,
 		ld.LOCATIONDOWN_REPOSITORY_ID as LOCATIONDOWN_REPOSITORY_ID
 		from
@@ -69,7 +69,10 @@
 			and ld.LOCATIONDOWN_GOODS_SIZE = #{goodsSize}
 		</if>
 		<if test="repositoryID > 0">
-			and ld.LOCATIONDOWN_REPOSITORYID = #{repositoryID}
+			and ld.LOCATIONDOWN_REPOSITORY_ID = #{repositoryID}
+		</if>
+		<if test="personID > 0">
+			and ld.LOCATIONDOWN_person_ID = #{personID}
 		</if>
 		<if test="startDate != null">
 			and ld.LOCATIONDOWN_UPDATE_TIME &gt;= #{startDate}
