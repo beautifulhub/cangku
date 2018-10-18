@@ -193,11 +193,11 @@
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_record_storage(RECORD_GOODS_ID,RECORD_REPOSITORY,RECORD_NUMBER)
+		insert into wms_record_storage(RECORD_GOODS_ID,RECORD_GOODS_COLOR,RECORD_GOODS_SIZE,RECORD_GOODS_NUM,RECORD_REPOSITORY)
 		values
 		<foreach collection="list" item="storage" separator=",">
 			(
-			#{storage.goodsID},#{storage.repositoryID},#{storage.number})
+			#{storage.goodsID},#{storage.goodsColor},#{storage.goodsSize},#{storage.goodsNum},#{storage.repositoryID})
 		</foreach>
 	</insert>
 	

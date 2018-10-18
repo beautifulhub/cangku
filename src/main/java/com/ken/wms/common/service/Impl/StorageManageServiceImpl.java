@@ -500,47 +500,75 @@ public class StorageManageServiceImpl implements StorageManageService {
         Map<String, Object> resultSet = new HashMap<>();
         int total = 0;
         int available = 0;
-
+        String errorTip = "";
         // 从文件中读取
         try {
             List<Storage> storageList = ejConvertor.excelReader(Storage.class, FileUtil.convertMultipartFileToFile(file));
             if (storageList != null) {
                 total = storageList.size();
 
-                boolean isAvailable;
                 List<Storage> availableList = new ArrayList<>();
                 Goods goods;
                 Repository repository;
+                int i = 1; //除去标题所在的首行
                 for (Storage storage : storageList) {
-                    isAvailable = true;
-
+                    i++;
                     // validate
-                    goods = goodsMapper.selectById(storage.getGoodsID());
-                    repository = repositoryMapper.selectByID(storage.getRepositoryID());
-                    if (goods == null)
-                        isAvailable = false;
-                    if (repository == null)
-                        isAvailable = false;
-                    if (storage.getGoodsNum() < 0)
-                        isAvailable = false;
-                    List<Storage> temp = storageMapper.selectByGoodsIDAndRepositoryID(storage.getGoodsID(), storage.getRepositoryID());
-                    if (!(temp != null && temp.isEmpty()))
-                        isAvailable = false;
-
-                    if (isAvailable) {
-                        availableList.add(storage);
+                    if (storage.getGoodsNum() < 0) {
+                        errorTip = "第"+i+"行的货物数量应该是大于等于0";
+                        break;
                     }
+//                    goods = goodsMapper.selectById(storage.getGoodsID());
+                    goods = goodsMapper.selectByNo(storage.getGoodsNO());
+                    if (goods == null) {
+                        errorTip = "第"+i+"行的货物编号不存在";
+                        break;
+                    }else{
+                        if(!goods.getColors().contains(storage.getGoodsColor())){
+                            errorTip = "第"+i+"行的货物颜色不存在";
+                            break;
+                        }else if(!goods.getSizes().contains(storage.getGoodsSize())){
+                            errorTip = "第"+i+"行的货物尺码不存在";
+                            break;
+                        }
+                        storage.setGoodsID(goods.getId());
+                    }
+                    repository = repositoryMapper.selectByID(storage.getRepositoryID());
+                    if (repository == null) {
+                        errorTip = "第"+i+"行对应的仓库编号不存在";
+                        break;
+                    }
+                    List<Storage> temp = storageMapper.selectByGoodsIDAndRepositoryID(goods.getId(), storage.getRepositoryID());
+                    if (!(temp != null && !temp.isEmpty())){
+                        errorTip = "第"+i+"行仓库对应的货物编号不存在";
+                        break;
+                    }
+
+                    availableList.add(storage);
                 }
                 // 保存到数据库
-                available = availableList.size();
-                System.out.println(available);
-                if (available > 0)
-                    storageMapper.insertBatch(availableList);
+                // 保存到数据库
+                if(i == availableList.size() +1 && i > 1){
+                    //所有校验都合格
+                    for(Storage storage : availableList){
+                        synchronized (this) {
+                            // 检查对应的库存记录是否存在
+                            Storage newstorage = getStorage(storage.getGoodsID(), storage.getGoodsColor(), storage.getGoodsSize(), storage.getRepositoryID());
+                            if (newstorage != null) {
+                                long newStorageNum = newstorage.getGoodsNum() + storage.getGoodsNum();
+                                updateStorage(newstorage.getStorageID(), newStorageNum);
+                            } else {
+                                addNewStorage(storage.getGoodsID(), storage.getGoodsColor(), storage.getGoodsSize(), storage.getRepositoryID(), storage.getGoodsNum());
+                            }
+                        }
+                    }
+                    available = availableList.size();
+                }
             }
         } catch (PersistenceException | IOException e) {
             throw new StorageManageServiceException(e);
         }
-
+        resultSet.put("errorTip", errorTip);
         resultSet.put("total", total);
         resultSet.put("available", available);
         return resultSet;

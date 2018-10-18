@@ -385,7 +385,7 @@
 	var import_step = 1;
 	var import_start = 1;
 	var import_end = 3;
-	// 导入库存信息
+	// 导入货位库存信息
 	function importStorageAction() {
 		$('#import_storage').click(function() {
 			$('#import_modal').modal("show");
@@ -672,7 +672,7 @@
 			<div class="modal-header">
 				<button class="close" type="button" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">导入库存信息</h4>
+				<h4 class="modal-title" id="myModalLabel">导入货位库存信息</h4>
 			</div>
 			<div class="modal-body">
 				<div id="step1">
@@ -697,11 +697,14 @@
 						<div class="col-md-1 col-sm-1"></div>
 						<div class="col-md-10 col-sm-10">
 							<div>
-								<h4>请按照库存信息电子表格中指定的格式填写需要添加的一个或多个库存信息</h4>
+								<h4>导入前请仔细阅读以下注意事项</h4>
 							</div>
 							<div class="alert alert-info"
 								style="margin-top: 10px; margin-buttom: 30px">
-								<p>注意：表格中各个列均不能为空，若存在未填写的项，则该条信息将不能成功导入</p>
+								<p>注意：</p>
+								<p>1.表格中各个列均不能为空，若存在未填写的项，则该条信息将不能成功导入</p>
+								<p>2.导入的数据会累加到库存中，切勿无意义的多次导入，避免带来库存混乱</p>
+								<p>3.不确定或不知道怎么处理时，请及时联系系统管理人员</p>
 							</div>
 						</div>
 					</div>

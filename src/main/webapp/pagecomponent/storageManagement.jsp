@@ -426,7 +426,6 @@
 			// next
 			$('#confirm').removeClass("hide");
 			$('#submit').addClass("hide");
-
 			// ajax
 			$.ajaxFileUpload({
 				url : "storageManage/importStorageRecord",
@@ -441,16 +440,18 @@
 					var info;
 
 					$('#import_progress_bar').addClass("hide");
-					if(data.result == "success"){
-						total = data.total;
-						available = data.available;
-						info = msg1;
-						$('#import_success').removeClass('hide');
-					}else{
-						info = msg2
-						$('#import_error').removeClass('hide');
-					}
-					info = info + ",总条数：" + total + ",有效条数:" + available;
+                    total = data.total;
+                    if(data.result == "success"){
+                        available = data.available;
+                        info = msg1;
+                        info = info + ",总条数：" + total + ",有效条数:" + available;
+                        $('#import_success').removeClass('hide');
+                    }else{
+                        var errorTip = data.errorTip;
+                        info = msg2
+                        $('#import_error').removeClass('hide');
+                        info = info + ",总条数：" + total +",错误信息:"+ errorTip;
+                    }
 					$('#import_result').removeClass('hide');
 					$('#import_info').text(info);
 					$('#confirm').removeClass('disabled');
@@ -476,9 +477,11 @@
 
 		$('#export_storage_download').click(function(){
 			var data = {
-				searchType : search_type_storage,
-				repositoryBelong : search_repository,
-				keyword : search_keyWord
+                searchType : search_type_storage,
+                selectColor : search_color,
+                selectSize : search_size,
+                repositoryBelong : search_repository,
+                keyword : search_keyWord,
 			}
 			var url = "storageManage/exportStorageRecord?" + $.param(data)
 			window.open(url, '_blank');
@@ -578,11 +581,11 @@
 		</div>
 
 
-		<%--<div class="row" style="margin-top: 25px">
+		<div class="row" style="margin-top: 25px">
                     <div class="col-md-5">
-                        &lt;%&ndash;<button class="btn btn-sm btn-default" id="add_storage">
+                        <%--<button class="btn btn-sm btn-default" id="add_storage">
                             <span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
-                        </button>&ndash;%&gt;
+                        </button>--%>
                         <button class="btn btn-sm btn-default" id="import_storage">
                             <span class="glyphicon glyphicon-import"></span> <span>导入</span>
                         </button>
@@ -591,7 +594,7 @@
                         </button>
                     </div>
                     <div class="col-md-5"></div>
-                </div>--%>
+                </div>
 		<div class="row" style="margin-top: 15px">
 			<div class="col-md-12">
 				<table id="storageList" class="table table-striped"></table>
@@ -693,11 +696,14 @@
 						<div class="col-md-1 col-sm-1"></div>
 						<div class="col-md-10 col-sm-10">
 							<div>
-								<h4>请按照库存信息电子表格中指定的格式填写需要添加的一个或多个库存信息</h4>
+								<h4>导入前请仔细阅读以下注意事项</h4>
 							</div>
 							<div class="alert alert-info"
 								style="margin-top: 10px; margin-buttom: 30px">
-								<p>注意：表格中各个列均不能为空，若存在未填写的项，则该条信息将不能成功导入</p>
+								<p>注意：</p>
+								<p>1.表格中各个列均不能为空，若存在未填写的项，则该条信息将不能成功导入</p>
+								<p>2.导入的数据会累加到库存中，切勿无意义的多次导入，避免带来库存混乱</p>
+								<p>3.不确定或不知道怎么处理时，请及时联系系统管理人员</p>
 							</div>
 						</div>
 					</div>

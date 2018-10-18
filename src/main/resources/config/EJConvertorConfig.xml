@@ -148,32 +148,28 @@
 
     <entity class="com.ken.wms.domain.Storage" sheetName="库存信息" boldHeading="true">
         <property>
-            <field>goodsID</field>
-            <value>货物ID</value>
+            <field>goodsNO</field>
+            <value>货物编号</value>
         </property>
         <property>
             <field>goodsName</field>
             <value>货物名称</value>
         </property>
         <property>
+            <field>goodsColor</field>
+            <value>货物颜色</value>
+        </property>
+        <property>
             <field>goodsSize</field>
-            <value>货物规格</value>
+            <value>货物尺码</value>
         </property>
         <property>
-            <field>goodsType</field>
-            <value>货物类型</value>
-        </property>
-        <property>
-            <field>goodsValue</field>
-            <value>货物价值</value>
+            <field>goodsNum</field>
+            <value>货物数量</value>
         </property>
         <property>
             <field>repositoryID</field>
             <value>仓库ID</value>
-        </property>
-        <property>
-            <field>number</field>
-            <value>库存数量</value>
         </property>
     </entity>
 

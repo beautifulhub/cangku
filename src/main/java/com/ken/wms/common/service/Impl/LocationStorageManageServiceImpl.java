@@ -3,6 +3,7 @@ package com.ken.wms.common.service.Impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ken.wms.common.service.Interface.LocationStorageManageService;
+import com.ken.wms.common.service.Interface.StorageManageService;
 import com.ken.wms.common.util.EJConvertor;
 import com.ken.wms.common.util.FileUtil;
 import com.ken.wms.dao.GoodsMapper;
@@ -43,6 +44,7 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
     private LocationMapper locationMapper;
     @Autowired
     private EJConvertor ejConvertor;
+
 
     /**
      * 返回所有的货位库存记录
@@ -228,15 +230,33 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
                     }
                     location = locationMapper.selectByNo(locationStorage.getRepositoryID(),locationStorage.getLocationNO());
                     if (location == null) {
-                        errorTip = "第"+i+"行所在的货位编号不存在";
+                        errorTip = "第"+i+"行仓库所在的货位编号不存在";
                         break;
                     }
                     availableList.add(locationStorage);
                 }
                 // 保存到数据库
                 if(i == availableList.size() +1 && i > 1){//所有校验都合格
+                    for(LocationStorage locationStorage : availableList){
+                        synchronized (this) {
+                            // 检查对应的货位库存记录是否存在
+                            LocationStorage newLocationStorage = getLocationStorage(locationStorage.getGoodsID(), locationStorage.getGoodsColor(), locationStorage.getGoodsSize(), locationStorage.getLocationNO(),locationStorage.getRepositoryID());
+                            if (newLocationStorage != null) {
+                                long newStorageNum = newLocationStorage.getGoodsNum() + locationStorage.getGoodsNum();
+                                updateStorageByNum(newLocationStorage.getStorageID(), newStorageNum);
+                            } else {
+                                LocationStorage locStorage = new LocationStorage();
+                                locStorage.setGoodsID(locationStorage.getGoodsID());
+                                locStorage.setGoodsColor(locationStorage.getGoodsColor());
+                                locStorage.setGoodsSize(locationStorage.getGoodsSize());
+                                locStorage.setGoodsNum(locationStorage.getGoodsNum());
+                                locStorage.setLocationNO(locationStorage.getLocationNO());
+                                locStorage.setRepositoryID(locationStorage.getRepositoryID());
+                                addLocationStorage(locStorage);
+                            }
+                        }
+                    }
                     available = availableList.size();
-                    locationStorageMapper.insertBatch(availableList);
                 }
             }
         } catch (PersistenceException | IOException e) {

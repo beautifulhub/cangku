@@ -309,20 +309,32 @@ public class StorageManageHandler {
 
         int total = 0;
         int available = 0;
+        String errorTip = "";
 
         if (file != null) {
             Map<String, Object> importInfo = storageManageService.importStorage(file);
             if (importInfo != null) {
                 total = (int) importInfo.get("total");
+                errorTip = (String)importInfo.get("errorTip");
+                if(errorTip == null || "".equals(errorTip)){
+                    available = (int) importInfo.get("available");
+                    result = Response.RESPONSE_RESULT_SUCCESS;
+                }else{
+                    result = Response.RESPONSE_RESULT_ERROR;
+                }
+            }
+            /*if (importInfo != null) {
+                total = (int) importInfo.get("total");
                 available = (int) importInfo.get("available");
                 result = Response.RESPONSE_RESULT_SUCCESS;
-            }
+            }*/
         }
 
         // 设置 Response
         responseContent.setResponseResult(result);
         responseContent.setResponseTotal(total);
         responseContent.setCustomerInfo("available", available);
+        responseContent.setCustomerInfo("errorTip", errorTip);
         return responseContent.generateResponse();
     }
 
