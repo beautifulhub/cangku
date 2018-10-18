@@ -159,7 +159,6 @@ public class RepositoryManageHandler {
 
         List<Repository> rows = null;
         long total = 0;
-
         // 查询
         Map<String, Object> queryResult = repositoryService.selectAllRepo();
 
@@ -191,6 +190,33 @@ public class RepositoryManageHandler {
 
         // 查询
         Map<String, Object> queryResult = repositoryService.selectUnassign();
+        if (queryResult != null) {
+            data = (List<Repository>) queryResult.get("data");
+            total = (long) queryResult.get("total");
+        } else
+            data = new ArrayList<>();
+
+        resultSet.put("data", data);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
+    /**
+     * 查询除自身之外的所有管理员仓库
+     *
+     * @return 返回一个 map，其中key=data表示查询的记录，key=total表示记录的条数
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getOtherRepository", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> getOtherRepository(@RequestParam("repoAdminID") Integer repoAdminID) throws RepositoryManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Repository> data;
+        long total = 0;
+        // 查询
+        Map<String, Object> queryResult = repositoryService.selectOther(repoAdminID);
         if (queryResult != null) {
             data = (List<Repository>) queryResult.get("data");
             total = (long) queryResult.get("total");

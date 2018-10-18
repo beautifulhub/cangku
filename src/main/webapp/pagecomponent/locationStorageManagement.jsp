@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <script>
 	var search_type_storage = "none";
 	var search_keyWord = "";
@@ -46,6 +46,7 @@
 				$("#search_input_type").removeAttr("readOnly");
 			}
 			$("#search_type").text(type);
+            $("#search_input_type").val('');
 			$("#search_input_type").attr("placeholder", type);
             commonUtil.goodsAutocomplete(search_type_storage);
         })
@@ -55,19 +56,21 @@
 	function repositoryOptionInit(){
 		$.ajax({
 			type : 'GET',
-			url : 'repositoryManage/getOnlyRepositoryList',
+			//url : 'repositoryManage/getOnlyRepositoryList',
+			url : 'repositoryManage/getOwnRepo',
 			dataType : 'json',
 			contentType : 'application/json',
 			success : function(response){
-				$.each(response.rows,function(index,elem){
+				$.each(response.data,function(index,elem){
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
 			},
 			error : function(response){
 				// do nothing
+                $('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
 		});
-		$('#search_input_repository').append("<option value='all'>所有仓库</option>");
+
 	}
 
 	function colorSizeSearchInit(){
@@ -260,7 +263,6 @@
                         locationStorageID : $('#location_storage_id').val(),
 						number : $('#storage_number_edit').val(),
 					}
-					debugger
 					// ajax
 					$.ajax({
 						type : "POST",
@@ -532,7 +534,7 @@
 </script>
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>库存信息管理</li>
+		<li>架位库存查询</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">
@@ -565,6 +567,9 @@
 					</div>
 					<div class="col-md-2 col-sm-4">
 						<select class="form-control" id="search_input_repository">
+							<shiro:hasRole name="systemAdmin">
+								<option value='all'>所有仓库</option>
+							</shiro:hasRole>
 						</select>
 					</div>
 					<div class="col-md-2 col-sm-2">

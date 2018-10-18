@@ -28,7 +28,13 @@ public interface RepositoryMapper {
 	 * @return 返回所有未分配的 Repository
 	 */
 	List<Repository> selectUnassign();
-	
+
+	/**
+	 * 查询除自身之外的所有repository 记录
+	 * @return 返回所有未分配的 Repository
+	 */
+	List<Repository> selectOther(Integer personID);
+
 	/**
 	 * 选择指定 Repository ID 的 Repository 记录
 	 * @param repositoryID 仓库ID

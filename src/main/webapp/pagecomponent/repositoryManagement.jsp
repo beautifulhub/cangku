@@ -499,7 +499,7 @@
 			<div class="col-md-9 col-sm-9">
 				<div>
 					<div class="col-md-3 col-sm-4">
-						<input id="search_input" type="text" class="form-control"
+						<input id="search_input" type="text" class="form-control" readOnly
 							placeholder="仓库信息查询">
 					</div>
 					<div class="col-md-2 col-sm-2">

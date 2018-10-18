@@ -21,9 +21,10 @@
 			r.REPO_STATUS,
 			r.REPO_AREA,
 			r.REPO_DESC,
-			ra.REPO_ADMIN_NAME
+			GROUP_CONCAT(ra.repo_admin_name) REPO_ADMIN_NAME
 		from
 			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
+			GROUP by r.REPO_ID
 	</select>
 
 	<select id="selectAllRepo" resultMap="repository">
@@ -55,7 +56,27 @@
 				ra.REPO_ADMIN_REPOID = r.REPO_ID
 		)
 	</select>
-	
+
+	<select id="selectOther" resultMap="repository">
+		select
+			r.REPO_ID,
+			r.REPO_ADDRESS,
+			r.REPO_STATUS,
+			r.REPO_AREA,
+			r.REPO_DESC
+		from
+			wms_respository r
+		where r.repo_id not in
+		(
+			select IFNULL(REPO_ADMIN_REPOID,0)
+			from
+				wms_repo_admin ra
+			where
+				ra.REPO_ADMIN_ID = #{personID}
+		);
+
+	</select>
+
 	<!--<select id="selectByID" resultMap="repository">-->
 		<!--select-->
 			<!--r.REPO_ID,-->
@@ -76,11 +97,12 @@
 			r.REPO_ADDRESS,
 			r.REPO_STATUS,
 			r.REPO_AREA,
-			r.REPO_DESC
+			r.REPO_DESC,
+			GROUP_CONCAT(ra.repo_admin_name) REPO_ADMIN_NAME
 		from
-			wms_respository r
-		where
-			r.REPO_ID = #{repositoryID}
+			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
+		where r.REPO_ID = #{repositoryID}
+		GROUP by r.REPO_ID
 	</select>
 
 	<select id="selectByAddress" resultMap="repository">
@@ -90,11 +112,12 @@
 			r.REPO_STATUS,
 			r.REPO_AREA,
 			r.REPO_DESC,
-			ra.REPO_ADMIN_NAME
+			GROUP_CONCAT(ra.repo_admin_name) REPO_ADMIN_NAME
 		from
 			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
 		where
 			r.REPO_ADDRESS like concat(concat("%",#{address},"%"))
+			GROUP by r.REPO_ID
 	</select>
 	
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true">

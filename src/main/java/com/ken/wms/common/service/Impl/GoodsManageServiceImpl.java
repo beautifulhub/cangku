@@ -335,6 +335,8 @@ public class GoodsManageServiceImpl implements GoodsManageService {
                 List<Goods> availableList = new ArrayList<>();
                 for (Goods goods : goodsList) {
                     if (goodsCheck(goods)) {
+                        String upperSizes = goods.getSizes().toUpperCase();
+                        goods.setSizes(upperSizes);
                         availableList.add(goods);
                     }
                 }

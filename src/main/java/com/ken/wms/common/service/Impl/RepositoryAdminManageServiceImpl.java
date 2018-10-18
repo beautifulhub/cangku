@@ -230,8 +230,8 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
                 if (!repositoryAdminCheck(repositoryAdmin))
                     return false;
 
-                // 若有指派的仓库则检查
-                if (repositoryAdmin.getRepositoryBelongID() != null) {
+                // 若有指派的仓库则检查---暂时注释掉
+                /*if (repositoryAdmin.getRepositoryBelongID() != null) {
                     List<RepositoryAdmin> rAdminFromDB = repositoryAdminMapper.selectByRepositoryID(repositoryAdmin.getRepositoryBelongID());
 
                     if (rAdminFromDB != null){
@@ -243,7 +243,7 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
                             return false;
                         }
                     }
-                }
+                }*/
 
                 // 更新
                 repositoryAdminMapper.update(repositoryAdmin);

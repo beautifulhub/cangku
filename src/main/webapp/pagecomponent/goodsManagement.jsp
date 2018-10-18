@@ -185,9 +185,9 @@
                 var goodssizes = $(".goods_size");
                 var goodssize = '';
                 for(var i=0 ;i<goodssizes.length-1; i++){
-                    goodssize += goodssizes[i].value.trim() + "，";
+                    goodssize += goodssizes[i].value.trim().toUpperCase() + "，";
                 }
-                goodssize += goodssizes[goodssizes.length-1].value.trim();
+                goodssize += goodssizes[goodssizes.length-1].value.trim().toUpperCase();
                 $("#"+sizeDealType).val(goodssize).change();
                 $('#goods_sizes_modal').modal("hide");
             });

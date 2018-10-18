@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <style type="text/css">
     .table tbody tr td{
         overflow: hidden;
@@ -34,16 +35,17 @@
 	function repositoryOptionInit(){
 		$.ajax({
 			type : 'GET',
-			url : 'repositoryManage/getOnlyRepositoryList',
+			url : 'repositoryManage/getOwnRepo',
 			dataType : 'json',
 			contentType : 'application/json',
 			success : function(response){
-				$.each(response.rows,function(index,elem){
+				$.each(response.data,function(index,elem){
 					$('#search_repository_ID').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
 			},
 			error : function(response){
-				// do nothing 
+				// do nothing
+                $('#search_repository_ID').append("<option value='-1'>加载失败</option>");
 			}
 		});
 	}
@@ -215,7 +217,7 @@
 
 <div class="panel panel-default">
     <ol class="breadcrumb">
-        <li>业务流水</li>
+        <li>上下架记录</li>
     </ol>
     <div class="panel-body">
         <div class="row">
@@ -224,7 +226,9 @@
                     <div class="form-group">
                         <label class="form-label">仓库编号：</label>
                         <select class="form-control" id="search_repository_ID">
-                            <option value="-1">所有仓库</option>
+                            <shiro:hasRole name="systemAdmin">
+                                <option value="-1">所有仓库</option>
+                            </shiro:hasRole>
                         </select>
                     </div>
                 </form>

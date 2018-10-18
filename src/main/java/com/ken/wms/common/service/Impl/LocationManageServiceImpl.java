@@ -350,6 +350,9 @@ public class LocationManageServiceImpl implements LocationManageService {
                         location.setUpdateTime(new Date());
                         location.setPerson(userID);
                         location.setRepoID(repoID);
+                        //货位编号中的字母统一成大写
+                        String locatonNO = location.getNo();
+                        location.setNo(locatonNO.toUpperCase());
                         availableList.add(location);
                     }
                 }

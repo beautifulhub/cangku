@@ -44,11 +44,11 @@ pageEncoding="UTF-8"%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <shiro:hasRole name="commonsAdmin">
+                            <%--<shiro:hasRole name="commonsAdmin">
                                 <li>
                                     <a href="#" id="editInfo"> <span
                                             class="glyphicon glyphicon-pencil"></span> &nbsp;&nbsp;修改个人信息</a></li>
-                            </shiro:hasRole>
+                            </shiro:hasRole>--%>
                             <li>
                                 <a href="javascript:void(0)" id="signOut"> <span
                                         class="glyphicon glyphicon-off"></span> &nbsp;&nbsp;注销登录
@@ -108,6 +108,46 @@ pageEncoding="UTF-8"%>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
+                            <a href="#collapse2" data-toggle="collapse" data-parent="#accordion"
+                               class="parentMenuTitle collapseHead">出入库管理</a>
+                            <div class="pull-right">
+                                <span class="caret"></span>
+                            </div>
+                        </h4>
+                    </div>
+                    <div id="collapse2" class="panel-collapse collapse collapseBody in">
+                        <div class="panel-body">
+                            <%--<shiro:hasRole name="systemAdmin">--%>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id="" class="menu_item"
+                                       name="pagecomponent/stock-inManagement.jsp">货物入库</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="javascript:void(0)" id="" class="menu_item"
+                                       name="pagecomponent/stock-outManagement.jsp">货物出库</a>
+                                </li>
+                            </ul>
+                            <%--</shiro:hasRole>--%>
+                            <%--<shiro:hasRole name="commonsAdmin">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item"
+                                           name="pagecomponent/stock-inManagementCommon.jsp">货物入库</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item"
+                                           name="pagecomponent/stock-outManagementCommon.jsp">货物出库</a>
+                                    </li>
+                                </ul>
+                            </shiro:hasRole>--%>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
                             <a href="#collapse1-1" data-toggle="collapse" data-parent="#accordion"
                                class="parentMenuTitle collapseHead">上下架库存</a>
                             <div class="pull-right">
@@ -136,46 +176,6 @@ pageEncoding="UTF-8"%>
                                     </li>
                                 <%--</shiro:hasRole>--%>
                             </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a href="#collapse2" data-toggle="collapse" data-parent="#accordion"
-                               class="parentMenuTitle collapseHead">出入库管理</a>
-                            <div class="pull-right">
-                                <span class="caret"></span>
-                            </div>
-                        </h4>
-                    </div>
-                    <div id="collapse2" class="panel-collapse collapse collapseBody in">
-                        <div class="panel-body">
-                            <%--<shiro:hasRole name="systemAdmin">--%>
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/stock-inManagement.jsp">货物入库</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/stock-outManagement.jsp">货物出库</a>
-                                    </li>
-                                </ul>
-                            <%--</shiro:hasRole>--%>
-                            <%--<shiro:hasRole name="commonsAdmin">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/stock-inManagementCommon.jsp">货物入库</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/stock-outManagementCommon.jsp">货物出库</a>
-                                    </li>
-                                </ul>
-                            </shiro:hasRole>--%>
                         </div>
                     </div>
                 </div>
@@ -489,7 +489,8 @@ pageEncoding="UTF-8"%>
                     <div class="col-md-10 col-sm-10">
                         <div class="alert alert-info" style="margin-top: 25px">
                             <p>登录密码修改规则说明：</p>
-                            <p>1.密码长度为6~16位，至少包含数字、字母、特殊符号中的两类，字母区分大小写</p>
+                            <%--<p>1.密码长度为6~16位，至少包含数字、字母、特殊符号中的两类，字母区分大小写</p>--%>
+                            <p>1.密码长度为6~16位</p>
                             <p>2.密码不可与账号相同</p>
                         </div>
                     </div>

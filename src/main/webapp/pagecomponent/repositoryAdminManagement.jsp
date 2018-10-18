@@ -151,7 +151,7 @@
 	}
 
 	// 行编辑操作
-	var unassignRepoCache;
+	var otherRepoCache;
 	function rowEditOperation(row) {
 		$('#edit_modal').modal("show");
 
@@ -173,12 +173,13 @@
 		$('#repositoryInfo').removeClass('hide').addClass('hide');
 		$.ajax({
 			type : 'GET',
-			url : 'repositoryManage/getUnassignRepository',
+			url : 'repositoryManage/getOtherRepository',
 			dataType : 'json',
-			contentTypr : 'application/json',
+			contentType : 'application/json',
+			data:{'repoAdminID':row.id},
 			success : function(response){
 				data = response.data;
-				unassignRepoCache = data;
+				otherRepoCache = data;
 				$.each(data,function(index,element){
 					$('#repositoryAdmin_repoID_edit').append("<option value='" + element.id + "'>" + element.id + "</option>");
 				})
@@ -282,7 +283,7 @@
 							if (response.result == "success") {
 								type = "success";
 								msg = "仓库管理员信息更新成功";
-							} else if (resposne == "error") {
+							} else if (resposne.result == "error") {
 								type = "error";
 								msg = "仓库管理员信息更新失败"
 							}
@@ -300,7 +301,7 @@
 		$('#repositoryAdmin_repoID_edit').change(function(){
 			var repositoryID = $(this).val();
 			$('#repositoryInfo').removeClass('hide').addClass('hide');
-			$.each(unassignRepoCache,function(index,element){
+			$.each(otherRepoCache,function(index,element){
 				if(element.id == repositoryID){
 					$('#repository_address').text(element.address);
 					$('#repository_area').text(element.area);
@@ -937,7 +938,7 @@
 							</div>
 							<div class="form-group">
 								<label for="BirthDate" class="control-label col-md-5 col-sm-5"> 
-									<span>出生日期:</span>
+									<span>出生日期：</span>
 								</label>
 								<div class="col-md-7 col-sm-7">
 									<input class="form_date form-control" value="" id="repositoryAdmin_birth_edit" name="repositoryAdmin_birth" placeholder="出生日期">

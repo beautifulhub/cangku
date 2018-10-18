@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 
 <script>
 	var search_type_storage = "none";
@@ -46,6 +47,7 @@
 				$("#search_input_type").removeAttr("readOnly");
 			}
 			$("#search_type").text(type);
+            $("#search_input_type").val('');
 			$("#search_input_type").attr("placeholder", type);
             commonUtil.goodsAutocomplete(search_type_storage);
         })
@@ -55,19 +57,19 @@
 	function repositoryOptionInit(){
 		$.ajax({
 			type : 'GET',
-			url : 'repositoryManage/getOnlyRepositoryList',
+			url : 'repositoryManage/getOwnRepo',
 			dataType : 'json',
 			contentType : 'application/json',
 			success : function(response){
-				$.each(response.rows,function(index,elem){
+				$.each(response.data,function(index,elem){
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
 			},
 			error : function(response){
 				// do nothing
+                $('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
 		});
-		$('#search_input_repository').append("<option value='all'>所有仓库</option>");
 	}
 
 	function colorSizeSearchInit(){
@@ -140,6 +142,7 @@
 									{
 										field : 'operation',
 										title : '操作',
+                                        visible : $("#is_admin").length > 0,
 										formatter : function(value, row, index) {
 											var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';
 											var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';
@@ -166,7 +169,8 @@
 														'show');
 											}
 										}
-									} ],
+									}
+									],
 							url : 'storageManage/getStorageListWithRepository',
 							onLoadError:function(status){
 								handleAjaxError(status);
@@ -558,6 +562,10 @@
 					</div>
 					<div class="col-md-2 col-sm-4">
 						<select class="form-control" id="search_input_repository">
+							<shiro:hasRole name="systemAdmin">
+								<option value='all'>所有仓库</option>
+								<input type="hidden" id="is_admin"></input>
+							</shiro:hasRole>
 						</select>
 					</div>
 					<div class="col-md-2 col-sm-2">

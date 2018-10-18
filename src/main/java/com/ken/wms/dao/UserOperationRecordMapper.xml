@@ -33,6 +33,7 @@
                 <![CDATA[and OPERATION_TIME <= #{endDate}]]>
             </if>
         </where>
+        order by OPERATION_TIME DESC
     </select>
 
     <insert id="insertUserOperationRecord">

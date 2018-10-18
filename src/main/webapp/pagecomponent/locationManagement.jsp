@@ -335,7 +335,7 @@
                 locationNO += $(item).val().trim() + ",";
 			})
 			var data = {
-				no : locationNO,
+				no : locationNO.toUpperCase(),
                 repoID : $("#own_repo_text").text()
 			}
 			// ajax

@@ -242,10 +242,10 @@
             },
             success : function(response){
                 locationup_repository = response.data[0].id
-                locationNoSelectorInit()
                 $.each(response.data,function(index,elem){
                     $('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
                 });
+                locationNoSelectorInit()
             },
             error : function(response){
                 $('#repository_selector').append("<option value='-1'>加载失败</option>");

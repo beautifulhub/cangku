@@ -76,6 +76,13 @@ public interface RepositoryService {
     Map<String, Object> selectUnassign() throws RepositoryManageServiceException;
 
     /**
+     * 查询除自身之外的所有管理员仓库
+     *
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    Map<String, Object> selectOther(Integer personID) throws RepositoryManageServiceException;
+
+    /**
      * 添加仓库记录
      *
      * @param repository 仓库信息

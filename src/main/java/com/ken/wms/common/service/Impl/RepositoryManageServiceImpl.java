@@ -404,13 +404,41 @@ public class RepositoryManageServiceImpl implements RepositoryService {
         return resultSet;
     }
 
+    /**
+     * 查询除自身之外的所有管理员仓库
+     *
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectOther(Integer personID) throws RepositoryManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Repository> repositories;
+        long total = 0;
+
+        // 查询
+        try {
+            repositories = repositoryMapper.selectOther(personID);
+        } catch (PersistenceException e) {
+            throw new RepositoryManageServiceException(e);
+        }
+        if (repositories != null)
+            total = repositories.size();
+        else
+            repositories = new ArrayList<>();
+
+        resultSet.put("data", repositories);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
     @Override
     public List<Repository> selectOwnRepo(boolean isAdmin, Integer userId) throws RepositoryManageServiceException {
         List<Repository> repositories = new ArrayList<>();
         //query
         try {
             if(isAdmin){
-                repositories = repositoryMapper.selectAll();
+                repositories = repositoryMapper.selectAllRepo();
             }else{
                 RepositoryAdmin repositoryAdmin ;
                 repositoryAdmin = repositoryAdminMapper.selectByID(userId); //找到自己管理的仓库
