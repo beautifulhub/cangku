@@ -95,7 +95,10 @@
 		$(".dropOption").click(function() {
 			var type = $(this).text();
 			$("#search_input").val("");
-			if (type == "货位编号") {
+            if (type == "所有") {
+                $("#search_input").attr("readOnly", "true");
+                search_type_location = "searchAll";
+            }else if (type == "货位编号") {
 				$("#search_input").removeAttr("readOnly");
 				search_type_location = "searchByNO";
 			} else {
@@ -543,6 +546,7 @@
 					</button>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0)" class="dropOption">货位编号</a></li>
+						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
 			</div>
