@@ -152,8 +152,8 @@
 					},
 					success : function(data){
 						var autoCompleteInfo = new Array();
+                        goodsCache = new Array();
 						$.each(data.rows, function(index,elem){
-                            goodsCache = new Array();
 							goodsCache.push(elem);
 							autoCompleteInfo.push({label:elem.no,value:elem.id});
 						});
@@ -260,7 +260,6 @@
     function goodsInfoSet(goodsID){
         var detailInfo;
         $.each(goodsCache,function(index,elem){
-
             if(elem.id == goodsID){
                 detailInfo = elem;
 

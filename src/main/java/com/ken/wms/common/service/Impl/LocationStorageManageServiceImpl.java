@@ -69,6 +69,7 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
         Map<String, Object> resultSet = new HashMap<>();
         List<LocationStorage> locationStorageList;
         long total = 0;
+        long totalNum = 0;
         boolean isPagination = true;
 
         // validate
@@ -80,6 +81,7 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
                 locationStorageList = locationStorageMapper.selectBySearch(goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
+                totalNum = locationStorageMapper.selectBySearchToTotalNum(goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
                 if (locationStorageList != null) {
                     PageInfo<LocationStorage> pageInfo = new PageInfo<>(locationStorageList);
                     total = pageInfo.getTotal();
@@ -98,6 +100,7 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
 
         resultSet.put("data", locationStorageList);
         resultSet.put("total", total);
+        resultSet.put("totalNum", totalNum);
         return resultSet;
     }
 

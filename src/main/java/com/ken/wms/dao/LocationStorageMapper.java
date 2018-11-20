@@ -25,6 +25,9 @@ public interface LocationStorageMapper {
 	List<LocationStorage> selectBySearch(@Param("goodsNO") String goodsNO, @Param("goodsName") String goodsName,
 										 @Param("goodsColor") String goodsColor, @Param("goodsSize") String goodsSize,
                                                    @Param("repositoryID") Integer repositoryID);
+	Long selectBySearchToTotalNum(@Param("goodsNO") String goodsNO, @Param("goodsName") String goodsName,
+										 @Param("goodsColor") String goodsColor, @Param("goodsSize") String goodsSize,
+                                                   @Param("repositoryID") Integer repositoryID);
 	/**
 	 * 选择货位库存信息
 	 * @return 返回所有指定货物ID和仓库ID的库存信息

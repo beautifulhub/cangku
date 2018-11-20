@@ -114,17 +114,20 @@ public class LocationStorageManageHandler {
 
         List<LocationStorage> rows;
         long total = 0;
+        long totalNum = 0;
 
         // query
         Map<String, Object> queryResult = query(searchType, keyword, selectColor, selectSize, repositoryBelong, offset, limit);
         if (queryResult != null) {
             rows = (List<LocationStorage>) queryResult.get("data");
             total = (long) queryResult.get("total");
+            totalNum = (long) queryResult.get("totalNum");
         } else
             rows = new ArrayList<>();
 
         // 设置 Response
         responseContent.setCustomerInfo("rows", rows);
+        responseContent.setCustomerInfo("totalNum", totalNum);
         responseContent.setResponseTotal(total);
         return responseContent.generateResponse();
     }

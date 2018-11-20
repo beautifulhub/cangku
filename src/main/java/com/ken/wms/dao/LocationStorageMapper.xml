@@ -65,6 +65,29 @@
 			and ls.LOCATION_REPOSITORY_ID = #{repositoryID}
 		</if>
 	</select>
+	<select id="selectBySearchToTotalNum" resultType="java.lang.Long">
+		select
+		IFNULL(SUM(ls.LOCATION_GOODS_NUM),0) as totalNum
+		from
+		wms_location_storage ls,wms_goods g
+		where
+		ls.LOCATION_GOODS_ID = g.GOODS_ID
+		<if test="goodsNO != null and goodsNO != ''">
+			and g.GOODS_NO = #{goodsNO}
+		</if>
+		<if test="goodsName != null and goodsName != ''">
+			and g.GOODS_NAME = #{goodsName}
+		</if>
+		<if test="goodsColor != null and goodsColor != ''">
+			and ls.LOCATION_GOODS_COLOR = #{goodsColor}
+		</if>
+		<if test="goodsSize != null and goodsSize != ''">
+			and ls.LOCATION_GOODS_SIZE = #{goodsSize}
+		</if>
+		<if test="repositoryID > 0">
+			and ls.LOCATION_REPOSITORY_ID = #{repositoryID}
+		</if>
+	</select>
 
 	<select id="selectByGoodsParam" resultMap="locationStorage">
 		SELECT

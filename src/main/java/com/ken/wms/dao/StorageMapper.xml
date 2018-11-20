@@ -50,7 +50,19 @@
 		 		and r.REPO_ID = #{repositoryID}
 		 	</if>
 	</select>
-	
+	<select id="selectAllAndRepositoryIDToTotalNum" resultType="java.lang.Long">
+		select
+		IFNULL(SUM(s.RECORD_GOODS_NUM),0) as totalNum
+		from
+			wms_record_storage s,wms_respository r, wms_goods g
+		where
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
+		 	s.RECORD_REPOSITORY = r.REPO_ID
+		 	<if test="repositoryID > 0">
+		 		and r.REPO_ID = #{repositoryID}
+		 	</if>
+	</select>
+
 	<select id="selectByGoodsIDAndRepositoryID" resultMap="storage">
 		select
 			s.RECORD_STORAGE_ID as storageID,
@@ -78,6 +90,25 @@
 			s.RECORD_GOODS_COLOR as goodsColor,
 			s.RECORD_GOODS_SIZE as goodsSize,
 			s.RECORD_GOODS_NUM as number
+		from
+			wms_record_storage s,wms_respository r, wms_goods g
+		where
+		 	s.RECORD_GOODS_ID = g.GOODS_ID and
+		 	s.RECORD_REPOSITORY = r.REPO_ID and
+		 	g.GOODS_NO = #{goodsNO}
+		 	<if test="repositoryID > 0">
+		 		and r.REPO_ID = #{repositoryID}
+		 	</if>
+		 	<if test="selectColor != null and selectColor != '' ">
+		 		and s.RECORD_GOODS_COLOR = #{selectColor}
+		 	</if>
+		 	<if test="selectSize != null and selectSize != '' ">
+		 		and s.RECORD_GOODS_SIZE = #{selectSize}
+		 	</if>
+	</select>
+	<select id="selectByGoodsNOAndRepositoryIDToTotalNum" resultType="java.lang.Long">
+		select
+		IFNULL(SUM(s.RECORD_GOODS_NUM),0) as totalNum
 		from
 			wms_record_storage s,wms_respository r, wms_goods g
 		where
@@ -143,7 +174,26 @@
 				and s.RECORD_GOODS_SIZE = #{selectSize}
 			</if>
 	</select>
-	
+	<select id="selectByGoodsNameAndRepositoryIDToTotalNum" resultType="java.lang.Long">
+		select
+		IFNULL(SUM(s.RECORD_GOODS_NUM),0) as totalNum
+		from
+			wms_record_storage s,wms_respository r, wms_goods g
+		where
+			s.RECORD_GOODS_ID = g.GOODS_ID and
+			s.RECORD_REPOSITORY = r.REPO_ID and
+			g.GOODS_NAME like concat("%",concat(#{goodsName},"%"))
+			<if test="repositoryID > 0">
+				and r.REPO_ID = #{repositoryID}
+			</if>
+			<if test="selectColor != null and selectColor != '' ">
+				and s.RECORD_GOODS_COLOR = #{selectColor}
+			</if>
+			<if test="selectSize != null and selectSize != '' ">
+				and s.RECORD_GOODS_SIZE = #{selectSize}
+			</if>
+	</select>
+
 	<select id="selectByGoodsTypeAndRepositoryID" resultMap="storage">
 		select
 			r.REPO_ID as repositoryID,

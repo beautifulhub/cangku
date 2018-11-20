@@ -183,8 +183,14 @@
 							pageNumber : 1,
 							pageSize : 5,
 							pageList : [ 5, 10, 25, 50, 100 ],
-							clickToSelect : true
-						});
+							clickToSelect : true,
+                            onLoadSuccess: function(result){  //加载成功时执行
+                                $("#total_num").text(result.totalNum);
+                            },
+                            onLoadError: function(err){
+                                $("#total_num").text("");
+							},
+                        });
 	}
 
 	// 表格刷新
@@ -593,7 +599,9 @@
                             <span class="glyphicon glyphicon-export"></span> <span>导出</span>
                         </button>
                     </div>
-                    <div class="col-md-5"></div>
+                    <div class="col-md-5">
+						查询的总数量：<font id="total_num" color="red"></font>
+					</div>
                 </div>
 		<div class="row" style="margin-top: 15px">
 			<div class="col-md-12">

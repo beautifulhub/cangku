@@ -64,6 +64,7 @@ public class StorageManageServiceImpl implements StorageManageService {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Storage> storageList;
+        long totalNum = 0;
         long total = 0;
         boolean isPagination = true;
 
@@ -76,6 +77,7 @@ public class StorageManageServiceImpl implements StorageManageService {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
                 storageList = storageMapper.selectAllAndRepositoryID(repositoryID);
+                totalNum = storageMapper.selectAllAndRepositoryIDToTotalNum(repositoryID);
                 if (storageList != null) {
                     PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
                     total = pageInfo.getTotal();
@@ -94,6 +96,7 @@ public class StorageManageServiceImpl implements StorageManageService {
 
         resultSet.put("data", storageList);
         resultSet.put("total", total);
+        resultSet.put("totalNum", totalNum);
         return resultSet;
     }
 
@@ -179,6 +182,7 @@ public class StorageManageServiceImpl implements StorageManageService {
         Map<String, Object> resultSet = new HashMap<>();
         List<Storage> storageList;
         long total = 0;
+        long totalNum = 0;
         boolean isPagination = true;
 
         // validate
@@ -190,6 +194,7 @@ public class StorageManageServiceImpl implements StorageManageService {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
                 storageList = storageMapper.selectByGoodsNOAndRepositoryID(goodsNO, selectColor, selectSize, repositoryID);
+                totalNum = storageMapper.selectByGoodsNOAndRepositoryIDToTotalNum(goodsNO, selectColor, selectSize, repositoryID);
                 if (storageList != null) {
                     PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
                     total = pageInfo.getTotal();
@@ -208,6 +213,7 @@ public class StorageManageServiceImpl implements StorageManageService {
 
         resultSet.put("data", storageList);
         resultSet.put("total", total);
+        resultSet.put("totalNum", totalNum);
         return resultSet;
     }
 
@@ -236,6 +242,7 @@ public class StorageManageServiceImpl implements StorageManageService {
         Map<String, Object> resultSet = new HashMap<>();
         List<Storage> storageList;
         long total = 0;
+        long totalNum = 0;
         boolean isPagination = true;
 
         // validate
@@ -247,6 +254,7 @@ public class StorageManageServiceImpl implements StorageManageService {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
                 storageList = storageMapper.selectByGoodsNameAndRepositoryID(goodsName,selectColor,selectSize, repositoryID);
+                totalNum = storageMapper.selectByGoodsNameAndRepositoryIDToTotalNum(goodsName,selectColor,selectSize, repositoryID);
                 if (storageList != null) {
                     PageInfo<Storage> pageInfo = new PageInfo<>(storageList);
                     total = pageInfo.getTotal();
@@ -265,6 +273,7 @@ public class StorageManageServiceImpl implements StorageManageService {
 
         resultSet.put("data", storageList);
         resultSet.put("total", total);
+        resultSet.put("totalNum", totalNum);
         return resultSet;
     }
 

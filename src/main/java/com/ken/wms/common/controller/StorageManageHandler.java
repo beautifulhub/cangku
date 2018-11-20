@@ -67,7 +67,7 @@ public class StorageManageHandler {
                     queryResult = storageManageService.selectAll(-1, offset, limit);
                 }
                 break;
-            case SEARCH_BY_GOODS_ID:
+            case SEARCH_BY_GOODS_ID://暂时没有用上
                 if (StringUtils.isNumeric(keyword)) {
                     Integer goodsID = Integer.valueOf(keyword);
                     if (StringUtils.isNumeric(repositoryBelong)) {
@@ -84,7 +84,7 @@ public class StorageManageHandler {
                 } else
                     queryResult = storageManageService.selectByGoodsNO(keyword, selectColor, selectSize, -1, offset, limit);
                 break;
-            case SEARCH_BY_GOODS_TYPE:
+            case SEARCH_BY_GOODS_TYPE://暂时没有用上
                 if (StringUtils.isNumeric(repositoryBelong)) {
                     Integer repositoryID = Integer.valueOf(repositoryBelong);
                     queryResult = storageManageService.selectByGoodsType(keyword, repositoryID, offset, limit);
@@ -131,17 +131,20 @@ public class StorageManageHandler {
 
         List<Storage> rows;
         long total = 0;
+        long totalNum = 0;
 
         // query
         Map<String, Object> queryResult = query(searchType, keyword, selectColor, selectSize, repositoryBelong, offset, limit);
         if (queryResult != null) {
             rows = (List<Storage>) queryResult.get("data");
             total = (long) queryResult.get("total");
+            totalNum = (long) queryResult.get("totalNum");
         } else
             rows = new ArrayList<>();
 
         // 设置 Response
         responseContent.setCustomerInfo("rows", rows);
+        responseContent.setCustomerInfo("totalNum", totalNum);
         responseContent.setResponseTotal(total);
         return responseContent.generateResponse();
     }
