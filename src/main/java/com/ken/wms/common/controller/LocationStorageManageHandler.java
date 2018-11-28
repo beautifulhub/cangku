@@ -62,24 +62,24 @@ public class LocationStorageManageHandler {
             case SEARCH_ALL:
                 if (StringUtils.isNumeric(repositoryBelong)) {
                     Integer repositoryID = Integer.valueOf(repositoryBelong);
-                    queryResult = locationStorageManageService.selectAllBySearchPage(null,null,null, null, repositoryID, offset, limit);
+                    queryResult = locationStorageManageService.selectAllBySearchPage("","","", "", repositoryID, offset, limit);
                 } else {
-                    queryResult = locationStorageManageService.selectAllBySearchPage(null,null,null, null, -1, offset, limit);
+                    queryResult = locationStorageManageService.selectAllBySearchPage("","","", "", -1, offset, limit);
                 }
                 break;
             case SEARCH_BY_GOODS_NO:
                 if (StringUtils.isNumeric(repositoryBelong)) {
                     Integer repositoryID = Integer.valueOf(repositoryBelong);
-                    queryResult = locationStorageManageService.selectAllBySearchPage(keyword, null, selectColor, selectSize, repositoryID, offset, limit);
+                    queryResult = locationStorageManageService.selectAllBySearchPage(keyword, "", selectColor, selectSize, repositoryID, offset, limit);
                 } else
-                    queryResult = locationStorageManageService.selectAllBySearchPage(keyword, null, selectColor, selectSize, -1, offset, limit);
+                    queryResult = locationStorageManageService.selectAllBySearchPage(keyword, "", selectColor, selectSize, -1, offset, limit);
                 break;
             case SEARCH_BY_GOODS_NAME:
                 if (StringUtils.isNumeric(repositoryBelong)) {
                     Integer repositoryID = Integer.valueOf(repositoryBelong);
-                    queryResult = locationStorageManageService.selectAllBySearchPage(null, keyword, selectColor, selectSize, repositoryID, offset, limit);
+                    queryResult = locationStorageManageService.selectAllBySearchPage("", keyword, selectColor, selectSize, repositoryID, offset, limit);
                 } else
-                    queryResult = locationStorageManageService.selectAllBySearchPage(null, keyword, selectColor, selectSize, -1, offset, limit);
+                    queryResult = locationStorageManageService.selectAllBySearchPage("", keyword, selectColor, selectSize, -1, offset, limit);
                 break;
             default:
                 // do other thing
