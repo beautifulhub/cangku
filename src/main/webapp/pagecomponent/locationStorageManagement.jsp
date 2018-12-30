@@ -39,7 +39,10 @@
 			} else if (type == "货物名称") {
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsName";
-			} /*else if(type = "货物类型"){
+			} else if (type == "货位编号") {
+                $("#search_input_type").removeAttr("readOnly");
+                search_type_storage = "searchByLocationNO";
+            } /*else if(type = "货物类型"){
 				$("#search_input_type").removeAttr("readOnly");
 				search_type_storage = "searchByGoodsType";
 			}*/else {
@@ -48,7 +51,13 @@
 			$("#search_type").text(type);
             $("#search_input_type").val('');
 			$("#search_input_type").attr("placeholder", type);
-            commonUtil.goodsAutocomplete(search_type_storage);
+            if (type == "货位编号") {
+                $('#search_input_color').empty();
+                $('#search_input_size').empty();
+                colorSizeSearchInit();
+            }else{
+                commonUtil.goodsAutocomplete(search_type_storage);
+			}
         })
     }
 
@@ -553,6 +562,7 @@
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0)" class="dropOption">货物编号</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">货物名称</a></li>
+						<li><a href="javascript:void(0)" class="dropOption">货位编号</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>

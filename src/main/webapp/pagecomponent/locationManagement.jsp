@@ -590,14 +590,14 @@
 
 <!-- 添加货位信息模态框 -->
 <div id="add_modal" class="modal fade" table-index="-1" role="dialog"
-	aria-labelledby="myModalLabel" aria-hidden="true"
+	aria-labelledby="addModalLabel" aria-hidden="true"
 	data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button class="close" type="button" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">添加货位信息</h4>
+				<h4 class="modal-title" id="addModalLabel">添加货位信息</h4>
 			</div>
 			<div class="modal-body">
 				<!-- 模态框的内容 -->

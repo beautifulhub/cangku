@@ -31,7 +31,7 @@ public interface LocationStorageManageService {
      * @param limit  分页大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectAllBySearchPage(String goodsNO,String goodsName,String goodsColor, String goodsSize, Integer repositoryID, int offset, int limit) throws LocationStorageManageServiceException;
+    Map<String, Object> selectAllBySearchPage(String locationNO, String goodsNO,String goodsName,String goodsColor, String goodsSize, Integer repositoryID, int offset, int limit) throws LocationStorageManageServiceException;
 
 
     /**

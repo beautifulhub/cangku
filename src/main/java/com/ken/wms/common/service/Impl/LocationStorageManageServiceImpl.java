@@ -53,7 +53,8 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
      */
     @Override
     public Map<String, Object> selectAllBySearch(String goodsNO,String goodsName,String goodsColor, String goodsSize, Integer repositoryID) throws LocationStorageManageServiceException {
-        return selectAllBySearchPage(goodsNO,goodsName,goodsColor, goodsSize, repositoryID, -1, -1);
+        //return selectAllBySearchPage(goodsNO,goodsName,goodsColor, goodsSize, repositoryID, -1, -1);
+        return null;
     }
 
     /**
@@ -64,7 +65,7 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectAllBySearchPage(String goodsNO,String goodsName,String goodsColor, String goodsSize, Integer repositoryID, int offset, int limit) throws LocationStorageManageServiceException {
+    public Map<String, Object> selectAllBySearchPage(String locationNO,String goodsNO,String goodsName,String goodsColor, String goodsSize, Integer repositoryID, int offset, int limit) throws LocationStorageManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<LocationStorage> locationStorageList;
@@ -80,15 +81,15 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                locationStorageList = locationStorageMapper.selectBySearch(goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
-                totalNum = locationStorageMapper.selectBySearchToTotalNum(goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
+                locationStorageList = locationStorageMapper.selectBySearch(locationNO,goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
+                totalNum = locationStorageMapper.selectBySearchToTotalNum(locationNO,goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
                 if (locationStorageList != null) {
                     PageInfo<LocationStorage> pageInfo = new PageInfo<>(locationStorageList);
                     total = pageInfo.getTotal();
                 } else
                     locationStorageList = new ArrayList<>();
             } else {
-                locationStorageList = locationStorageMapper.selectBySearch(goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
+                locationStorageList = locationStorageMapper.selectBySearch(locationNO,goodsNO,goodsName,goodsColor, goodsSize, repositoryID);
                 if (locationStorageList != null)
                     total = locationStorageList.size();
                 else

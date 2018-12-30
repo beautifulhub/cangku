@@ -49,6 +49,9 @@
 		<include refid="commonSelectFrom"></include>
 		where
 		ls.LOCATION_GOODS_ID = g.GOODS_ID
+		<if test="locationNO != null and locationNO != ''">
+			and ls.LOCATION_NO = #{locationNO}
+		</if>
 		<if test="goodsNO != null and goodsNO != ''">
 			and g.GOODS_NO = #{goodsNO}
 		</if>
@@ -72,6 +75,9 @@
 		wms_location_storage ls,wms_goods g
 		where
 		ls.LOCATION_GOODS_ID = g.GOODS_ID
+		<if test="locationNO != null and locationNO != ''">
+			and ls.LOCATION_NO = #{locationNO}
+		</if>
 		<if test="goodsNO != null and goodsNO != ''">
 			and g.GOODS_NO = #{goodsNO}
 		</if>
