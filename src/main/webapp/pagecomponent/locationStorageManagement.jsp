@@ -114,95 +114,157 @@
 
 	// 表格初始化
 	function storageListInit() {
-		$('#storageList')
-				.bootstrapTable(
-						{
-							columns : [
-									{
-										field : 'locationStorageID',
-										title : '货位库存ID',
-										visible : false
-									//sortable: true
-									},
-									{
-										field : 'goodsNO',
-										title : '货物编号'
-									//sortable: true
-									},
-									{
-										field : 'goodsName',
-										title : '货物名称'
-									},
-									{
-										field : 'goodsColor',
-										title : '货物颜色'
-									},
-									{
-										field : 'goodsSize',
-										title : '货物尺码'
-									},
-									{
-										field : 'goodsNum',
-										title : '货物数量'
-									},
-									{
-										field : 'locationNO',
-										title : '所在货位'
-									},
-									{
-										field : 'repositoryID',
-										title : '仓库ID'
-									},
-									{
-										field : 'operation',
-										title : '操作',
-										formatter : function(value, row, index) {
-											var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';
-											var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';
-											var fun = '';
-											return s + ' ' + d;
-										},
-										events : {
-											// 操作列中编辑按钮的动作
-											'click .edit' : function(e, value,
-													row, index) {
-												//selectID = row.id;
-												rowEditOperation(row);
-											},
-											'click .delete' : function(e,
-													value, row, index) {
-											    if(row.goodsNum > 0){
-                                                    $('#not_deleteWarning_modal').modal(
-                                                        'show');
-                                                    return
-												}
-												select_goodsID = row.goodsID;
-												select_repositoryID = row.repositoryID
-												$('#deleteWarning_modal').modal(
-														'show');
-											}
-										}
-									} ],
-							url : 'locationStorageManage/getLocationStorageList',
-							onLoadError:function(status){
-								handleAjaxError(status);
-							},
-							method : 'GET',
-							queryParams : queryParams,
-							sidePagination : "server",
-							dataType : 'json',
-							pagination : true,
-							pageNumber : 1,
-							pageSize : 5,
-							pageList : [ 5, 10, 25, 50, 100 ],
-							clickToSelect : true,
-                            onLoadSuccess: function(result){  //加载成功时执行
-                                $("#total_num").text(result.totalNum);
+        if($("#is_admin").length > 0){
+            $('#storageList')
+                .bootstrapTable(
+                    {
+                        columns : [
+                            {
+                                field : 'locationStorageID',
+                                title : '货位库存ID',
+                                visible : false
+                                //sortable: true
                             },
-                            onLoadError: function(err){
-                                $("#total_num").text("");
+                            {
+                                field : 'goodsNO',
+                                title : '货物编号'
+                                //sortable: true
                             },
-						});
+                            {
+                                field : 'goodsName',
+                                title : '货物名称'
+                            },
+                            {
+                                field : 'goodsColor',
+                                title : '货物颜色'
+                            },
+                            {
+                                field : 'goodsSize',
+                                title : '货物尺码'
+                            },
+                            {
+                                field : 'goodsNum',
+                                title : '货物数量'
+                            },
+                            {
+                                field : 'locationNO',
+                                title : '所在货位'
+                            },
+                            {
+                                field : 'repositoryID',
+                                title : '仓库ID'
+                            },
+                            {
+                                field : 'operation',
+                                title : '操作',
+                                formatter : function(value, row, index) {
+                                    var s = '<button class="btn btn-info btn-sm edit"><span>编辑</span></button>';
+                                    var d = '<button class="btn btn-danger btn-sm delete"><span>删除</span></button>';
+                                    var fun = '';
+                                    return s + ' ' + d;
+                                },
+                                events : {
+                                    // 操作列中编辑按钮的动作
+                                    'click .edit' : function(e, value,
+                                                             row, index) {
+                                        //selectID = row.id;
+                                        rowEditOperation(row);
+                                    },
+                                    'click .delete' : function(e,
+                                                               value, row, index) {
+                                        if(row.goodsNum > 0){
+                                            $('#not_deleteWarning_modal').modal(
+                                                'show');
+                                            return
+                                        }
+                                        select_goodsID = row.goodsID;
+                                        select_repositoryID = row.repositoryID
+                                        $('#deleteWarning_modal').modal(
+                                            'show');
+                                    }
+                                }
+                            } ],
+                        url : 'locationStorageManage/getLocationStorageList',
+                        onLoadError:function(status){
+                            handleAjaxError(status);
+                        },
+                        method : 'GET',
+                        queryParams : queryParams,
+                        sidePagination : "server",
+                        dataType : 'json',
+                        pagination : true,
+                        pageNumber : 1,
+                        pageSize : 5,
+                        pageList : [ 5, 10, 25, 50, 100 ],
+                        clickToSelect : true,
+                        onLoadSuccess: function(result){  //加载成功时执行
+                            $("#total_num").text(result.totalNum);
+                        },
+                        onLoadError: function(err){
+                            $("#total_num").text("");
+                        },
+                    });
+        }else{
+            $('#storageList')
+                .bootstrapTable(
+                    {
+                        columns : [
+                            {
+                                field : 'locationStorageID',
+                                title : '货位库存ID',
+                                visible : false
+                                //sortable: true
+                            },
+                            {
+                                field : 'goodsNO',
+                                title : '货物编号'
+                                //sortable: true
+                            },
+                            {
+                                field : 'goodsName',
+                                title : '货物名称'
+                            },
+                            {
+                                field : 'goodsColor',
+                                title : '货物颜色'
+                            },
+                            {
+                                field : 'goodsSize',
+                                title : '货物尺码'
+                            },
+                            {
+                                field : 'goodsNum',
+                                title : '货物数量'
+                            },
+                            {
+                                field : 'locationNO',
+                                title : '所在货位'
+                            },
+                            {
+                                field : 'repositoryID',
+                                title : '仓库ID'
+                            } ],
+                        url : 'locationStorageManage/getLocationStorageList',
+                        onLoadError:function(status){
+                            handleAjaxError(status);
+                        },
+                        method : 'GET',
+                        queryParams : queryParams,
+                        sidePagination : "server",
+                        dataType : 'json',
+                        pagination : true,
+                        pageNumber : 1,
+                        pageSize : 5,
+                        pageList : [ 5, 10, 25, 50, 100 ],
+                        clickToSelect : true,
+                        onLoadSuccess: function(result){  //加载成功时执行
+                            $("#total_num").text(result.totalNum);
+                        },
+                        onLoadError: function(err){
+                            $("#total_num").text("");
+                        },
+                    });
+        }
 	}
 
 	// 表格刷新
@@ -585,6 +647,7 @@
 						<select class="form-control" id="search_input_repository">
 							<shiro:hasRole name="systemAdmin">
 								<option value='all'>所有仓库</option>
+								<input type="hidden" id="is_admin"></input>
 							</shiro:hasRole>
 						</select>
 					</div>

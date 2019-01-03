@@ -147,6 +147,6 @@
 	
 	<delete id="deleteByID">
 		delete from wms_respository
-		where REPO_ID = #{id}
+		where REPO_ID = #{repositoryID}
 	</delete>
 </mapper>

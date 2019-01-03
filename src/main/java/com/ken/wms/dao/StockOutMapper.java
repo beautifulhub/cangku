@@ -42,7 +42,7 @@ public interface StockOutMapper {
      * @param repositoryID 指定的仓库ID
      * @return 返回指定仓库ID相关的出库记录
      */
-    List<StockOutDO> selectByRepositoryID(Integer repositoryID);
+    List<StockOutDO> selectByRepositoryID(@Param("repositoryID")Integer repositoryID);
 
     /**
      * 选择指定仓库ID以及指定日期范围内的出库记录

@@ -286,6 +286,10 @@
 		});
 
 		$('#add_modal_submit').click(function() {
+            $('#repository_form').data('bootstrapValidator').validate();
+            if (!$('#repository_form').data('bootstrapValidator').isValid()) {
+                return;
+            }
 			var data = {
 				address : $('#repository_address').val(),
 				status : $('#repository_status').val(),

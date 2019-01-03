@@ -38,6 +38,13 @@
 		wms_location_storage ls,wms_goods g
 	</sql>
 
+	<select id="selectAllByRepositoryID" resultMap="locationStorage">
+		<include refid="commonSelectFrom"></include>
+		where
+		ls.LOCATION_GOODS_ID = g.GOODS_ID AND
+		ls.LOCATION_REPOSITORY_ID = #{repositoryID}
+	</select>
+
 	<select id="selectByID" resultMap="locationStorage">
 		<include refid="commonSelectFrom"></include>
 		where
@@ -109,6 +116,24 @@
 			ls.location_goods_size = #{goodsSize} AND
 			ls.location_no = #{locationNO} AND
 			ls.LOCATION_REPOSITORY_ID = #{repositoryID}
+	</select>
+
+	<select id="selectByGoodsIDAndRepositoryID" resultMap="locationStorage">
+		select
+		ls.LOCATION_STORAGE_ID as storageID,
+		r.REPO_ID as repositoryID,
+		ls.LOCATION_GOODS_NUM as number,
+		g.GOODS_ID as goodsID,
+		g.GOODS_NAME as goodsName
+		from
+		wms_location_storage ls,wms_respository r, wms_goods g
+		where
+		ls.LOCATION_GOODS_ID = g.GOODS_ID and
+		ls.LOCATION_REPOSITORY_ID = r.REPO_ID and
+		g.GOODS_ID = #{goodsID}
+		<if test="repositoryID > 0">
+			and r.REPO_ID = #{repositoryID}
+		</if>
 	</select>
 
 	<insert id="insert">

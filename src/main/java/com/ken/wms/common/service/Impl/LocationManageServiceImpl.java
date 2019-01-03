@@ -34,6 +34,8 @@ public class LocationManageServiceImpl implements LocationManageService {
     @Autowired
     private LocationMapper locationMapper;
     @Autowired
+    private LocationStorageMapper locationStorageMapper;
+    @Autowired
     private RepositoryMapper repositoryMapper;
     @Autowired
     private RepositoryAdminMapper repositoryAdminMapper;
@@ -299,20 +301,25 @@ public class LocationManageServiceImpl implements LocationManageService {
     public boolean deleteLocation(Integer locationId) throws LocationManageServiceException {
 
         try {
-            /*// 检查该货位是否有入库信息
+            /*// 检查该货位是否有上架信息
             List<StockInDO> stockInDORecord = stockInMapper.selectByLocationID(locationId);
             if (stockInDORecord != null && !stockInDORecord.isEmpty())
                 return false;
 
-            // 检查该货位是否有出库信息
+            // 检查该货位是否有下架信息
             List<StockOutDO> stockOutDORecord = stockOutMapper.selectByLocationId(locationId);
             if (stockOutDORecord != null && !stockOutDORecord.isEmpty())
                 return false;*/
 
-            // 检查该货位是否有存储信息
-            /*List<Storage> storageRecord = storageMapper.selectByLocationIDAndRepositoryID(locationId, null);
-            if (storageRecord != null && !storageRecord.isEmpty())
-                return false;*/
+            Location location = locationMapper.selectById(locationId);
+            String locationNO = "";
+            if(location != null ){
+                locationNO = location.getNo();
+            }
+            // 检查该货位是否有库存信息
+            List<LocationStorage> locationStorageRecords =  locationStorageMapper.selectBySearch(locationNO,"","", "", "",-1);
+            if (locationStorageRecords != null && !locationStorageRecords.isEmpty())
+                return false;
 
             // 删除货位记录
             locationMapper.deleteById(locationId);

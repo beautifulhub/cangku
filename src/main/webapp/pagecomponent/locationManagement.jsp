@@ -46,6 +46,9 @@
            })
 	   },
 		dealLocationNO : function(){
+	       if($('.del-location-no').length > 0 ){
+               $("#location_no").parent().parent().nextAll().not("#location_no_group").remove();
+		   }
             $('#add_location_no').unbind("click").click(function(){
                 var n=$(".location-no").length;
                 var addAttr = '<div class="form-group">\n' +
@@ -217,7 +220,7 @@
 
 	// 产品模态框数据校验
 	function bootstrapValidatorInit() {
-		$("#location_no_form","#location_form_edit").bootstrapValidator({
+		$("#location_no_form,#location_form_edit").bootstrapValidator({
 			message : 'This is not valid',
 			feedbackIcons : {
 				valid : 'glyphicon glyphicon-ok',
@@ -363,6 +366,7 @@
 					showMsg(type, msg, append);
 					tableRefresh();
 					// reset
+                    $("#location_no").val("");
 					$('#location_no_form').bootstrapValidator("resetForm", true);
 				},
 				error : function(xhr, textStatus, errorThrow) {

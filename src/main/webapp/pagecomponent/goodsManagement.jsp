@@ -705,6 +705,7 @@
 					$('#goods_no').val("");
 					$('#goods_name').val("");
 					$('#goods_type').val("");
+                    $("#type_select").text("类型选择");
 					$('#goods_sizes').val("");
 					$('#goods_colors').val("");
 					$('#goods_pic').val("");

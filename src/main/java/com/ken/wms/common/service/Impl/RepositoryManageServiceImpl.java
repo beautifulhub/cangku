@@ -41,6 +41,8 @@ public class RepositoryManageServiceImpl implements RepositoryService {
     @Autowired
     private StorageMapper storageMapper;
     @Autowired
+    private LocationStorageMapper locationStorageMapper;
+    @Autowired
     private RepositoryAdminMapper repositoryAdminMapper;
 
     /**
@@ -303,9 +305,14 @@ public class RepositoryManageServiceImpl implements RepositoryService {
             if (storageRecords != null && !storageRecords.isEmpty())
                 return false;
 
+            // 检查是否存在架位库存记录
+            List<LocationStorage> locationStorageRecords= locationStorageMapper.selectAllByRepositoryID(repositoryId);
+            if (locationStorageRecords != null && !locationStorageRecords.isEmpty())
+                return false;
+
             // 检查是否已指派仓库管理员
             List<RepositoryAdmin> repositoryAdmin = repositoryAdminMapper.selectByRepositoryID(repositoryId);
-            if (repositoryAdmin != null)
+            if (repositoryAdmin != null && !repositoryAdmin.isEmpty())
                 return false;
 
             // 删除记录

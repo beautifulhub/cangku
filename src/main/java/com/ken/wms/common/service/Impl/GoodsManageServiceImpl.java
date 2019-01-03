@@ -41,6 +41,8 @@ public class GoodsManageServiceImpl implements GoodsManageService {
     @Autowired
     private StorageMapper storageMapper;
     @Autowired
+    private LocationStorageMapper locationStorageMapper;
+    @Autowired
     private EJConvertor ejConvertor;
 
     /**
@@ -301,6 +303,11 @@ public class GoodsManageServiceImpl implements GoodsManageService {
             // 检查该货物是否有存储信息
             List<Storage> storageRecord = storageMapper.selectByGoodsIDAndRepositoryID(goodsId, null);
             if (storageRecord != null && !storageRecord.isEmpty())
+                return false;
+
+            // 检查是否存在架位库存记录
+            List<LocationStorage> locationStorageRecord = locationStorageMapper.selectByGoodsIDAndRepositoryID(goodsId, null);
+            if (locationStorageRecord != null && !locationStorageRecord.isEmpty())
                 return false;
 
             // 删除货物记录

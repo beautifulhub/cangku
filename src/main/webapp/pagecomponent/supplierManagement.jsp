@@ -306,6 +306,12 @@
 		});
 
 		$('#add_modal_submit').click(function() {
+            $('#supplier_form').data('bootstrapValidator')
+                .validate();
+            if (!$('#supplier_form').data('bootstrapValidator')
+                    .isValid()) {
+                return;
+            }
 			var data = {
 				name : $('#supplier_name').val(),
 				personInCharge : $('#supplier_person').val(),

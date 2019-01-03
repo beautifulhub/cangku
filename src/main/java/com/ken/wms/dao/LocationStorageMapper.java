@@ -13,10 +13,22 @@ import java.util.List;
 public interface LocationStorageMapper {
 
 	/**
-	 * 选择货位库存信息
-	 * @return 返回所有指定货物ID和仓库ID的库存信息
+	 * 根据仓库id查询仓库中所有的上下架库存
+	 * @return 返回所有的架子的库存信息
+	 */
+	List<LocationStorage> selectAllByRepositoryID(@Param("repositoryID") Integer repositoryID);
+
+	/**
+	 * 根据架位库存编号查询架位库存信息
+	 * @return 返回所有的架子的库存信息
 	 */
 	LocationStorage selectByID(@Param("storageID") Integer storageID);
+
+	/**
+	 * 根据架位ID查询架位库存信息
+	 * @return 返回所有的架位的库存信息
+	 */
+	//List<LocationStorage> selectAllByLocationID(@Param("locationID") Integer locationID);
 
 	/**
 	 * 选择货位库存信息
@@ -35,6 +47,15 @@ public interface LocationStorageMapper {
 	LocationStorage selectByGoodsParam(@Param("goodsID") Integer goodsID,@Param("goodsColor") String goodsColor,
 									   @Param("goodsSize") String goodsSize, @Param("locationNO") String locationNO,
 									   @Param("repositoryID") Integer repositoryID);
+
+	/**
+	 * 选择指定货物ID和仓库ID的库存信息
+	 * @param goodsID 货物ID
+	 * @param repositoryID 库存ID
+	 * @return 返回所有指定货物ID和仓库ID的货位库存信息
+	 */
+	List<LocationStorage> selectByGoodsIDAndRepositoryID(@Param("goodsID") Integer goodsID,
+												 @Param("repositoryID") Integer repositoryID);
 
 	/**
 	 * 添加一条

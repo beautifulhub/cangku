@@ -359,6 +359,12 @@
 		});
 
 		$('#add_modal_submit').click(function() {
+            $('#repositoryAdmin_form').data('bootstrapValidator')
+                .validate();
+            if (!$('#repositoryAdmin_form').data('bootstrapValidator')
+                    .isValid()) {
+                return;
+            }
 			var data = {
 				name : $('#repositoryAdmin_name').val(),
 				tel : $('#repositoryAdmin_tel').val(),
