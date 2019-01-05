@@ -157,7 +157,8 @@ function bootstrapValidatorInit(){
 					identical:{
 						field:'newPassword',
 						message:'两次密码不一致'
-					}
+					},
+                    callback:{}
 				}
 			}
 		}
@@ -174,6 +175,11 @@ function passwordEncrying(userID,password){
 // 密码修改提交
 function submitPasswordModify(){
 	$('#init_password_modify_submit').click(function(event) {
+        //由于提交的type不是submit,所以需要手动校验
+        $('#form').data('bootstrapValidator').validate();
+        if (!$('#form').data('bootstrapValidator').isValid()) {
+            return;
+        }
 		var userID = $('#userID').html();
 		var oldPassword = $('#oldPassword').val();
 		var newPassword = $('#newPassword').val();
@@ -203,12 +209,15 @@ function submitPasswordModify(){
 						errorMessage = "密码错误";
 						field = "oldPassword"
 					}else if(response.msg == "passwordUnmatched"){
-						errorMessage = "密码不一致";
+						errorMessage = "两次密码不一致";
+						field = "newPassword_re"
+					}else if(response.msg == "passwordDiffUsername"){
+						errorMessage = "密码不可与用户ID相同";
 						field = "newPassword"
 					}
 
-					$('form').data('bootstrapValidator').updateMessage(field,'callback',errorMessage);
-					$('form').data('bootstrapValidator').updateStatus(field,'INVALID','callback');
+					$('#form').data('bootstrapValidator').updateMessage(field,'callback',errorMessage);
+					$('#form').data('bootstrapValidator').updateStatus(field,'INVALID','callback');
 				}else{
 					// 否则更新成功，弹出模态框并清空表单
 					$('#init_password_modify').modal('hide');

@@ -80,6 +80,14 @@
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
+            //首先判断response.data有没有数据，如果普通管理员没有，就是没有被分配仓库，要进行提示
+            if($('#search_input_repository option').length == 0){
+                var type = "error";
+                var msg = "权限不足";
+                var append = "请联系管理员给你分配仓库管理权限！" ;
+                showMsg(type, msg, append);
+                return;
+            }
 			search_keyWord = $('#search_input_type').val();
 			search_color = $('#search_input_color').val();
 			search_size = $('#search_input_size').val();

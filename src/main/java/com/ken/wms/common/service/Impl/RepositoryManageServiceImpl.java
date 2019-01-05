@@ -453,7 +453,9 @@ public class RepositoryManageServiceImpl implements RepositoryService {
                 if(repositoryAdmin != null){
                     repo = repositoryMapper.selectByID(repositoryAdmin.getRepositoryBelongID());
                 }
-                repositories.add(repo);
+                if(repo != null){
+                    repositories.add(repo);
+                }
             }
         } catch (PersistenceException e) {
             throw new RepositoryManageServiceException(e);

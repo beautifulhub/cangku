@@ -10,6 +10,7 @@ public class UserAccountServiceException extends BusinessException {
 
     public static final String PASSWORD_ERROR = "passwordError";
     public static final String PASSWORD_UNMATCH = "passwordUnmatched";
+    public static final String PASSWORD_DIFF_USERNAME = "passwordDiffUsername";
 
     public UserAccountServiceException() {
         super();

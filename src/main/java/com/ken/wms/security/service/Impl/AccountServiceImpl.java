@@ -60,6 +60,11 @@ public class AccountServiceImpl implements AccountService {
                 throw new UserAccountServiceException(UserAccountServiceException.PASSWORD_UNMATCH);
             }
 
+            // 新密码不能与登录账号相同验证
+            if (newPassword.equals(MD5Util.MD5(userID.toString()))) {
+                throw new UserAccountServiceException(UserAccountServiceException.PASSWORD_DIFF_USERNAME);
+            }
+
             // 原密码正确性验证
             String password;
             password = MD5Util.MD5(oldPassword + userID);

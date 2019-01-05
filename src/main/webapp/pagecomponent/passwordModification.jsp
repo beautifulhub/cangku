@@ -44,7 +44,8 @@
 						identical:{
 							field:'newPassword',
 							message:'两次密码不一致'
-						}
+						},
+                        callback:{}
 					}
 				}
 			}
@@ -87,13 +88,16 @@
 							errorMessage = "密码错误";
 							field = "oldPassword"
 						}else if(response.msg == "passwordUnmatched"){
-							errorMessage = "密码不一致";
-							field = "newPassword"
-						}
+							errorMessage = "两次密码不一致";
+							field = "newPassword_re"
+						}else if(response.msg == "passwordDiffUsername"){
+                            errorMessage = "密码不可与用户ID相同";
+                            field = "newPassword"
+                        }
 
-						$("#oldPassword").val("");
+						/*$("#oldPassword").val("");
 						$("#newPassword").val("");
-						$("#newPassword_re").val("");
+						$("#newPassword_re").val("");*/
 						bv.updateMessage(field,'callback',errorMessage);
 						bv.updateStatus(field,'INVALID','callback');
 					}else{
@@ -189,7 +193,7 @@
 					<p>登录密码修改规则说明：</p>
 					<%--<p>1.密码长度为6~16位，至少包含数字、字母、特殊符号中的两类，字母区分大小写</p>--%>
 					<p>1.密码长度为6~16位</p>
-					<p>2.密码不可与账号相同</p>
+					<p>2.密码不可与用户ID相同</p>
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-1"></div>
