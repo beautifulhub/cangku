@@ -222,11 +222,11 @@
 			contentType : 'application/json',
 			success : function(response){
 				$.each(response.rows,function(index,elem){
-					$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				});
 			},
 			error : function(response){
-				$('#repository_selector').append("<option value='-1'>加载失败</option>");
+				$('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
 			
 		})
@@ -234,7 +234,7 @@
 
 	// 获取仓库当前库存量
 	function fetchStorage(){
-		$('#repository_selector').change(function(){
+		$('#search_input_repository').change(function(){
 			stockin_repository = $(this).val();
 			loadStorageInfo();
 		});
@@ -514,7 +514,7 @@
                         <form action="" class="form-inline">
                             <div class="form-group">
                                 <label for="" class="form-label">入库仓库：</label>
-                                <select name="" id="repository_selector" class="form-control">
+                                <select name="" id="search_input_repository" class="form-control">
 									<option value='-1'>请选择仓库</option>
                                 </select>
                             </div>

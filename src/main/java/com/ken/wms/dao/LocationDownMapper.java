@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 下架记录映射器
  *
- * @author Ken
+ * @author Bea
  */
 public interface LocationDownMapper {
 

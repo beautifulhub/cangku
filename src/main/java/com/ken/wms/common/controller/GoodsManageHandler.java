@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * 货物信息管理请求 Handler
  *
- * @author Ken
+ * @author Bea
  */
 @RequestMapping(value = "/**/goodsManage")
 @Controller

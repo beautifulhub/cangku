@@ -3,7 +3,7 @@ package com.ken.wms.exception;
 /**
  * CustomerManageService异常
  *
- * @author Ken
+ * @author Bea
  * @since 2017/3/8.
  */
 public class CustomerManageServiceException extends BusinessException{

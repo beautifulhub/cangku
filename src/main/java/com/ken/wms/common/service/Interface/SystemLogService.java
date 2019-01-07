@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 系统操作日志Service接口
  *
- * @author Ken
+ * @author Bea
  * @since 2017/4/7.
  */
 public interface SystemLogService {

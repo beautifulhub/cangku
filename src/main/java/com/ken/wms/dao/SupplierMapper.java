@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Supplier 映射器
- * @author Ken
+ * @author Bea
  *
  */
 public interface SupplierMapper {

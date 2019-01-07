@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 下架/上架记录DO
  *
- * @author Ken
+ * @author Bea
  * @since 2017/4/5.
  */
 public class LocationRecordDTO {

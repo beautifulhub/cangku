@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * 货位库存管理请求处理
  *
- * @author Ken
+ * @author Bea
  */
 @Controller
 @RequestMapping(value = "/**/locationStorageManage")

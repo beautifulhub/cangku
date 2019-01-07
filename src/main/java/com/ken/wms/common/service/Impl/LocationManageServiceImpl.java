@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * 货位信息管理Service 实现类
  *
- * @author Ken
+ * @author Bea
  */
 @Service
 public class LocationManageServiceImpl implements LocationManageService {

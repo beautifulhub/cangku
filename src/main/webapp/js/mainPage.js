@@ -233,3 +233,17 @@ function submitPasswordModify(){
 		});
 	});
 }
+
+//没有仓库管理权限提示
+function UnRepoAuthTip(){
+	//首先判断response.data有没有数据，如果普通管理员没有，就是没有被分配仓库，要进行提示
+    if($('#search_input_repository option').length == 0){
+        var type = "error";
+        var msg = "权限不足";
+        var append = "请联系管理员给你分配仓库管理权限！" ;
+        showMsg(type, msg, append);
+        return true;
+    }else{
+    	return false;
+	}
+}

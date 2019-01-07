@@ -205,7 +205,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         List<StockInDO> stockInRecordDOS = null;
         List<StockOutDO> stockOutRecordDOS = null;
         switch (searchType) {
-            case "all": {
+            case "searchAll": {
                 if (offset < 0 || limit < 0) { //不分页
                     stockInTemp = selectStockInRecord(repositoryID, startDate, endDate, offset, limit);
                     stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, offset, limit);

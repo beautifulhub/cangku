@@ -2,7 +2,7 @@ package com.ken.wms.dao;
 
 /**
  *
- * @author Ken
+ * @author Bea
  * @since 2017/3/1.
  */
 public interface RolesMapper {

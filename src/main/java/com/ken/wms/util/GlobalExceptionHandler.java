@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 /**
  * 全局异常处理器
  *
- * @author Ken
+ * @author Bea
  * @since 2017/3/8.
  */
 @ControllerAdvice

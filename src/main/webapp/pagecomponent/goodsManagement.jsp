@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_goods = "none";
+	var search_type_goods = "searchAll";
 	var search_keyWord = "";
 	var selectID;
 

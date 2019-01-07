@@ -13,10 +13,10 @@
 
 <script>
     // 出入库记录查询参数
-    search_type = 'none'
-    search_repositoryID = ''
-    search_start_date = null
-    search_end_date = null
+    var search_type = 'searchAll'
+    var search_repositoryID = ''
+    var search_start_date = null
+    var search_end_date = null
 
     var stockRecordManage = {
 
@@ -25,7 +25,7 @@
     $(function(){
         repositoryOptionInit();
         datePickerInit();
-        storageListInit();
+        //storageListInit();
         searchAction();
     })
 
@@ -38,12 +38,13 @@
 			contentType : 'application/json',
 			success : function(response){
 				$.each(response.data,function(index,elem){
-					$('#search_repository_ID').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
+                storageListInit();
 			},
 			error : function(response){
 				// do nothing
-                $('#search_repository_ID').append("<option value='-1'>加载失败</option>");
+                $('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
 		});
 	}
@@ -66,6 +67,7 @@
 
 	// 表格初始化
 	function storageListInit() {
+        if(UnRepoAuthTip())return;
 		$('#stockRecords')
 				.bootstrapTable(
 						{
@@ -175,7 +177,8 @@
 	// 查询操作
 	function searchAction(){
 	    $('#search_button').click(function(){
-	        search_repositoryID = $('#search_repository_ID').val();
+            if(UnRepoAuthTip())return;
+	        search_repositoryID = $('#search_input_repository').val();
 	        search_type = $('#search_type').val();
 	        search_start_date = $('#search_start_date').val();
 	        search_end_date = $('#search_end_date').val();
@@ -194,7 +197,7 @@
                 <form action="" class="form-inline">
                     <div class="form-group">
                         <label class="form-label">仓库编号：</label>
-                        <select class="form-control" id="search_repository_ID">
+                        <select class="form-control" id="search_input_repository">
                             <shiro:hasRole name="systemAdmin">
                                 <option value=''>所有仓库</option>
                             </shiro:hasRole>
@@ -206,7 +209,7 @@
                     <form action="" class="form-inline">
                         <label class="form-label">记录过滤：</label>
                         <select name="" id="search_type" class="form-control">
-                            <option value="all">显示所有</option>
+                            <option value="searchAll">显示所有</option>
                             <option value="stockInOnly">仅显示入库记录</option>
                             <option value="stockOutOnly">仅显示出库记录</option>
                         </select>

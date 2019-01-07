@@ -26,7 +26,7 @@ import java.util.*;
 /**
  * Excel -JavaBean 转换器
  *
- * @author Ken
+ * @author Bea
  * @since 2017/3/27.
  */
 public class EJConvertor {

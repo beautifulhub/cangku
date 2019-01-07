@@ -13,7 +13,7 @@
 
 <script>
     // 上下架记录查询参数
-    search_type = 'none'
+    search_type = 'searchAll'
     search_goods_no = ''
     search_goods_name = ''
     search_goods_color = ''
@@ -26,7 +26,7 @@
     $(function(){
         repositoryOptionInit();
         datePickerInit();
-        storageListInit();
+        //storageListInit();
         searchAction();
         fetchRepoAdmin();
     })
@@ -40,12 +40,14 @@
 			contentType : 'application/json',
 			success : function(response){
 				$.each(response.data,function(index,elem){
-					$('#search_repository_ID').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
+                if(UnRepoAuthTip())return;
+                storageListInit();
 			},
 			error : function(response){
 				// do nothing
-                $('#search_repository_ID').append("<option value='-1'>加载失败</option>");
+                $('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
 		});
 	}
@@ -177,7 +179,8 @@
 	// 查询操作
 	function searchAction(){
 	    $('#search_button').click(function(){
-	        search_repository_id = $('#search_repository_ID').val();
+            if(UnRepoAuthTip())return;
+	        search_repository_id = $('#search_input_repository').val();
 	        search_person_id = $('#search_person_ID').val();
 	        search_type = $('#search_type').val();
 	        search_start_date = $('#search_start_date').val();
@@ -188,7 +191,7 @@
 
 	//获取仓库负责人
 	function fetchRepoAdmin(){
-        $('#search_repository_ID').change(function(){
+        $('#search_input_repository').change(function(){
             $.ajax({
                 type : 'GET',
                 url : 'repositoryAdminManage/getRepositoryAdminList',
@@ -198,7 +201,7 @@
                     limit : -1,
                     offset : -1,
                     searchType : 'searchByRepositoryID',
-                    keyWord : $('#search_repository_ID').val()
+                    keyWord : $('#search_input_repository').val()
                 },
                 success : function(response){
                     $('#search_person_ID').empty();
@@ -225,7 +228,7 @@
                 <form action="" class="form-inline">
                     <div class="form-group">
                         <label class="form-label">仓库编号：</label>
-                        <select class="form-control" id="search_repository_ID">
+                        <select class="form-control" id="search_input_repository">
                             <shiro:hasRole name="systemAdmin">
                                 <option value="-1">所有仓库</option>
                             </shiro:hasRole>
@@ -247,7 +250,7 @@
                     <form action="" class="form-inline">
                         <label class="form-label">记录过滤：</label>
                         <select name="" id="search_type" class="form-control">
-                            <option value="all">显示所有</option>
+                            <option value="searchAll">显示所有</option>
                             <option value="up">仅显示上架记录</option>
                             <option value="down">仅显示下架记录</option>
                         </select>

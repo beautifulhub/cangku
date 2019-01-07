@@ -23,7 +23,7 @@
 //import java.util.Map;
 //
 ///**
-// * Created by Ken on 2017/4/5.
+// * Created by Bea on 2017/4/5.
 // */
 //@ContextConfiguration(locations = "classpath:config/SpringContextConfiguration.xml")
 //@RunWith(SpringJUnit4ClassRunner.class)

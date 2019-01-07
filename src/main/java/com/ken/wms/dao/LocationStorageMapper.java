@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 库存信息映射器
- * @author Ken
+ * @author Bea
  *
  */
 public interface LocationStorageMapper {

@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * 上下架管理
  *
- * @author Ken
+ * @author Bea
  */
 public interface LocationRecordManageService {
 

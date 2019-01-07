@@ -171,8 +171,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     public static void main(String[] args) {
-        String tempStr = MD5Util.MD5("12345");
-        String encryptPassword = MD5Util.MD5(tempStr + "1022");
+        String tempStr = MD5Util.MD5("111111");
+        String encryptPassword = MD5Util.MD5(tempStr + "1003");
         System.out.println("encryptPassword:"+encryptPassword);
     }
 

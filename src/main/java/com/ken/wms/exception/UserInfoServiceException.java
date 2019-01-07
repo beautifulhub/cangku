@@ -3,7 +3,7 @@ package com.ken.wms.exception;
 /**
  * UserInfoService异常
  *
- * @author Ken
+ * @author Bea
  * @since 2017/3/8.
  */
 public class UserInfoServiceException extends BusinessException {

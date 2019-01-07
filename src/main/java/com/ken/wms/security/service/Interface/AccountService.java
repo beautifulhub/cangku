@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * 账号相关服务
- * @author Ken
+ * @author Bea
  *
  */
 public interface AccountService {

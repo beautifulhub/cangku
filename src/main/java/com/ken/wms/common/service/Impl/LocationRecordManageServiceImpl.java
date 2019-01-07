@@ -172,7 +172,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
         List<LocationUpDO> locationUpRecordDOS = null;
         List<LocationDownDO> locationDownRecordDOS = null;
         switch (upOrDown) {
-            case "all": {
+            case "searchAll": {
                 if (offset < 0 || limit < 0) {
                     locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, offset, limit);
                     locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, offset, limit);

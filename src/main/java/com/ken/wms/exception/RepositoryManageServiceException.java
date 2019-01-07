@@ -3,7 +3,7 @@ package com.ken.wms.exception;
 /**
  * RepositoryManageService异常
  *
- * @author Ken
+ * @author Bea
  * @since 2017/3/8.
  */
 public class RepositoryManageServiceException extends BusinessException {

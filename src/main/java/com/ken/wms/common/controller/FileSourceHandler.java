@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 /**
  * 处理文件下载请求
  *
- * @author Ken
+ * @author Bea
  */
 @Controller
 @RequestMapping("/commons/fileSource")

@@ -3,7 +3,7 @@
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 
 <script>
-	var search_type_storage = "none";
+	var search_type_storage = "searchAll";
 	var search_keyWord = "";
 	var search_color = "";
 	var search_size = "";
@@ -14,7 +14,7 @@
 	$(function() {
 		optionAction();
 		searchAction();
-		storageListInit();
+		//storageListInit();
 		bootstrapValidatorInit();
 		repositoryOptionInit();
 		colorSizeSearchInit();
@@ -64,6 +64,7 @@
 				$.each(response.data,function(index,elem){
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
+                storageListInit();
 			},
 			error : function(response){
 				// do nothing
@@ -80,14 +81,7 @@
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
-            //首先判断response.data有没有数据，如果普通管理员没有，就是没有被分配仓库，要进行提示
-            if($('#search_input_repository option').length == 0){
-                var type = "error";
-                var msg = "权限不足";
-                var append = "请联系管理员给你分配仓库管理权限！" ;
-                showMsg(type, msg, append);
-                return;
-            }
+            if(UnRepoAuthTip())return;
 			search_keyWord = $('#search_input_type').val();
 			search_color = $('#search_input_color').val();
 			search_size = $('#search_input_size').val();
@@ -112,6 +106,7 @@
 
 	// 表格初始化
 	function storageListInit() {
+        if(UnRepoAuthTip())return;
         if($("#is_admin").length > 0){
             $('#storageList')
                 .bootstrapTable(

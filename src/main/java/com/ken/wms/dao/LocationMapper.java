@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 货位信息映射器
- * @author Ken
+ * @author Bea
  *
  */
 public interface LocationMapper {

@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * 货位库存信息管理 service 实现类
  *
- * @author Ken
+ * @author Bea
  */
 @Service
 public class LocationStorageManageServiceImpl implements LocationStorageManageService {

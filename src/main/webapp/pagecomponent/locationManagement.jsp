@@ -34,6 +34,10 @@
                            $("#own_repo_text").html(response.data[0].id);
 					   }
                        search_repo_id = $("#own_repo_text").text().trim();
+                       if("无所属仓库" == search_repo_id){
+                           showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                           return;
+                       }
                        locationListInit();
                    }else{
                        showMsg("error", "查询出现异常", "");
@@ -115,6 +119,10 @@
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
+            if("无所属仓库" == search_repo_id){
+                showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                return;
+            }
 			search_keyWord = $('#search_input').val();
             search_repo_id = $("#own_repo_text").text().trim();
 			tableRefresh();
@@ -326,6 +334,10 @@
 	// 添加货位信息
 	function addLocationAction() {
 		$('#add_location').click(function() {
+            if("无所属仓库" == search_repo_id){
+                showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                return;
+            }
 			$('#add_modal').modal("show");
             locationManage.dealLocationNO();
 		});

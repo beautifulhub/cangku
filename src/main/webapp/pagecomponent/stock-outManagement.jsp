@@ -329,20 +329,21 @@
 				limit : -1
 			},
 			success : function(response){
-                stockout_repository = response.data[0].id
 				$.each(response.data,function(index,elem){
-					$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				});
-			},
+                if(UnRepoAuthTip())return;
+                stockout_repository = response.data[0].id
+            },
 			error : function(response){
-				$('#repository_selector').append("<option value='-1'>加载失败</option>");
+				$('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
-			
+
 		})
 	}
 
 	function fetchStorage(){
-		$('#repository_selector').change(function(){
+		$('#search_input_repository').change(function(){
 			stockout_repository = $(this).val();
 			//loadStorageInfo();
 		});
@@ -380,6 +381,7 @@
 	//执行货物出库操作
 	function stockoutOperation(){
 		$('#submit').click(function(){
+            if(UnRepoAuthTip())return;
 			// data validate
 			$('#stockout_form').data('bootstrapValidator').validate();
 			if (!$('#stockout_form').data('bootstrapValidator').isValid()) {
@@ -654,7 +656,7 @@
 					<div class="col-md-10 col-sm-11">
 						<div class="form-group">
 							<label for="" class="form-label">出库仓库：</label>
-							<select name="" id="repository_selector" class="form-control">
+							<select name="" id="search_input_repository" class="form-control">
 							</select>
 						</div>
 					</div>

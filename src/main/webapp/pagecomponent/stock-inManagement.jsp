@@ -349,13 +349,14 @@
                 limit : -1
             },
             success : function(response){
-                stockin_repository = response.data[0].id
                 $.each(response.data,function(index,elem){
-                    $('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+                    $('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
                 });
+                if(UnRepoAuthTip())return;
+                stockin_repository = response.data[0].id
             },
             error : function(response){
-                $('#repository_selector').append("<option value='-1'>加载失败</option>");
+                $('#search_input_repository').append("<option value='-1'>加载失败</option>");
             }
 
         })
@@ -363,7 +364,7 @@
 
 	// 获取仓库当前库存量
 	function fetchStorage(){
-		$('#repository_selector').change(function(){
+		$('#search_input_repository').change(function(){
 			stockin_repository = $(this).val();
 			//loadStorageInfo();
 		});
@@ -401,6 +402,7 @@
 	// 执行货物入库操作
 	function stockInOption(){
 		$('#submit').click(function(){
+            if(UnRepoAuthTip())return;
 			// data validate
 			$('#stockin_form').data('bootstrapValidator').validate();
 			if (!$('#stockin_form').data('bootstrapValidator').isValid()) {
@@ -664,7 +666,7 @@
                     <div class="col-md-10 col-sm-11">
 						<div class="form-group">
 							<label for="" class="form-label">入库仓库：</label>
-							<select name="" id="repository_selector" class="form-control">
+							<select name="" id="search_input_repository" class="form-control">
 								<%--<option value='-1'>请选择仓库</option>--%>
 							</select>
 						</div>

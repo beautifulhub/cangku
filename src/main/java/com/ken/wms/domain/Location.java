@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * 货位信息
- * @author Ken
+ * @author Bea
  *
  */
 public class Location {

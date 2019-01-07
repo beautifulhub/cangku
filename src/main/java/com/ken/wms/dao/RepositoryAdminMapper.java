@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * RepositoryAdmin 映射器
- * @author Ken
+ * @author Bea
  *
  */
 public interface RepositoryAdminMapper {

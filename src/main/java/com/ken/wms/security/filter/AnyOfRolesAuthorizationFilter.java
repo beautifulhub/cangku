@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * 自定义过滤器，继承自 RolesAuthorizationFilter ，实现了多个角色可以访问某一条url
- * @author Ken
+ * @author Bea
  * @since 2017/3/3.
  */
 public class AnyOfRolesAuthorizationFilter extends RolesAuthorizationFilter{

@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * 商品出入库管理请求Handler
  *
- * @author Ken
+ * @author Bea
  * @since 017/4/5.
  */
 @Controller

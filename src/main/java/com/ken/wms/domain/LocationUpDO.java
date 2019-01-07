@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * 上架记录
  *
- * @author Ken
+ * @author Bea
  */
 public class LocationUpDO {
 

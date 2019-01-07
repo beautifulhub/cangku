@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 仓库管理员管理请求 Handler
  *
- * @author Ken
+ * @author Bea
  */
 @Controller
 @RequestMapping(value = "/**/repositoryAdminManage")

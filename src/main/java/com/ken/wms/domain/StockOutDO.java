@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * 出库记录
  *
- * @author Ken
+ * @author Bea
  */
 public class StockOutDO {
 

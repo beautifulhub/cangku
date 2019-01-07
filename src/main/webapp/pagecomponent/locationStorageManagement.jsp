@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <script>
-	var search_type_storage = "none";
+	var search_type_storage = "searchAll";
 	var search_keyWord = "";
 	var search_color = "";
 	var search_size = "";
@@ -13,7 +13,7 @@
 	$(function() {
 		optionAction();
 		searchAction();
-		storageListInit();
+		// storageListInit();
 		bootstrapValidatorInit();
 		repositoryOptionInit();
 		colorSizeSearchInit();
@@ -73,6 +73,8 @@
 				$.each(response.data,function(index,elem){
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
+                if(UnRepoAuthTip())return;
+                storageListInit();
 			},
 			error : function(response){
 				// do nothing
@@ -90,6 +92,7 @@
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
+            if(UnRepoAuthTip())return;
 			search_keyWord = $('#search_input_type').val();
 			search_color = $('#search_input_color').val();
 			search_size = $('#search_input_size').val();

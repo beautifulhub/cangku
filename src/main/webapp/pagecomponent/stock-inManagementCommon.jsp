@@ -219,11 +219,11 @@
 			contentType : 'application/json',
 			success : function(response){
 				$.each(response.rows,function(index,elem){
-					$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				});
 			},
 			error : function(response){
-				$('#repository_selector').append("<option value='-1'>加载失败</option>");
+				$('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
 
 		})

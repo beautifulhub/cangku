@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 出入库管理
  *
- * @author Ken
+ * @author Bea
  */
 public interface StockRecordManageService {
 

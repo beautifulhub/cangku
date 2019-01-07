@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * 货位信息管理 service
  *
- * @author Ken
+ * @author Bea
  */
 public interface LocationManageService {
 

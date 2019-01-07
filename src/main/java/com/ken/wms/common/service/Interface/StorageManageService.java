@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 库存信息管理 service
  *
- * @author Ken
+ * @author Bea
  */
 public interface StorageManageService {
 

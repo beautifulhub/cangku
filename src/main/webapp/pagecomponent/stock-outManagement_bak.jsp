@@ -217,18 +217,18 @@
 			contentType : 'application/json',
 			success : function(response){
 				$.each(response.rows,function(index,elem){
-					$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				});
 			},
 			error : function(response){
-				$('#repository_selector').append("<option value='-1'>加载失败</option>");
+				$('#search_input_repository').append("<option value='-1'>加载失败</option>");
 			}
 			
 		})
 	}
 
 	function fetchStorage(){
-		$('#repository_selector').change(function(){
+		$('#search_input_repository').change(function(){
 			stockout_repository = $(this).val();
 			loadStorageInfo();
 		});
@@ -509,7 +509,7 @@
 								<!--
 								<input type="text" class="form-control" placeholder="仓库编号">
 							-->
-								<select name="" id="repository_selector" class="form-control">
+								<select name="" id="search_input_repository" class="form-control">
 								</select>
 							</div>
 						</form>

@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 用户角色权限映射器
- * @author Ken
+ * @author Bea
  *
  */
 public interface UserPermissionMapper {

@@ -241,14 +241,15 @@
                 limit : -1
             },
             success : function(response){
-                locationup_repository = response.data[0].id
                 $.each(response.data,function(index,elem){
-                    $('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+                    $('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
                 });
+                if(UnRepoAuthTip())return;
+                locationup_repository = response.data[0].id
                 locationNoSelectorInit()
             },
             error : function(response){
-                $('#repository_selector').append("<option value='-1'>加载失败</option>");
+                $('#search_input_repository').append("<option value='-1'>加载失败</option>");
             }
 
         })
@@ -283,7 +284,7 @@
 
 	// 获取仓库当前库存量
 	function fetchStorage(){
-		$('#repository_selector').change(function(){
+		$('#search_input_repository').change(function(){
 			locationup_repository = $(this).val();
             locationNoSelectorInit();
 			//loadStorageInfo();
@@ -322,6 +323,7 @@
 	// 执行货物上架操作
 	function locationUpOption(){
 		$('#submit').click(function(){
+            if(UnRepoAuthTip())return;
 			// data validate
 			$('#locationup_form').data('bootstrapValidator').validate();
 			if (!$('#locationup_form').data('bootstrapValidator').isValid()) {
@@ -489,7 +491,7 @@
                     <div class="col-md-10 col-sm-11">
 						<div class="form-group">
 							<label for="" class="form-label">上架仓库：</label>
-							<select name="" id="repository_selector" class="form-control">
+							<select name="" id="search_input_repository" class="form-control">
 							</select>
 						</div>
                     </div>

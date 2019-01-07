@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * 文件操作工具类
  *
- * @author Ken
+ * @author Bea
  * @since 2017/4/22.
  */
 public class FileUtil {
