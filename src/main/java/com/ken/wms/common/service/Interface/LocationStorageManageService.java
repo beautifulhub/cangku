@@ -67,7 +67,12 @@ public interface LocationStorageManageService {
      * @param repositoryID 仓库ID
      * @return 返回一个 boolean 值，若值为 true 表示数目减少成功，否则表示增加失败
      */
-    boolean locationStorageDecrease(Integer goodsID, List<String> goodsStr, Integer repositoryID) throws LocationStorageManageServiceException;
+    boolean locationStorageDecrease(Integer goodsID, String goodsColor, String goodsSize, long goodsNum, String locationNO, Integer repositoryID) throws LocationStorageManageServiceException;
+
+    /**
+     * 货位下架时，校验该仓库的货位上是否有一定数量的货物
+     */
+    int checkLocationStorageService(Integer goodsID, String goodsColor, String goodsSize, long goodsNum, String locationNO, Integer repositoryID) throws LocationStorageManageServiceException;
 
     /**
      * 删除一条货位库存记录

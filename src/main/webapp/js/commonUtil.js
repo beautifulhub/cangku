@@ -1,3 +1,8 @@
+//实例化layer
+var layer = "";
+layui.use('layer', function () {
+    layer = layui.layer;
+});
 var commonUtil={
     //转换日期格式(时间戳转换为datetime格式)
     changeDateFormat : function(cellval) {
@@ -103,6 +108,6 @@ var commonUtil={
             values = values.replace(/\s+/g,'&nbsp;');
             return "<span title="+values+">"+param+"</span>"
         }
-    }
+    },
 
 }

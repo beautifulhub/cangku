@@ -4,16 +4,48 @@
 	var locationdown_repository = null;
 	var locationdown_goods = null;
 	var locationdown_number = null;
-
 	var goodsCache = new Array();
+
 
     //定义个性化命名空间
     var locationDownManage = {
         //批量添加入库
         downLocationDetail : function(){
+            var _this = this;
             //绑定添加子入库
             $('#add_out_stock').unbind("click").click(function(){
+                //添加前对新增的数据进行校验
+                //①验证货物是否已经选好
+                if(_this.locationDownGoodsCheck($('#goods_name').val().trim())){
+                    return;
+				}
+				//②校验货物数量
+                $('#locationdown_form').data('bootstrapValidator').validate();
+                if (!$('#locationdown_form').data('bootstrapValidator').isValid()) {
+                    return;
+                }
                 var n=$(".goods_color_selector").length;
+                var checkError = false;
+                //③检查该仓库是否有对应的货位
+                $.ajax({
+                    type : 'GET',
+                    url : 'locationRecordManage/checkLocationStorage',
+                    dataType : 'json',
+                    contentType : 'application/json',
+                    async : false,
+                    data : {
+                        goodsID : locationdown_goods,
+                        goodsColor : $("select[name='goodsColor["+(n-1)+"]']").val(),
+                        goodsSize : $("select[name='goodsSize["+(n-1)+"]']").val(),
+                        goodsNum : $("input[name='goodsNum["+(n-1)+"]']").val().trim(),
+                        locationNO : $("select[name='locationNO["+(n-1)+"]']").val(),
+                        repositoryID : locationdown_repository
+                    },
+                    success : function(ret){
+                        checkError = _this.locationDownRowCheck(ret.result,n);
+                    }
+                });
+                if(checkError)return;
                 var addAttr = '<div class="row" style="margin-top:5px;width:1500px">\n' +
                     '<div class="col-md-12 col-sm-11 down-goods-detail" style="margin-left:60px">\n' +
                     '<div class="col-md-6 form-group" style="width:20%">\n' +
@@ -34,7 +66,7 @@
                     '<label for="" class="col-md-5 control-label" style="margin-top:6px">货物数量：</label>\n' +
                     '<div class="col-md-6" style="margin-left: -40px;">\n' +
                     '<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum['+n+']" style="width:110%;" />\n' +
-                    '<button type="button" class="btn btn-xs btn-link del_stock_out" style="margin-left:350px;margin-top:-27px">删除</button>\n' +
+                    /*'<button type="button" class="btn btn-xs btn-link del_stock_out" style="margin-left:350px;margin-top:-27px">删除</button>\n' +*/
                     '</div>\n' +
                     '</div>\n' +
                     '<div class="col-md-6 form-group" style="width:20%;margin-left:-80px">\n' +
@@ -42,6 +74,7 @@
                     '<div class="col-md-6" style="margin-left: -40px;">\n' +
                     '<select name="locationNO['+n+']" class="form-control location_no_selector" style="width:120%;">\n' +
                     '</select>\n' +
+                    '<button type="button" class="btn btn-xs btn-link del_stock_out" style="margin-left:136px;margin-top:-24px">删除</button>\n' +
                     '</div>\n' +
                     '</div>\n' +
                     '</div>\n' +
@@ -50,11 +83,11 @@
                 $('#locationdown_form').bootstrapValidator('addField', 'goodsNum['+n+']', {
                     validators : {
                         notEmpty : {
-                            message : '数量只能为数字'
+                            message : '数量不能为空'
                         },
-                        greaterThan: {
-                            value: 0,
-                            message: '数量不能小于0'
+                        regexp: {
+                            regexp:/^[0-9]*[1-9][0-9]*$/,
+                            message:'请输入大于0的数'
                         }
                     }
                 });
@@ -67,14 +100,38 @@
                 $("[name='locationNO["+n+"]']").append(locationNOOption);
                 //动态添加-绑定删除动作
                 $('.del_stock_out').click(function() {
-                    var roleName = $(this).parent("div").find('input[type]').attr("name");
+                    var roleName = $(this).parent("div").parent("div").prev().find('input[type]').attr("name");
                     $("#locationdown_form").bootstrapValidator('removeField',roleName);
-                    $(this).parent("div").parent("div").parent("div").remove();
+                    $(this).parent("div").parent("div").parent("div").parent("div").remove();
                 });
             });
-
-
         },
+        //货物编号校验提示语
+        locationDownGoodsCheck : function(goodsName){
+            if(goodsName == ""){
+                layer.alert('请输入正确的货物编号，以便获取货物名称、颜色、尺码等!', {
+                    icon : 0
+                });
+                return true;
+            }
+            return false;
+        },
+        //条目校验提示语
+        locationDownRowCheck : function(ret,line){
+            if(ret == "2"){
+                layer.alert('第'+line+'条信息,'+'仓库此货位没有该货物', {
+                    icon : 0
+                });
+                return true;
+            }else if(ret =="3"){
+                layer.alert('第'+line+'条信息,'+'仓库此货位对应的货物数量不足', {
+                    icon : 0
+                });
+                return true;
+            }
+            return false;
+        }
+
     }
 
 	$(function(){
@@ -82,7 +139,6 @@
         dataValidateInit();
         downDetailToggle();
 		locationdownOperation();
-
 		fetchStorage();
 		goodsAutocomplete();
 	})
@@ -104,15 +160,15 @@
                         }
                     }
                 },
-                goodsNum : {
+                'goodsNum[0]' : {
 					validators : {
 						notEmpty : {
 							message : '数量不能为空'
 						},
-						greaterThan: {
-	                        value: 0,
-	                        message: '数量不能小于0'
-	                    }
+                        regexp: {
+                            regexp:/^[0-9]*[1-9][0-9]*$/,
+                            message:'请输入大于0的数'
+                        }
 					}
 				}
 			}
@@ -319,6 +375,9 @@
 		$('#submit').click(function(){
             if(UnRepoAuthTip())return;
 			// data validate
+            if(locationDownManage.locationDownGoodsCheck($('#goods_name').val().trim())){
+                return;
+            }
 			$('#locationdown_form').data('bootstrapValidator').validate();
 			if (!$('#locationdown_form').data('bootstrapValidator').isValid()) {
 				return;
@@ -333,7 +392,8 @@
                 downGoodsDetail += goodsColor + "," + goodsSize + "," + goodsNum + "," + locationNO + ";"
             })
             data = {
-                goodsNO : $("#goods_no").val().trim(),
+                //goodsNO : $("#goods_no").val().trim(),
+                goodsID : locationdown_goods,
                 goodsName : $("#goods_name").val().trim(),
                 goodsDetail : downGoodsDetail,
                 repositoryID : locationdown_repository,
@@ -348,18 +408,26 @@
 				content : 'application/json',
 				data : data,
 				success : function(response){
-					var msg;
-					var type;
-					var append = '';
-					if(response.result == "success"){
-						type = 'success';
-						msg = '货物下架成功';
-						inputReset();
-					}else{
-						type = 'error';
-						msg = '货物下架失败'
-					}
-					showMsg(type, msg, append);
+                    var msg;
+                    var type;
+                    var append = '';
+                    if(response.result == "success"){
+                        type = 'success';
+                        msg = '货物下架成功';
+                        inputReset();
+                        showMsg(type, msg, append);
+                    }else{
+                        if(response.data != ""){
+                            var retAndLine = response.data.split(";");
+                            var retCheck = retAndLine[0];
+                            var line = retAndLine[1];
+                            locationDownManage.locationDownRowCheck(retCheck,line);
+                        }else{
+                            type = 'error';
+                            msg = '系统出现异常，货物下架失败'
+                            showMsg(type, msg, append);
+                        }
+                    }
 				},
 				error : function(xhr, textStatus, errorThrown){
 					// handle error
@@ -445,27 +513,27 @@
 								<div class="col-md-6 form-group" style="width:20%">
 									<label for=""  class="col-md-5 control-label" style="margin-top:6px">货物颜色：</label>
 									<div class="col-md-7" style="margin-left: -40px;">
-										<select name="goodsColor" class="form-control goods_color_selector" style="width:100%;">
+										<select name="goodsColor[0]" class="form-control goods_color_selector" style="width:100%;">
 										</select>
 									</div>
 								</div>
 								<div class="col-md-6 form-group" style="width:20%;margin-left:-70px">
 									<label for="" class="col-md-5 control-label" style="margin-top:6px">货物尺码：</label>
 									<div class="col-md-5" style="margin-left: -40px;">
-										<select name="goodsSize" class="form-control goods_size_selector" style="width:100%;">
+										<select name="goodsSize[0]" class="form-control goods_size_selector" style="width:100%;">
 										</select>
 									</div>
 								</div>
 								<div class="col-md-6 form-group" style="width:20%;margin-left:-110px">
 									<label for="" class="col-md-5 control-label" style="margin-top:6px">货物数量：</label>
 									<div class="col-md-6" style="margin-left: -40px;">
-										<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum" style="width:110%;" />
+										<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum[0]" style="width:110%;" />
 									</div>
 								</div>
 								<div class="col-md-6 form-group" style="width:20%;margin-left:-80px">
 									<label for="" class="col-md-5 control-label" style="margin-top:6px">货位编号：</label>
 									<div class="col-md-6" style="margin-left: -40px;">
-										<select name="locationNO" class="form-control location_no_selector" style="width:120%;">
+										<select name="locationNO[0]" class="form-control location_no_selector" style="width:120%;">
 										</select>
 									</div>
 								</div>

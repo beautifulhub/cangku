@@ -339,26 +339,36 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
      * @return 返回一个 boolean 值，若值为 true 表示数目减少成功，否则表示减少失败
      */
     @Override
-    public boolean locationStorageDecrease(Integer goodsID, List<String> goodsStr, Integer repositoryID) throws LocationStorageManageServiceException {
+    public boolean locationStorageDecrease(Integer goodsID, String goodsColor, String goodsSize, long goodsNum, String locationNO, Integer repositoryID) throws LocationStorageManageServiceException {
 
         synchronized (this) {
-            // 检查对应的货位库存记录是否存在
-            String goodsColor = goodsStr.get(0);
-            String goodsSize = goodsStr.get(1);
-            String goodsNum = goodsStr.get(2);
-            String locationNO = goodsStr.get(3);
             LocationStorage locationStorage = getLocationStorage(goodsID, goodsColor, goodsSize, locationNO,repositoryID);
-            if (null != locationStorage) {
-                // 检查货位库存减少数目的范围是否合理
-                long number = Long.parseLong(goodsNum);
-                if (number < 0 || locationStorage.getGoodsNum() < number)
-                    return false;
-                long newStorage = locationStorage.getGoodsNum() - number;
-                updateStorageByNum(locationStorage.getStorageID(), newStorage);
-                return true;
-            } else
-                return false;
+            long newStorage = locationStorage.getGoodsNum() - goodsNum;
+            updateStorageByNum(locationStorage.getStorageID(), newStorage);
+            return true;
         }
+    }
+
+    /**
+     * 货位下架时，校验该仓库的货位上是否有一定数量的货物
+     *
+     * ret:1：成功,2：仓库此货位没有该货物,3：仓库此货位对应的货物数量不足
+     */
+    @Override
+    public int checkLocationStorageService(Integer goodsID, String goodsColor, String goodsSize, long goodsNum, String locationNO, Integer repositoryID) throws LocationStorageManageServiceException {
+
+        int resultValue = 1;//默认成功
+        // 检查对应的货位库存记录是否存在
+        LocationStorage locationStorage = getLocationStorage(goodsID, goodsColor, goodsSize, locationNO,repositoryID);
+        if (null != locationStorage) {
+            // 检查货位库存减少数目的范围是否合理
+            if (locationStorage.getGoodsNum() < goodsNum){
+                resultValue = 3;
+            }
+        } else{
+            resultValue = 2;
+        }
+        return resultValue;
     }
 
     /**

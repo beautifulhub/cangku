@@ -91,22 +91,19 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
      */
     @UserOperation(value = "货物下架")
     @Override
-    public boolean locationDownOperation(String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, Integer personID, String remark) throws LocationRecordManageServiceException {
-
+    public boolean locationDownOperation(Integer goodsID, String goodsName, String goodsDetail, Integer repositoryID, Integer personID, String remark) throws LocationRecordManageServiceException {
         try {
             // 更新库存信息
             boolean isSuccess = false;
-            //根据货物编号查询货物ID
-            Integer goodsID = goodsMapper.selectIDByNO(goodsNO);
-            if(goodsID == null ){
-                return isSuccess;
-            }
             //组装批量录入的货物信息
             List<String> goodsSingle = SPLIT_SEMICOLON.splitToList(goodsDetail);
             for(String goodss : goodsSingle){
                 List<String> goodsStr = SPLIT_COMMA.splitToList(goodss);
-                //保存到货位总数
-                isSuccess = locationStorageManageService.locationStorageDecrease(goodsID, goodsStr, repositoryID);
+                String goodsColor = goodsStr.get(0);
+                String goodsSize = goodsStr.get(1);
+                String goodsNum = goodsStr.get(2);
+                String locationNO = goodsStr.get(3);
+                isSuccess = locationStorageManageService.locationStorageDecrease(goodsID, goodsColor, goodsSize, Long.parseLong(goodsNum), locationNO, repositoryID);
                 // 保存下架记录
                 if (isSuccess) {
                     LocationDownDO locationDownDO = new LocationDownDO();

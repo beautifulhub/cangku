@@ -26,7 +26,7 @@ public interface LocationRecordManageService {
      *
      * @return 返回一个boolean值，若值为true表示下架成功，否则表示下架失败
      */
-    boolean locationDownOperation(String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, Integer personID, String remark) throws LocationRecordManageServiceException;
+    boolean locationDownOperation(Integer goodsID, String goodsName, String goodsDetail, Integer repositoryID, Integer personID, String remark) throws LocationRecordManageServiceException;
 
     /**
      * 查询上下架记录

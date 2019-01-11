@@ -1,12 +1,16 @@
 package com.ken.wms.common.controller;
 
+import com.google.common.base.Splitter;
 import com.ken.wms.common.service.Interface.LocationRecordManageService;
+import com.ken.wms.common.service.Interface.LocationStorageManageService;
 import com.ken.wms.common.util.Response;
 import com.ken.wms.common.util.ResponseFactory;
+import com.ken.wms.domain.LocationStorage;
 import com.ken.wms.domain.StockRecordDTO;
 import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.LocationManageServiceException;
 import com.ken.wms.exception.LocationRecordManageServiceException;
+import com.ken.wms.exception.LocationStorageManageServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -33,8 +37,12 @@ import java.util.Map;
 @RequestMapping(value = "locationRecordManage")
 public class LocationRecordManageHandler {
 
+    private static final Splitter SPLIT_SEMICOLON = Splitter.on(";").trimResults().omitEmptyStrings();
+    private static final Splitter SPLIT_COMMA = Splitter.on(",").trimResults().omitEmptyStrings();
     @Autowired
     private LocationRecordManageService locationRecordManageService;
+    @Autowired
+    private LocationStorageManageService locationStorageManageService;
 
     /**
      * 货物上架操作
@@ -100,6 +108,65 @@ public class LocationRecordManageHandler {
     }
 
     /**
+     * 货位下架时，校验该仓库的货位上是否有一定数量的货物
+     *
+     * @return 返回一个map，key为result的值表示操作是否成功
+     */
+    @RequestMapping(value = "checkLocationStorage", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    Map<String, Object> checkLocationStorage(@RequestParam("goodsID") String goodsID,
+                                 @RequestParam("goodsColor") String goodsColor,
+                                 @RequestParam("goodsSize") String goodsSize,
+                                 @RequestParam("goodsNum") String goodsNum,
+                                 @RequestParam("locationNO") String locationNO,
+                                 @RequestParam(value = "repositoryID", required = false) String repositoryIDStr
+                                 ) throws LocationStorageManageServiceException {
+        // 初始化 Response
+        Response responseContent = ResponseFactory.newInstance();
+        String resultValue = "1";
+        boolean authorizeCheck = true;
+        boolean argumentCheck = true;
+        Integer repositoryID = null;
+
+        // 参数检查
+        if (repositoryIDStr != null) {
+            if (StringUtils.isNumeric(repositoryIDStr)) {
+                repositoryID = Integer.valueOf(repositoryIDStr);
+            } else {
+                argumentCheck = false;
+                responseContent.setResponseMsg("request argument error");
+            }
+        }
+
+        // 获取 session 中的信息
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession();
+        UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");
+        Integer personID = userInfo == null ? -1 : userInfo.getUserID();
+        Integer repositoryIDBelong = userInfo == null ? -1 : userInfo.getRepositoryBelong();
+
+        // 设置非管理员请求的仓库ID
+        if (!currentUser.hasRole("systemAdmin")) {
+            if (repositoryIDBelong < 0) {
+                authorizeCheck = false;
+                responseContent.setResponseMsg("You are not authorized");
+            } else {
+                repositoryID = repositoryIDBelong;
+            }
+        }
+
+        if (authorizeCheck && argumentCheck) { //单条记录校验
+            int ret = locationStorageManageService.checkLocationStorageService(Integer.valueOf(goodsID), goodsColor, goodsSize, Long.parseLong(goodsNum), locationNO, repositoryID);
+            resultValue = String.valueOf(ret);
+        }
+
+        // 设置 Response
+        responseContent.setResponseResult(resultValue);
+        return responseContent.generateResponse();
+    }
+
+    /**
      * 货物下架操作
      *
      * @return 返回一个map，key为result的值表示操作是否成功
@@ -107,12 +174,12 @@ public class LocationRecordManageHandler {
     @RequestMapping(value = "locationDown", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> locationDown(@RequestParam("goodsNO") String goodsNO,
+    Map<String, Object> locationDown(@RequestParam("goodsID") String goodsID,
                                  @RequestParam("goodsName") String goodsName,
                                  @RequestParam("goodsDetail") String goodsDetail,
                                  @RequestParam(value = "repositoryID", required = false) String repositoryIDStr,
                                  @RequestParam("remark") String remark
-                                 ) throws LocationRecordManageServiceException {
+                                 ) throws LocationRecordManageServiceException,LocationStorageManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
         String result = Response.RESPONSE_RESULT_ERROR;
@@ -146,14 +213,34 @@ public class LocationRecordManageHandler {
                 repositoryID = repositoryIDBelong;
             }
         }
-
+        String data = "";
         if (authorizeCheck && argumentCheck) {
-            if (locationRecordManageService.locationDownOperation(goodsNO, goodsName, goodsDetail, repositoryID, personID, remark))
-                result = Response.RESPONSE_RESULT_SUCCESS;
+            //再次校验
+            List<String> goodsSingle = SPLIT_SEMICOLON.splitToList(goodsDetail);
+            int lineData = 1;
+            int retCheck = 1;
+            for(String goodss : goodsSingle){
+                List<String> goodsStr = SPLIT_COMMA.splitToList(goodss);
+                String goodsColor = goodsStr.get(0);
+                String goodsSize = goodsStr.get(1);
+                String goodsNum = goodsStr.get(2);
+                String locationNO = goodsStr.get(3);
+                retCheck = locationStorageManageService.checkLocationStorageService(Integer.parseInt(goodsID), goodsColor, goodsSize,Long.parseLong(goodsNum), locationNO, repositoryID);
+                if(retCheck != 1){ //出现问题
+                    data = retCheck + ";" + lineData; //前面是返回结果标识，后面是第几行出现问题
+                    break;
+                }
+                lineData++;
+            }
+            if(retCheck == 1){
+                if (locationRecordManageService.locationDownOperation(Integer.parseInt(goodsID), goodsName, goodsDetail, repositoryID, personID, remark)){
+                    result = Response.RESPONSE_RESULT_SUCCESS;
+                }
+            }
         }
-
         // 设置 Response
         responseContent.setResponseResult(result);
+        responseContent.setResponseData(data);
         return responseContent.generateResponse();
     }
 

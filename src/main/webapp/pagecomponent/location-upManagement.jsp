@@ -67,6 +67,7 @@
                 $("[name='locationNO["+n+"]']").append(locationNOOption);
                 //动态添加-绑定删除动作
                 $('.del_stock_up').click(function() {
+                    debugger
                     var roleName = $(this).parent("div").find('input[type]').attr("name");
                     $("#locationup_form").bootstrapValidator('removeField',roleName);
                     $(this).parent("div").parent("div").parent("div").remove();

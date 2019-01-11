@@ -526,8 +526,6 @@ pageEncoding="UTF-8"%>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/js/mainPage.js"></script>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/js/commonUtil.js"></script>
-<script type="text/javascript"
         src="${pageContext.request.contextPath}/js/ajaxfileupload.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script>
@@ -535,6 +533,8 @@ pageEncoding="UTF-8"%>
         src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/lib/layui/layui.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/js/commonUtil.js"></script>
 
 </body>
 </html>

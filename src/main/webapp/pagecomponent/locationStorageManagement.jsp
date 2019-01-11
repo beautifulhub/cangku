@@ -293,9 +293,9 @@
 		$('#storage_number_edit').val(row.goodsNum);
 	}
 
-	// 添加供应商模态框数据校验
 	function bootstrapValidatorInit() {
-		$("#storage_form").bootstrapValidator({
+        // 添加供应商模态框数据校验
+        $("#storage_form").bootstrapValidator({
 			message : 'This is not valid',
 			feedbackIcons : {
 				valid : 'glyphicon glyphicon-ok',
@@ -326,6 +326,29 @@
 					}
 				}
 			}
+		}),
+		//对编辑后的库存数量进行校验
+		$('#storage_form_edit').bootstrapValidator({
+			message:'This value is not valid',
+			feedbackIcons:{
+				valid:'glyphicon glyphicon-ok',
+				invalid:'glyphicon glyphicon-remove',
+				validating:'glyphicon glyphicon-refresh'
+			},
+			excluded: [':disabled'],
+			fields:{// 字段验证
+				storage_number:{
+					validators:{
+						notEmpty:{
+							message:'输入不能为空'
+						},
+						regexp: {
+							regexp:/^\d+$/,
+							message:'只能输入数字且必须大于或等于0'
+						}
+					}
+				}
+			}
 		})
 	}
 
@@ -339,38 +362,43 @@
 							.isValid()) {
 						return;
 					}
-					var data = {
-                        locationStorageID : $('#location_storage_id').val(),
-						number : $('#storage_number_edit').val(),
-					}
-					// ajax
-					$.ajax({
-						type : "POST",
-						url : 'locationStorageManage/updateLocationStorageRecord',
-						dataType : "json",
-						contentType : "application/json",
-						data : JSON.stringify(data),
-						success : function(response) {
-							$('#edit_modal').modal("hide");
-							var type;
-							var msg;
-							var append = '';
-							if (response.result == "success") {
-								type = "success";
-								msg = "库存信息更新成功";
-							} else if (resposne == "error") {
-								type = "error";
-								msg = "库存信息更新失败"
-							}
-							showMsg(type, msg, append);
-							tableRefresh();
-						},
-						error : function(xhr, textStatus, errorThrown) {
-							$('#edit_modal').modal("hide");
-							// handle error
-							handleAjaxError(xhr.status);
-						}
-					});
+                    if($('#storage_number_edit').val().trim() == 0){
+                        $('#deleteWarning_modal').modal(
+                            'show');
+                    }else{
+                        var data = {
+                            locationStorageID : $('#location_storage_id').val(),
+                            number : $('#storage_number_edit').val().trim(),
+                        }
+                        // ajax
+                        $.ajax({
+                            type : "POST",
+                            url : 'locationStorageManage/updateLocationStorageRecord',
+                            dataType : "json",
+                            contentType : "application/json",
+                            data : JSON.stringify(data),
+                            success : function(response) {
+                                $('#edit_modal').modal("hide");
+                                var type;
+                                var msg;
+                                var append = '';
+                                if (response.result == "success") {
+                                    type = "success";
+                                    msg = "库存信息更新成功";
+                                } else if (resposne == "error") {
+                                    type = "error";
+                                    msg = "库存信息更新失败"
+                                }
+                                showMsg(type, msg, append);
+                                tableRefresh();
+                            },
+                            error : function(xhr, textStatus, errorThrown) {
+                                $('#edit_modal').modal("hide");
+                                // handle error
+                                handleAjaxError(xhr.status);
+                            }
+                        });
+                    }
 				});
 	}
 
@@ -390,6 +418,9 @@
 				data : data,
 				success : function(response){
 					$('#deleteWarning_modal').modal("hide");
+					if($("#edit_modal").css("display")=="block"){
+                        $('#edit_modal').modal("hide");
+					}
 					var type;
 					var msg;
 					var append = '';
@@ -906,40 +937,6 @@
 	</div>
 </div>
 
-<!-- 删除提示模态框 -->
-<div class="modal fade" id="deleteWarning_modal" table-index="-1"
-	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close" type="button" data-dismiss="modal"
-					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">警告</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-3 col-sm-3" style="text-align: center;">
-						<img src="media/icons/warning-icon.png" alt=""
-							style="width: 70px; height: 70px; margin-top: 20px;">
-					</div>
-					<div class="col-md-8 col-sm-8">
-						<h3>是否确认删除该条库存信息</h3>
-						<p>(注意：一旦删除该条库存信息，将不能恢复)</p>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" type="button" data-dismiss="modal">
-					<span>取消</span>
-				</button>
-				<button class="btn btn-danger" type="button" id="delete_confirm">
-					<span>确认删除</span>
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
 <!-- 不能删除提示模态框 -->
 <div class="modal fade" id="not_deleteWarning_modal" table-index="-1"
 	role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1046,6 +1043,40 @@
 				</button>
 				<button class="btn btn-success" type="button" id="edit_modal_submit">
 					<span>确认更改</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 删除提示模态框 -->
+<div class="modal fade" id="deleteWarning_modal" table-index="-1"
+	 role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">警告</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-3 col-sm-3" style="text-align: center;">
+						<img src="media/icons/warning-icon.png" alt=""
+							 style="width: 70px; height: 70px; margin-top: 20px;">
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<h3>是否确定修改库存数量为0，如果确定，该库存信息将自动删除！</h3>
+						<p>(注意：删除的库存信息，将不能恢复)</p>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" type="button" data-dismiss="modal">
+					<span>取消</span>
+				</button>
+				<button class="btn btn-danger" type="button" id="delete_confirm">
+					<span>确认删除</span>
 				</button>
 			</div>
 		</div>
