@@ -344,7 +344,7 @@
 
 <div class="panel panel-default">
 <ol class="breadcrumb">
-	<li>货物出库</li>
+	<li>出货单</li>
 </ol>
 <div class="panel-body">
 	<div class="row">
@@ -534,7 +534,7 @@
 </div>
 <div class="panel-footer">
 	<div style="text-align:right">
-		<button class="btn btn-success" id="submit">提交出库</button>
+		<button class="btn btn-success" id="submit">确定</button>
 	</div>
 </div>
 </div>

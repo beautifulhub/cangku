@@ -378,7 +378,7 @@
 		}
 	}
 
-	//执行货物出库操作
+	//执行货物出货操作
 	function stockoutOperation(){
 		$('#submit').click(function(){
             if(UnRepoAuthTip())return;
@@ -387,7 +387,7 @@
 			if (!$('#stockout_form').data('bootstrapValidator').isValid()) {
 				return;
 			}
-            //获取出库获取的明细
+            //获取出货获取的明细
             var outGoodsDetail = "";
             $(".out-goods-detail").each(function(i,item){
                 var goodsColor = $(item).find('.goods_color_selector').val()
@@ -417,11 +417,11 @@
 					var append = '';
 					if(response.result == "success"){
 						type = 'success';
-						msg = '货物出库成功';
+						msg = '货物出货成功';
 						inputReset();
 					}else{
 						type = 'error';
-						msg = '货物出库失败'
+						msg = '货物出货失败'
 					}
 					showMsg(type, msg, append);
 				},
@@ -467,7 +467,7 @@
 
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>货物出库</li>
+		<li>出货单</li>
 	</ol>
 	<div class="panel-body">
 		<form class="form-inline" role="form" id="stockout_form">
@@ -489,7 +489,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline">
 							<div class="form-group">
-								<label for="" class="form-label">出库货物：</label>
+								<label for="" class="form-label">出货货物：</label>
 								<input type="text" class="form-control" id="goods_input" placeholder="请输入货物名称">
 							</div>
 						</form>
@@ -599,11 +599,11 @@
                 <div class="row visible-md visible-lg">
                     <div class="col-md-12 col-sm-12">
                         <div class='pull-right' style="cursor:pointer" id="outDetail-show">
-                            <span>显示出库详情</span>
+                            <span>显示出货详情</span>
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </div>
                         <div class='pull-right hide' style="cursor:pointer" id="outDetail-hidden">
-                            <span>隐藏出库详情</span>
+                            <span>隐藏出货详情</span>
                             <span class="glyphicon glyphicon-chevron-up"></span>
                         </div>
                     </div>
@@ -613,7 +613,7 @@
                         <div class="row">
                             <div class="col-md-1 col-sm-1"></div>
                             <div class="col-md-10 col-sm-10">
-                                <label for="" class="text-info">出库货物明细</label>
+                                <label for="" class="text-info">出货物明细</label>
                             </div>
                         </div>
 
@@ -655,7 +655,7 @@
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
 						<div class="form-group">
-							<label for="" class="form-label">出库仓库：</label>
+							<label for="" class="form-label">出货仓库：</label>
 							<select name="" id="search_input_repository" class="form-control">
 							</select>
 						</div>
@@ -683,7 +683,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline" id="">
 							<div class="form-group">
-								<label for="" class="form-label">出库数量：</label>
+								<label for="" class="form-label">出货数量：</label>
 								<input type="text" class="form-control" placeholder="请输入数量" id="stockout_input" name="stockout_input">
 								<span>(当前库存量：</span>
 								<span id="info_storage">-</span>
@@ -698,7 +698,7 @@
 	</div>
 	<div class="panel-footer">
 		<div style="text-align:right">
-			<button class="btn btn-success" id="submit">提交出库</button>
+			<button class="btn btn-success" id="submit">确定</button>
 		</div>
 	</div>
 </div>

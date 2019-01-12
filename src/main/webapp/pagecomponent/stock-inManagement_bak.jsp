@@ -338,7 +338,7 @@
 
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>货物入库</li>
+		<li>进货单</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">
@@ -513,7 +513,7 @@
                     <div class="col-md-10 col-sm-11">
                         <form action="" class="form-inline">
                             <div class="form-group">
-                                <label for="" class="form-label">入库仓库：</label>
+                                <label for="" class="form-label">进货仓库：</label>
                                 <select name="" id="search_input_repository" class="form-control">
 									<option value='-1'>请选择仓库</option>
                                 </select>
@@ -545,7 +545,7 @@
 	</div>
 	<div class="panel-footer">
 		<div style="text-align:right">
-			<button class="btn btn-success" id="submit">提交入库</button>
+			<button class="btn btn-success" id="submit">确定</button>
 		</div>
 	</div>
 </div>

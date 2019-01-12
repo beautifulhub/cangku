@@ -96,7 +96,7 @@ public interface StorageMapper {
 	void insert(Storage storage);
 	
 	/**
-	 * 批量导入库存信息
+	 * 批量导进货存信息
 	 * @param storages 若干条库存信息
 	 */
 	void insertBatch(List<Storage> storages);

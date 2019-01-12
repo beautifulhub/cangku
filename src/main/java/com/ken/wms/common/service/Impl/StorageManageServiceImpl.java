@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 库存信息管理 service 实现类
+ * 进出货盘点 service 实现类
  *
  * @author Bea
  */
@@ -497,12 +497,12 @@ public class StorageManageServiceImpl implements StorageManageService {
     }
 
     /**
-     * 导入库存记录
+     * 导进货存记录
      *
      * @param file 保存有的库存记录的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
-    @UserOperation(value = "导入库存记录")
+    @UserOperation(value = "导进货存记录")
     @Override
     public Map<String, Object> importStorage(MultipartFile file) throws StorageManageServiceException {
         // 初始化结果集
@@ -584,12 +584,12 @@ public class StorageManageServiceImpl implements StorageManageService {
     }
 
     /**
-     * 导出库存记录
+     * 导出货存记录
      *
      * @param storageList 保存有库存记录的List
      * @return excel 文件
      */
-    @UserOperation(value = "导出库存记录")
+    @UserOperation(value = "导出货存记录")
     @Override
     public File exportStorage(List<Storage> storageList) {
         if (storageList == null)

@@ -360,7 +360,7 @@
 	var import_step = 1;
 	var import_start = 1;
 	var import_end = 3;
-	// 导入库存信息
+	// 导入进出货盘点信息
 	function importStorageAction() {
 		$('#import_storage').click(function() {
 			$('#import_modal').modal("show");
@@ -462,7 +462,7 @@
 		})
 	}
 
-	// 导入库存信息模态框重置
+	// 导入进出货盘点信息模态框重置
 	function importModalReset(){
 		var i;
 		for(i = import_start; i <= import_end; i++){
@@ -505,7 +505,7 @@
 </script>
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>库存信息管理</li>
+		<li>进出货盘点</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">
@@ -624,7 +624,7 @@
 	</div>
 </div>
 
-<!-- 导入库存信息模态框 -->
+<!-- 导入进出货盘点信息模态框 -->
 <div class="modal fade" id="import_modal" table-index="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true"
 	data-backdrop="static">
@@ -633,7 +633,7 @@
 			<div class="modal-header">
 				<button class="close" type="button" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">导入库存信息</h4>
+				<h4 class="modal-title" id="myModalLabel">导入进出货盘点信息</h4>
 			</div>
 			<div class="modal-body">
 				<div id="step1">
@@ -641,7 +641,7 @@
 						<div class="col-md-1 col-sm-1"></div>
 						<div class="col-md-10 col-sm-10">
 							<div>
-								<h4>点击下面的下载按钮，下载库存信息电子表格</h4>
+								<h4>点击下面的下载按钮，下载盘点信息电子表格</h4>
 							</div>
 							<div style="margin-top: 30px; margin-buttom: 15px">
 								<a class="btn btn-info"
@@ -673,7 +673,7 @@
 						<div class="col-md-8 col-sm-10">
 							<div>
 								<div>
-									<h4>请点击下面上传文件按钮，上传填写好的库存信息电子表格</h4>
+									<h4>请点击下面上传文件按钮，上传填写好的盘点信息电子表格</h4>
 								</div>
 								<div style="margin-top: 30px; margin-buttom: 15px">
 									<span class="btn btn-info btn-file"> <span> <span

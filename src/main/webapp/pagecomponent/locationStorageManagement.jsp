@@ -645,7 +645,7 @@
 </script>
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>架位库存查询</li>
+		<li>库存查询</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">

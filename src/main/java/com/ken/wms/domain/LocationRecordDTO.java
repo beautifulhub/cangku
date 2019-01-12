@@ -3,7 +3,7 @@ package com.ken.wms.domain;
 import java.util.Date;
 
 /**
- * 下架/上架记录DO
+ * 出库/入库记录DO
  *
  * @author Bea
  * @since 2017/4/5.
@@ -16,7 +16,7 @@ public class LocationRecordDTO {
     private Integer recordID;
 
     /**
-     * 记录的类型（下架/上架）
+     * 记录的类型（出库/入库）
      */
     private String type;
 
@@ -40,27 +40,27 @@ public class LocationRecordDTO {
     private String goodsSize;
 
     /**
-     * 下架或上架数量
+     * 出库或入库数量
      */
     private long goodsNum;
 
     /**
-     * 下架或上架数量
+     * 出库或入库数量
      */
     private String locationNO;
 
     /**
-     * 下架或上架仓库ID
+     * 出库或入库仓库ID
      */
     private Integer repositoryID;
 
     /**
-     * 下架或上架时间
+     * 出库或入库时间
      */
     private Date time;
 
     /**
-     * 下架或上架经手人
+     * 出库或入库经手人
      */
     private String personInCharge;
 

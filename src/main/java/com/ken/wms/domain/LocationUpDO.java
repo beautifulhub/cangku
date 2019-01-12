@@ -4,14 +4,14 @@ package com.ken.wms.domain;
 import java.util.Date;
 
 /**
- * 上架记录
+ * 入库记录
  *
  * @author Bea
  */
 public class LocationUpDO {
 
     /**
-     * 上架记录
+     * 入库记录
      */
     private Integer id;
 
@@ -41,37 +41,37 @@ public class LocationUpDO {
     private String goodsSize;
 
     /**
-     * 上架数量
+     * 入库数量
      */
     private Long goodsNum;
 
     /**
-     * 上架货位
+     * 入库货位
      */
     private String locationNO;
 
     /**
-     * 上架仓库ID
+     * 入库仓库ID
      */
     private Integer repositoryID;
 
     /**
-     * 上架更新日期
+     * 入库更新日期
      */
     private Date updateTime;
 
     /**
-     * 上架经手人ID
+     * 入库经手人ID
      */
     private Integer personID;
 
     /**
-     * 上架经手人姓名
+     * 入库经手人姓名
      */
     private String personName;
 
     /**
-     * 上架备注说明
+     * 入库备注说明
      */
     private String remark;
 

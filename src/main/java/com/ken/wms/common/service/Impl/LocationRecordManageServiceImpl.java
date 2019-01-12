@@ -40,28 +40,28 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
     private LocationStorageManageService locationStorageManageService;
 
     /**
-     * 货物上架操作
+     * 货物入库操作
      *
-     * @return 返回一个boolean 值，若值为true表示上架成功，否则表示上架失败
+     * @return 返回一个boolean 值，若值为true表示入库成功，否则表示入库失败
      */
-    @UserOperation(value = "货物上架")
+    @UserOperation(value = "货物入库")
     @Override
-    public boolean locationUpOperation(String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, Integer personID, String remark) throws LocationRecordManageServiceException {
+    public boolean locationUpOperation(Integer goodsID, String goodsName, String goodsDetail, Integer repositoryID, Integer personID, String remark) throws LocationRecordManageServiceException {
         try {
             // 更新库存记录
             boolean isSuccess = false;
             //根据货物编号查询货物ID
-            Integer goodsID = goodsMapper.selectIDByNO(goodsNO);
+            /*Integer goodsID = goodsMapper.selectIDByNO(goodsNO);
             if(goodsID == null ){
                 return isSuccess;
-            }
+            }*/
             //组装批量录入的货物信息
             List<String> goodsSingle = SPLIT_SEMICOLON.splitToList(goodsDetail);
             for(String goodss : goodsSingle){
                 List<String> goodsStr = SPLIT_COMMA.splitToList(goodss);
                 //保存到货位总数
                 isSuccess = locationStorageManageService.locationStorageIncrease(goodsID, goodsStr, repositoryID);
-                // 保存上架记录
+                // 保存入库记录
                 if (isSuccess) {
                     LocationUpDO locationUpDO = new LocationUpDO();
                     locationUpDO.setGoodsID(goodsID);
@@ -85,11 +85,11 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
     }
 
     /**
-     * 货物下架操作
+     * 货物出库操作
      *
-     * @return 返回一个boolean值，若值为true表示下架成功，否则表示下架失败
+     * @return 返回一个boolean值，若值为true表示出库成功，否则表示出库失败
      */
-    @UserOperation(value = "货物下架")
+    @UserOperation(value = "货物出库")
     @Override
     public boolean locationDownOperation(Integer goodsID, String goodsName, String goodsDetail, Integer repositoryID, Integer personID, String remark) throws LocationRecordManageServiceException {
         try {
@@ -104,7 +104,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
                 String goodsNum = goodsStr.get(2);
                 String locationNO = goodsStr.get(3);
                 isSuccess = locationStorageManageService.locationStorageDecrease(goodsID, goodsColor, goodsSize, Long.parseLong(goodsNum), locationNO, repositoryID);
-                // 保存下架记录
+                // 保存出库记录
                 if (isSuccess) {
                     LocationDownDO locationDownDO = new LocationDownDO();
                     locationDownDO.setGoodsID(goodsID);
@@ -128,7 +128,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
     }
 
     /**
-     * 查询出上架记录
+     * 查询出入库记录
      *
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
@@ -138,7 +138,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
     }
 
     /**
-     * 分页查询出上下架记录
+     * 分页查询出出入库记录
      *
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
@@ -250,14 +250,14 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
     }
 
     /**
-     * 查询上架记录
+     * 查询入库记录
      *
-     * @param repositoryID 上架仓库ID
-     * @param startDate    上架记录起始日期
-     * @param endDate      上架记录结束日期
+     * @param repositoryID 入库仓库ID
+     * @param startDate    入库记录起始日期
+     * @param endDate      入库记录结束日期
      * @param offset       分页偏移值
      * @param limit        分页大小
-     * @return 返回所有符合要求的上架记录
+     * @return 返回所有符合要求的入库记录
      */
     private Map<String, Object> selectLocationUpRecord(String goodsNo, String goodsName, String goodsColor, String goodsSize, Integer repositoryID,Integer personID, Date startDate, Date endDate, int offset, int limit) throws LocationRecordManageServiceException {
         Map<String, Object> result = new HashMap<>();
@@ -295,14 +295,14 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
     }
 
     /**
-     * 查询下架记录
+     * 查询出库记录
      *
-     * @param repositoryID 下架仓库ID
-     * @param startDate    下架记录起始日期
-     * @param endDate      下架记录结束日期
+     * @param repositoryID 出库仓库ID
+     * @param startDate    出库记录起始日期
+     * @param endDate      出库记录结束日期
      * @param offset       分页偏移值
      * @param limit        分页大小
-     * @return 返回所有符合要求的下架记录
+     * @return 返回所有符合要求的出库记录
      */
     private Map<String, Object> selectLocationDownRecord(String goodsNo, String goodsName, String goodsColor, String goodsSize,Integer repositoryID,Integer personID, Date startDate, Date endDate, int offset, int limit) throws LocationRecordManageServiceException {
         Map<String, Object> result = new HashMap<>();
@@ -360,7 +360,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
         locationRecordDTO.setRepositoryID(locationUpDO.getRepositoryID());
         locationRecordDTO.setPersonInCharge(locationUpDO.getPersonName());
         locationRecordDTO.setRemark(locationUpDO.getRemark());
-        locationRecordDTO.setType("上架");
+        locationRecordDTO.setType("入库");
         return locationRecordDTO;
     }
 
@@ -383,7 +383,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
         locationRecordDTO.setRepositoryID(locationDownDO.getRepositoryID());
         locationRecordDTO.setPersonInCharge(locationDownDO.getPersonName());
         locationRecordDTO.setRemark(locationDownDO.getRemark());
-        locationRecordDTO.setType("下架");
+        locationRecordDTO.setType("出库");
         return locationRecordDTO;
     }
 

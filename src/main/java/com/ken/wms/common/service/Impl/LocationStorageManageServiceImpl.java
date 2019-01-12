@@ -350,7 +350,7 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
     }
 
     /**
-     * 货位下架时，校验该仓库的货位上是否有一定数量的货物
+     * 货位出库时，校验该仓库的货位上是否有一定数量的货物
      *
      * ret:1：成功,2：仓库此货位没有该货物,3：仓库此货位对应的货物数量不足
      */

@@ -12,7 +12,7 @@
 </style>
 
 <script>
-    // 上下架记录查询参数
+    // 记录查询参数
     search_type = 'searchAll'
     search_goods_no = ''
     search_goods_name = ''
@@ -115,7 +115,7 @@
 									},
                                     {
                                         field : 'repositoryID',
-                                        title : '下/上架仓库ID',
+                                        title : '仓库ID',
                                         //visible : false
                                     },
 									{
@@ -220,7 +220,7 @@
 
 <div class="panel panel-default">
     <ol class="breadcrumb">
-        <li>上下架记录</li>
+        <li>出入库记录</li>
     </ol>
     <div class="panel-body">
         <div class="row">
@@ -251,8 +251,8 @@
                         <label class="form-label">记录过滤：</label>
                         <select name="" id="search_type" class="form-control">
                             <option value="searchAll">显示所有</option>
-                            <option value="up">仅显示上架记录</option>
-                            <option value="down">仅显示下架记录</option>
+                            <option value="up">仅显示入库记录</option>
+                            <option value="down">仅显示出库记录</option>
                         </select>
                     </form>
                 </div>

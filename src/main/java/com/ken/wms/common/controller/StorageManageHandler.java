@@ -296,7 +296,7 @@ public class StorageManageHandler {
     }
 
     /**
-     * 导入库存信息
+     * 导进货存信息
      *
      * @param file 保存有库存信息的文件
      * @return 返回一个map，其中：key 为 result表示操作的结果，包括：success 与
@@ -342,7 +342,7 @@ public class StorageManageHandler {
     }
 
     /**
-     * 导出库存信息
+     * 导出货存信息
      *
      * @param searchType       查询类型
      * @param keyword          查询关键字

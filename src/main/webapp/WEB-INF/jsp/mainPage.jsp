@@ -74,7 +74,7 @@ pageEncoding="UTF-8"%>
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a href="#collapse1" data-toggle="collapse" data-parent="#accordion"
-                               class="parentMenuTitle collapseHead">库存管理</a>
+                               class="parentMenuTitle collapseHead">进出货管理</a>
                             <div class="pull-right">
                                 <span class="caret"></span>
                             </div>
@@ -86,18 +86,18 @@ pageEncoding="UTF-8"%>
                                 <%--<shiro:hasRole name="commonsAdmin">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/storageManagementCommon.jsp">库存查询</a>
+                                           name="pagecomponent/storageManagementCommon.jsp">进出货盘点</a>
                                     </li>
                                 </shiro:hasRole>--%>
                                 <%--<shiro:hasRole name="systemAdmin">--%>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/storageManagement.jsp">库存查询</a>
+                                           name="pagecomponent/storageManagement.jsp">进出货盘点</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id=""
                                            class="menu_item"
-                                           name="pagecomponent/stockRecordManagement.jsp">出入库记录</a>
+                                           name="pagecomponent/stockRecordManagement.jsp">进出货记录</a>
                                     </li>
                                 <%--</shiro:hasRole>--%>
                             </ul>
@@ -109,7 +109,7 @@ pageEncoding="UTF-8"%>
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a href="#collapse2" data-toggle="collapse" data-parent="#accordion"
-                               class="parentMenuTitle collapseHead">出入库管理</a>
+                               class="parentMenuTitle collapseHead">进出货开单</a>
                             <div class="pull-right">
                                 <span class="caret"></span>
                             </div>
@@ -121,11 +121,11 @@ pageEncoding="UTF-8"%>
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <a href="javascript:void(0)" id="" class="menu_item"
-                                       name="pagecomponent/stock-inManagement.jsp">货物入库</a>
+                                       name="pagecomponent/stock-inManagement.jsp">进货单</a>
                                 </li>
                                 <li class="list-group-item">
                                     <a href="javascript:void(0)" id="" class="menu_item"
-                                       name="pagecomponent/stock-outManagement.jsp">货物出库</a>
+                                       name="pagecomponent/stock-outManagement.jsp">出货单</a>
                                 </li>
                             </ul>
                             <%--</shiro:hasRole>--%>
@@ -133,11 +133,11 @@ pageEncoding="UTF-8"%>
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/stock-inManagementCommon.jsp">货物入库</a>
+                                           name="pagecomponent/stock-inManagementCommon.jsp">进货单</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/stock-outManagementCommon.jsp">货物出库</a>
+                                           name="pagecomponent/stock-outManagementCommon.jsp">出货单</a>
                                     </li>
                                 </ul>
                             </shiro:hasRole>--%>
@@ -149,7 +149,7 @@ pageEncoding="UTF-8"%>
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a href="#collapse1-1" data-toggle="collapse" data-parent="#accordion"
-                               class="parentMenuTitle collapseHead">上下架库存</a>
+                               class="parentMenuTitle collapseHead">库存管理</a>
                             <div class="pull-right">
                                 <span class="caret"></span>
                             </div>
@@ -161,18 +161,18 @@ pageEncoding="UTF-8"%>
                                 <%--<shiro:hasRole name="commonsAdmin">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/storageManagementCommon.jsp">库存查询</a>
+                                           name="pagecomponent/storageManagementCommon.jsp">进出货盘点</a>
                                     </li>
                                 </shiro:hasRole>--%>
                                 <%--<shiro:hasRole name="systemAdmin">--%>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item"
-                                           name="pagecomponent/locationStorageManagement.jsp">架位库存查询</a>
+                                           name="pagecomponent/locationStorageManagement.jsp">库存查询</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id=""
                                            class="menu_item"
-                                           name="pagecomponent/locationRecordManagement.jsp">上下架记录</a>
+                                           name="pagecomponent/locationRecordManagement.jsp">出入库记录</a>
                                     </li>
                                 <%--</shiro:hasRole>--%>
                             </ul>
@@ -184,7 +184,7 @@ pageEncoding="UTF-8"%>
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a href="#collapse3_1" data-toggle="collapse" data-parent="#accordion"
-                               class="parentMenuTitle collapseHead">上下架管理</a>
+                               class="parentMenuTitle collapseHead">出入库管理</a>
                             <div class="pull-right	">
                                 <span class="caret"></span>
                             </div>
@@ -195,11 +195,11 @@ pageEncoding="UTF-8"%>
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <a href="javascript:void(0)" id="" class="menu_item"
-                                       name="pagecomponent/location-upManagement.jsp">货物上架</a>
+                                       name="pagecomponent/location-upManagement.jsp">货物入库</a>
                                 </li>
                                 <li class="list-group-item">
                                     <a href="javascript:void(0)" id="" class="menu_item"
-                                       name="pagecomponent/location-downManagement.jsp">货物下架</a>
+                                       name="pagecomponent/location-downManagement.jsp">货物出库</a>
                                 </li>
                             </ul>
                         </div>
@@ -344,28 +344,28 @@ pageEncoding="UTF-8"%>
                         <div class="col-md-10" style="text-align: center">
                             <div class="col-md-4 col-sm-4">
                                 <a href="javascript:void(0)" class="thumbnail shortcut"> <img
-                                        src="media/icons/stock_search-512.png" alt="库存查询"
+                                        src="media/icons/stock_search-512.png" alt="进出货盘点"
                                         class="img-rounded link" style="width: 150px; height: 150px;">
                                     <div class="caption">
-                                        <h3 class="title">库存查询</h3>
+                                        <h3 class="title">进出货盘点</h3>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-md-4 col-sm-4">
                                 <a href="javascript:void(0)" class="thumbnail shortcut"> <img
-                                        src="media/icons/stock_in-512.png" alt="货物入库"
+                                        src="media/icons/stock_in-512.png" alt="进货单"
                                         class="img-rounded link" style="width: 150px; height: 150px;">
                                     <div class="caption">
-                                        <h3 class="title">货物入库</h3>
+                                        <h3 class="title">进货单</h3>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-md-4 col-sm-4">
                                 <a href="javascript:void(0)" class="thumbnail shortcut"> <img
-                                        src="media/icons/stock_out-512.png" alt="货物出库"
+                                        src="media/icons/stock_out-512.png" alt="出货单"
                                         class="img-rounded link" style="width: 150px; height: 150px;">
                                     <div class="caption">
-                                        <h3 class="title">货物出库</h3>
+                                        <h3 class="title">出货单</h3>
                                     </div>
                                 </a>
                             </div>

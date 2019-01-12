@@ -451,7 +451,7 @@
 	var import_step = 1;
 	var import_start = 1;
 	var import_end = 3;
-	// 导入库存信息
+	// 导入进出货盘点信息
 	function importStorageAction() {
 		$('#import_storage').click(function() {
 			$('#import_modal').modal("show");
@@ -536,7 +536,7 @@
 		})
 	}
 
-	// 导出库存信息
+	// 导出货存信息
 	function exportStorageAction() {
 		$('#export_storage').click(function() {
 			$('#export_modal').modal("show");
@@ -556,7 +556,7 @@
 		})
 	}
 
-	// 导入库存信息模态框重置
+	// 导入进出货盘点信息模态框重置
 	function importModalReset(){
 		var i;
 		for(i = import_start; i <= import_end; i++){
@@ -599,7 +599,7 @@
 </script>
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>库存信息管理</li>
+		<li>进出货盘点</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">
@@ -620,7 +620,7 @@
 				<div>
 					<div class="col-md-3 col-sm-3">
 						<input id="search_input_type" type="text" class="form-control" readOnly
-							placeholder="库存查询">
+							placeholder="进出货盘点">
 					</div>
 					<div class="col-md-2 col-sm-4">
 						<select class="form-control" id="search_input_color">
@@ -731,7 +731,7 @@
 	</div>
 </div>--%>
 
-<!-- 导入库存信息模态框 -->
+<!-- 导入进出货盘点信息模态框 -->
 <div class="modal fade" id="import_modal" table-index="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true"
 	data-backdrop="static">
@@ -740,7 +740,7 @@
 			<div class="modal-header">
 				<button class="close" type="button" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">导入库存信息</h4>
+				<h4 class="modal-title" id="myModalLabel">导入进出货盘点信息</h4>
 			</div>
 			<div class="modal-body">
 				<div id="step1">
@@ -748,7 +748,7 @@
 						<div class="col-md-1 col-sm-1"></div>
 						<div class="col-md-10 col-sm-10">
 							<div>
-								<h4>点击下面的下载按钮，下载库存信息电子表格</h4>
+								<h4>点击下面的下载按钮，下载盘点信息电子表格</h4>
 							</div>
 							<div style="margin-top: 30px; margin-buttom: 15px">
 								<a class="btn btn-info"
@@ -771,7 +771,7 @@
 								style="margin-top: 10px; margin-buttom: 30px">
 								<p>注意：</p>
 								<p>1.表格中各个列均不能为空，若存在未填写的项，则该条信息将不能成功导入</p>
-								<p>2.导入的数据会累加到库存中，切勿无意义的多次导入，避免带来库存混乱</p>
+								<p>2.导入的数据会累加到盘点中，切勿无意义的多次导入，避免带来盘点混乱</p>
 								<p>3.不确定或不知道怎么处理时，请及时联系系统管理人员</p>
 							</div>
 						</div>
@@ -783,7 +783,7 @@
 						<div class="col-md-8 col-sm-10">
 							<div>
 								<div>
-									<h4>请点击下面上传文件按钮，上传填写好的库存信息电子表格</h4>
+									<h4>请点击下面上传文件按钮，上传填写好的盘点信息电子表格</h4>
 								</div>
 								<div style="margin-top: 30px; margin-buttom: 15px">
 									<span class="btn btn-info btn-file"> <span> <span
@@ -855,7 +855,7 @@
 	</div>
 </div>
 
-<!-- 导出库存信息模态框 -->
+<!-- 导出盘点信息模态框 -->
 <div class="modal fade" id="export_modal" table-index="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true"
 	data-backdrop="static">
@@ -864,7 +864,7 @@
 			<div class="modal-header">
 				<button class="close" type="button" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModalLabel">导出库存信息</h4>
+				<h4 class="modal-title" id="myModalLabel">导出盘点信息</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -873,8 +873,8 @@
 							style="width: 70px; height: 70px; margin-top: 20px;">
 					</div>
 					<div class="col-md-8 col-sm-8">
-						<h3>是否确认导出库存信息</h3>
-						<p>(注意：请确定要导出的库存信息，导出的内容为当前列表的搜索结果)</p>
+						<h3>是否确认导出盘点信息</h3>
+						<p>(注意：请确定要导出的盘点信息，导出的内容为当前列表的搜索结果)</p>
 					</div>
 				</div>
 			</div>
@@ -942,7 +942,7 @@
 					</div>
 					<div class="col-md-8 col-sm-8">
 						<br>
-						<h3>该库存数量大于0，不能删除</h3>
+						<h3>该货物数量大于0，不能删除</h3>
 					</div>
 				</div>
 			</div>

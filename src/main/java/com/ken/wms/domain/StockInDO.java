@@ -4,14 +4,14 @@ package com.ken.wms.domain;
 import java.util.Date;
 
 /**
- * 入库记录
+ * 进货记录
  *
  * @author Bea
  */
 public class StockInDO {
 
     /**
-     * 入库记录
+     * 进货记录
      */
     private Integer id;
 
@@ -51,22 +51,22 @@ public class StockInDO {
     private String goodsSize;
 
     /**
-     * 入库数量
+     * 进货数量
      */
     private Long goodsNum;
 
     /**
-     * 入库仓库ID
+     * 进货仓库ID
      */
     private Integer repositoryID;
 
     /**
-     * 入库日期
+     * 进货日期
      */
     private Date time;
 
     /**
-     * 入库经手人
+     * 进货经手人
      */
     private String personInCharge;
 

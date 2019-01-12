@@ -301,12 +301,12 @@ public class LocationManageServiceImpl implements LocationManageService {
     public boolean deleteLocation(Integer locationId) throws LocationManageServiceException {
 
         try {
-            /*// 检查该货位是否有上架信息
+            /*// 检查该货位是否有入库信息
             List<StockInDO> stockInDORecord = stockInMapper.selectByLocationID(locationId);
             if (stockInDORecord != null && !stockInDORecord.isEmpty())
                 return false;
 
-            // 检查该货位是否有下架信息
+            // 检查该货位是否有出库信息
             List<StockOutDO> stockOutDORecord = stockOutMapper.selectByLocationId(locationId);
             if (stockOutDORecord != null && !stockOutDORecord.isEmpty())
                 return false;*/

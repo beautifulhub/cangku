@@ -342,7 +342,7 @@
 </script>
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>货物入库</li>
+		<li>进货单</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">
@@ -532,7 +532,7 @@
 	</div>
 	<div class="panel-footer">
 		<div style="text-align:right">
-			<button class="btn btn-success" id="submit">提交入库</button>
+			<button class="btn btn-success" id="submit">确定</button>
 		</div>
 	</div>
 </div>

@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 商品出上架管理请求Handler
+ * 商品出入库管理请求Handler
  *
  * @author Bea
  * @since 017/4/5.
@@ -45,17 +45,17 @@ public class LocationRecordManageHandler {
     private LocationStorageManageService locationStorageManageService;
 
     /**
-     * 货物上架操作
+     * 货物入库操作
      *
-     * @param goodsNO         货物编号
+     * @param goodsID         货物ID
      * @param repositoryIDStr 仓库ID
-     * @param goodsDetail     上架明细："颜色,尺码,数量;颜色,尺码,数量;"
+     * @param goodsDetail     入库明细："颜色,尺码,数量;颜色,尺码,数量;"
      * @return 返回一个map，key为result的值表示操作是否成功
      */
     @RequestMapping(value = "locationUp", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> locationUp(@RequestParam("goodsNO") String goodsNO,
+    Map<String, Object> locationUp(@RequestParam("goodsID") String goodsID,
                                    @RequestParam("goodsName") String goodsName,
                                    @RequestParam("goodsDetail") String goodsDetail,
                                    @RequestParam(value = "repositoryID", required = false) String repositoryIDStr,
@@ -97,7 +97,7 @@ public class LocationRecordManageHandler {
 
         // 执行 Service
         if (authorizeCheck && argumentCheck) {
-            if (locationRecordManageService.locationUpOperation(goodsNO, goodsName, goodsDetail, repositoryID, personID, remark)) {
+            if (locationRecordManageService.locationUpOperation(Integer.valueOf(goodsID), goodsName, goodsDetail, repositoryID, personID, remark)) {
                 result = Response.RESPONSE_RESULT_SUCCESS;
             }
         }
@@ -108,7 +108,7 @@ public class LocationRecordManageHandler {
     }
 
     /**
-     * 货位下架时，校验该仓库的货位上是否有一定数量的货物
+     * 货位出库时，校验该仓库的货位上是否有一定数量的货物
      *
      * @return 返回一个map，key为result的值表示操作是否成功
      */
@@ -167,7 +167,7 @@ public class LocationRecordManageHandler {
     }
 
     /**
-     * 货物下架操作
+     * 货物出库操作
      *
      * @return 返回一个map，key为result的值表示操作是否成功
      */
@@ -245,7 +245,7 @@ public class LocationRecordManageHandler {
     }
 
     /**
-     * 查询出上下架记录
+     * 查询出出入库记录
      *
      * @param repositoryIDStr 查询记录所对应的仓库ID
      * @param endDateStr      查询的记录起始日期

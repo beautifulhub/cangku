@@ -262,7 +262,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
     @Override
     public boolean deleteSupplier(Integer supplierId) {
 
-        // 查询该供应商是否有入库记录
+        // 查询该供应商是否有进货记录
         List<StockInDO> records = stockInMapper.selectBySupplierId(supplierId);
         if (records == null || records.size() > 0)
             return false;

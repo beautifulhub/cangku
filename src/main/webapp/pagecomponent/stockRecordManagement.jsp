@@ -12,7 +12,7 @@
 </style>
 
 <script>
-    // 出入库记录查询参数
+    // 记录查询参数
     var search_type = 'searchAll'
     var search_repositoryID = ''
     var search_start_date = null
@@ -118,7 +118,7 @@
 									},
                                     {
                                         field : 'repositoryID',
-                                        title : '出/入库仓库ID',
+                                        title : '仓库ID',
                                         //visible : false
                                     },
 									{
@@ -189,7 +189,7 @@
 
 <div class="panel panel-default">
     <ol class="breadcrumb">
-        <li>业务流水</li>
+        <li>进出货记录</li>
     </ol>
     <div class="panel-body">
         <div class="row">
@@ -210,8 +210,8 @@
                         <label class="form-label">记录过滤：</label>
                         <select name="" id="search_type" class="form-control">
                             <option value="searchAll">显示所有</option>
-                            <option value="stockInOnly">仅显示入库记录</option>
-                            <option value="stockOutOnly">仅显示出库记录</option>
+                            <option value="stockInOnly">仅显示进货记录</option>
+                            <option value="stockOutOnly">仅显示出货记录</option>
                         </select>
                     </form>
                 </div>

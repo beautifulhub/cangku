@@ -290,12 +290,12 @@ public class GoodsManageServiceImpl implements GoodsManageService {
     public boolean deleteGoods(Integer goodsId) throws GoodsManageServiceException {
 
         try {
-            // 检查该货物是否有入库信息
+            // 检查该货物是否有进货信息
             List<StockInDO> stockInDORecord = stockInMapper.selectByGoodsID(goodsId);
             if (stockInDORecord != null && !stockInDORecord.isEmpty())
                 return false;
 
-            // 检查该货物是否有出库信息
+            // 检查该货物是否有出货信息
             List<StockOutDO> stockOutDORecord = stockOutMapper.selectByGoodsId(goodsId);
             if (stockOutDORecord != null && !stockOutDORecord.isEmpty())
                 return false;

@@ -19,7 +19,7 @@
                 if(_this.locationDownGoodsCheck($('#goods_name').val().trim())){
                     return;
 				}
-				//②校验货物数量
+				//②校验货物数量输入是否合法
                 $('#locationdown_form').data('bootstrapValidator').validate();
                 if (!$('#locationdown_form').data('bootstrapValidator').isValid()) {
                     return;
@@ -43,6 +43,10 @@
                     },
                     success : function(ret){
                         checkError = _this.locationDownRowCheck(ret.result,n);
+                    },
+                    error : function(xhr, textStatus, errorThrown){
+                        // handle error
+                        handleAjaxError(xhr.status);
                     }
                 });
                 if(checkError)return;
@@ -370,7 +374,7 @@
 		}
 	}
 
-	//执行货物下架操作
+	//执行货物出库操作
 	function locationdownOperation(){
 		$('#submit').click(function(){
             if(UnRepoAuthTip())return;
@@ -382,7 +386,7 @@
 			if (!$('#locationdown_form').data('bootstrapValidator').isValid()) {
 				return;
 			}
-            //获取下架获取的明细
+            //获取出库获取的明细
             var downGoodsDetail = "";
             $(".down-goods-detail").each(function(i,item){
                 var goodsColor = $(item).find('.goods_color_selector').val()
@@ -413,7 +417,7 @@
                     var append = '';
                     if(response.result == "success"){
                         type = 'success';
-                        msg = '货物下架成功';
+                        msg = '货物出库成功';
                         inputReset();
                         showMsg(type, msg, append);
                     }else{
@@ -424,7 +428,7 @@
                             locationDownManage.locationDownRowCheck(retCheck,line);
                         }else{
                             type = 'error';
-                            msg = '系统出现异常，货物下架失败'
+                            msg = '系统出现异常，货物出库失败'
                             showMsg(type, msg, append);
                         }
                     }
@@ -464,7 +468,7 @@
 
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>货物下架</li>
+		<li>货物出库</li>
 	</ol>
 	<div class="panel-body">
 		<form class="form-inline" role="form" id="locationdown_form">
@@ -490,11 +494,11 @@
                 <div class="row visible-md visible-lg">
                     <div class="col-md-12 col-sm-12">
                         <div class='pull-right' style="cursor:pointer" id="downDetail-show">
-                            <span>显示下架详情</span>
+                            <span>显示出库详情</span>
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </div>
                         <div class='pull-right hide' style="cursor:pointer" id="downDetail-hidden">
-                            <span>隐藏下架详情</span>
+                            <span>隐藏出库详情</span>
                             <span class="glyphicon glyphicon-chevron-up"></span>
                         </div>
                     </div>
@@ -504,7 +508,7 @@
                         <div class="row">
                             <div class="col-md-1 col-sm-1"></div>
                             <div class="col-md-10 col-sm-10">
-                                <label for="" class="text-info">下架货物明细</label>
+                                <label for="" class="text-info">出库货物明细</label>
                             </div>
                         </div>
 
@@ -553,7 +557,7 @@
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
 						<div class="form-group">
-							<label for="" class="form-label">下架仓库：</label>
+							<label for="" class="form-label">仓库：</label>
 							<select name="" id="search_input_repository" class="form-control">
 							</select>
 						</div>
@@ -567,7 +571,7 @@
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
 						<div class="form-group">
-							<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：</label>
+							<label for="" class="form-label">备注：</label>
 							<input type="text" class="form-control" id="remark" placeholder="备注说明">
 						</div>
 					</div>
@@ -581,7 +585,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline" id="">
 							<div class="form-group">
-								<label for="" class="form-label">下架数量：</label>
+								<label for="" class="form-label">出库数量：</label>
 								<input type="text" class="form-control" placeholder="请输入数量" id="locationdown_input" name="locationdown_input">
 								<span>(当前库存量：</span>
 								<span id="info_storage">-</span>
@@ -596,7 +600,7 @@
 	</div>
 	<div class="panel-footer">
 		<div style="text-align:right">
-			<button class="btn btn-success" id="submit">提交下架</button>
+			<button class="btn btn-success" id="submit">提交出库</button>
 		</div>
 	</div>
 </div>

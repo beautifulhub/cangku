@@ -5,36 +5,36 @@ import com.ken.wms.exception.StockRecordManageServiceException;
 import java.util.Map;
 
 /**
- * 出入库管理
+ * 进出货开单
  *
  * @author Bea
  */
 public interface StockRecordManageService {
 
     /**
-     * 货物入库操作
+     * 货物进货操作
      *
      * @param supplierID   供应商ID
      * @param goodsNO      货物编号
      * @param goodsName    货物名称
      * @param goodsDetail  货物明细
-     * @param repositoryID 入库仓库ID
-     * @param personInCharge 入库人员
-     * @return 返回一个boolean 值，若值为true表示入库成功，否则表示入库失败
+     * @param repositoryID 进货仓库ID
+     * @param personInCharge 进货人员
+     * @return 返回一个boolean 值，若值为true表示进货成功，否则表示进货失败
      */
     boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException;
 
     /**
-     * 货物出库操作
+     * 货物出货操作
      *
      * @param customerID   客户ID
-     * @param repositoryID 出库仓库ID
-     * @return 返回一个boolean值，若值为true表示出库成功，否则表示出库失败
+     * @param repositoryID 出货仓库ID
+     * @return 返回一个boolean值，若值为true表示出货成功，否则表示出货失败
      */
     boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException;
 
     /**
-     * 查询出入库记录
+     * 查询进出货记录
      *
      * @param repositoryID 仓库ID
      * @param endDateStr   查询记录起始日期
@@ -45,7 +45,7 @@ public interface StockRecordManageService {
     Map<String, Object> selectStockRecord(Integer repositoryID, String startDateStr, String endDateStr, String searchType) throws StockRecordManageServiceException;
 
     /**
-     * 分页查询出入库记录
+     * 分页查询进出货记录
      *
      * @param repositoryID 仓库ID
      * @param endDateStr   查询记录起始日期

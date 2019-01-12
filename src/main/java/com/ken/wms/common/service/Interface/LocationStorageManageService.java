@@ -70,7 +70,7 @@ public interface LocationStorageManageService {
     boolean locationStorageDecrease(Integer goodsID, String goodsColor, String goodsSize, long goodsNum, String locationNO, Integer repositoryID) throws LocationStorageManageServiceException;
 
     /**
-     * 货位下架时，校验该仓库的货位上是否有一定数量的货物
+     * 货位出库时，校验该仓库的货位上是否有一定数量的货物
      */
     int checkLocationStorageService(Integer goodsID, String goodsColor, String goodsSize, long goodsNum, String locationNO, Integer repositoryID) throws LocationStorageManageServiceException;
 

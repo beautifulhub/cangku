@@ -290,12 +290,12 @@ public class RepositoryManageServiceImpl implements RepositoryService {
     public boolean deleteRepository(Integer repositoryId) throws RepositoryManageServiceException {
 
         try {
-            // 检查是否存在出库记录
+            // 检查是否存在出货记录
             List<StockOutDO> stockOutDOList = stockOutMapper.selectByRepositoryID(repositoryId);
             if (stockOutDOList != null && !stockOutDOList.isEmpty())
                 return false;
 
-            // 检查是否存在入库记录
+            // 检查是否存在进货记录
             List<StockInDO> stockInDOList = stockInMapper.selectByRepositoryID(repositoryId);
             if (stockInDOList != null && !stockInDOList.isEmpty())
                 return false;

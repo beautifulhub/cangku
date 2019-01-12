@@ -3,7 +3,7 @@ package com.ken.wms.domain;
 import java.util.Date;
 
 /**
- * 出库/入库记录DO
+ * 出货/进货记录DO
  *
  * @author Bea
  * @since 2017/4/5.
@@ -16,12 +16,12 @@ public class StockRecordDTO {
     private Integer recordID;
 
     /**
-     * 记录的类型（出库/入库）
+     * 记录的类型（出货/进货）
      */
     private String type;
 
     /**
-     * 供应商（入库）或客户（出库）名称
+     * 供应商（进货）或客户（出货）名称
      */
     private String supplierOrCustomerName;
 
@@ -45,22 +45,22 @@ public class StockRecordDTO {
     private String goodsSize;
 
     /**
-     * 出库或入库数量
+     * 出货或进货数量
      */
     private long goodsNum;
 
     /**
-     * 出库或入库仓库ID
+     * 出货或进货仓库ID
      */
     private Integer repositoryID;
 
     /**
-     * 出库或入库时间
+     * 出货或进货时间
      */
     private Date time;
 
     /**
-     * 出库或入库经手人
+     * 出货或进货经手人
      */
     private String personInCharge;
 

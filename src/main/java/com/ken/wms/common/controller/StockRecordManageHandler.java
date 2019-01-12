@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 商品出入库管理请求Handler
+ * 商品进出货管理请求Handler
  *
  * @author Bea
  * @since 017/4/5.
@@ -36,7 +36,7 @@ public class StockRecordManageHandler {
     private StockRecordManageService stockRecordManageService;
 
     /**
-     * 货物出库操作
+     * 货物出货操作
      *
      * @param customerID      客户ID
      * @param repositoryIDStr 仓库ID
@@ -97,12 +97,12 @@ public class StockRecordManageHandler {
     }
 
     /**
-     * 货物入库操作
+     * 货物进货操作
      *
      * @param supplierID      供应商ID
      * @param goodsNO         货物编号
      * @param repositoryIDStr 仓库ID
-     * @param goodsDetail     入库明细："颜色,尺码,数量;颜色,尺码,数量;"
+     * @param goodsDetail     进货明细："颜色,尺码,数量;颜色,尺码,数量;"
      * @return 返回一个map，key为result的值表示操作是否成功
      */
     @RequestMapping(value = "stockIn", method = RequestMethod.POST)
@@ -162,9 +162,9 @@ public class StockRecordManageHandler {
     }
 
     /**
-     * 查询出入库记录
+     * 查询进出货记录
      *
-     * @param searchType      查询类型（查询所有或仅查询入库记录或仅查询出库记录）
+     * @param searchType      查询类型（查询所有或仅查询进货记录或仅查询出货记录）
      * @param repositoryIDStr 查询记录所对应的仓库ID
      * @param endDateStr      查询的记录起始日期
      * @param startDateStr    查询的记录结束日期

@@ -13,7 +13,7 @@ import java.util.List;
 public interface LocationStorageMapper {
 
 	/**
-	 * 根据仓库id查询仓库中所有的上下架库存
+	 * 根据仓库id查询仓库中所有的出入库库存
 	 * @return 返回所有的架子的库存信息
 	 */
 	List<LocationStorage> selectAllByRepositoryID(@Param("repositoryID") Integer repositoryID);

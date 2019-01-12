@@ -262,7 +262,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
     public boolean deleteCustomer(Integer customerId) throws CustomerManageServiceException {
 
         try {
-            // 查询该客户是否有出库记录
+            // 查询该客户是否有出货记录
             List<StockOutDO> records = stockOutMapper.selectByCustomerId(customerId);
             if (records != null && records.size() > 0) {
                 return false;

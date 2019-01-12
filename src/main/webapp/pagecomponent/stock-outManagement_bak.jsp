@@ -330,7 +330,7 @@
 
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>货物出库</li>
+		<li>出货单</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">
@@ -505,7 +505,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline">
 							<div class="form-group">
-								<label for="" class="form-label">出库仓库：</label>
+								<label for="" class="form-label">出货仓库：</label>
 								<!--
 								<input type="text" class="form-control" placeholder="仓库编号">
 							-->
@@ -539,7 +539,7 @@
 	</div>
 	<div class="panel-footer">
 		<div style="text-align:right">
-			<button class="btn btn-success" id="submit">提交出库</button>
+			<button class="btn btn-success" id="submit">确定</button>
 		</div>
 	</div>
 </div>

@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <script>
-	var stockin_repository = null;// 入库仓库编号
-	var stockin_supplier = null;// 入库供应商编号
-	var stockin_goods = null;// 入库货物编号
-	var stockin_number = null;// 入库数量
+	var stockin_repository = null;// 进货仓库编号
+	var stockin_supplier = null;// 进货供应商编号
+	var stockin_goods = null;// 进货货物编号
+	var stockin_number = null;// 进货数量
 
 	var supplierCache = new Array();// 供应商信息缓存
 	var goodsCache = new Array();//货物信息缓存
 
     //定义个性化命名空间
     var stockInManage = {
-        //批量添加入库
+        //批量添加进货
         addStockDetail : function(){
-            //绑定添加子入库
+            //绑定添加子进货
             $('#add_stock').unbind("click").click(function(){
                 var n=$(".goods_color_selector").length;
                 var addAttr = '<div class="row" style="margin-top:5px;width:1500px">\n' +
@@ -96,11 +96,11 @@
 				/*stockin_input : {
 					validators : {
 						notEmpty : {
-							message : '入库数量不能为空'
+							message : '进货数量不能为空'
 						},
 						greaterThan: {
 	                        value: 0,
-	                        message: '入库数量不能小于0'
+	                        message: '进货数量不能小于0'
 	                    }
 					}
 				}*/
@@ -399,7 +399,7 @@
 		}
 	}
 
-	// 执行货物入库操作
+	// 执行货物进货操作
 	function stockInOption(){
 		$('#submit').click(function(){
             if(UnRepoAuthTip())return;
@@ -408,7 +408,7 @@
 			if (!$('#stockin_form').data('bootstrapValidator').isValid()) {
 				return;
 			}
-			//获取入库获取的明细
+			//获取进货获取的明细
             var addGoodsDetail = "";
             $(".add-goods-detail").each(function(i,item){
                 var goodsColor = $(item).find('.goods_color_selector').val()
@@ -438,11 +438,11 @@
 					var append = '';
 					if(response.result == "success"){
 						type = 'success';
-						msg = '货物入库成功';
+						msg = '货物进货成功';
 						inputReset();
 					}else{
 						type = 'error';
-						msg = '货物入库失败'
+						msg = '货物进货失败'
 					}
 					showMsg(type, msg, append);
 				},
@@ -490,7 +490,7 @@
 
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>货物入库</li>
+		<li>进货单</li>
 	</ol>
 	<div class="panel-body">
         <form class="form-inline" role="form" id="stockin_form">
@@ -609,11 +609,11 @@
 				<div class="row visible-md visible-lg">
 					<div class="col-md-12 col-sm-12">
 						<div class='pull-right' style="cursor:pointer" id="addDetail-show">
-							<span>显示入库详情</span>
+							<span>显示进货详情</span>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</div>
 						<div class='pull-right hide' style="cursor:pointer" id="addDetail-hidden">
-							<span>隐藏入库详情</span>
+							<span>隐藏进货详情</span>
 							<span class="glyphicon glyphicon-chevron-up"></span>
 						</div>
 					</div>
@@ -623,7 +623,7 @@
 						<div class="row">
 							<div class="col-md-1 col-sm-1"></div>
 							<div class="col-md-10 col-sm-10">
-								<label for="" class="text-info">入库货物明细</label>
+								<label for="" class="text-info">进货物明细</label>
 							</div>
 						</div>
 
@@ -665,7 +665,7 @@
                     <div class="col-md-1 col-sm-1"></div>
                     <div class="col-md-10 col-sm-11">
 						<div class="form-group">
-							<label for="" class="form-label">入库仓库：</label>
+							<label for="" class="form-label">进货仓库：</label>
 							<select name="" id="search_input_repository" class="form-control">
 								<%--<option value='-1'>请选择仓库</option>--%>
 							</select>
@@ -694,7 +694,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline" id="">
 							<div class="form-group">
-								<label for="" class="control-label">入库数量：</label>
+								<label for="" class="control-label">进货数量：</label>
 								<input type="text" class="form-control" placeholder="请输入数量" id="stockin_input" name="stockin_input">
 								<span>(当前库存量：</span>
 								<span id="info_storage">-</span>
@@ -709,7 +709,7 @@
 	</div>
 	<div class="panel-footer">
 		<div style="text-align:right">
-			<button class="btn btn-success" type="button" id="submit">提交入库</button>
+			<button class="btn btn-success" type="button" id="submit">确定</button>
 		</div>
 	</div>
 </div>

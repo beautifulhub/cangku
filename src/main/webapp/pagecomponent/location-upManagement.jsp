@@ -1,18 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <script>
-	var locationup_repository = null;// 上架仓库编号
-	var locationup_goods = null;// 上架货物编号
-	var locationup_number = null;// 上架数量
+	var locationup_repository = null;// 入库仓库编号
+	var locationup_goods = null;// 入库货物编号
+	var locationup_number = null;// 入库数量
 
 	var goodsCache = new Array();//货物信息缓存
 
     //定义个性化命名空间
     var locationUpManage = {
-        //批量添加上架
+        //批量添加入库
         upLocationDetail : function(){
-            //绑定添加子上架
+            var _this = this;
+            //绑定添加子入库
             $('#up_stock').unbind("click").click(function(){
+                //①验证货物是否已经选好
+                if(_this.locationUpGoodsCheck($('#goods_name').val().trim())){
+                    return;
+                }
+                //②校验货物数量输入是否合法
+                $('#locationup_form').data('bootstrapValidator').validate();
+                if (!$('#locationup_form').data('bootstrapValidator').isValid()) {
+                    return;
+                }
                 var n=$(".goods_color_selector").length;
                 var addAttr = '<div class="row" style="margin-top:5px;width:1500px">\n' +
                     '<div class="col-md-12 col-sm-11 up-goods-detail" style="margin-left:60px">\n' +
@@ -34,14 +44,15 @@
                     '<label for="" class="col-md-5 control-label" style="margin-top:6px">货物数量：</label>\n' +
                     '<div class="col-md-6" style="margin-left: -40px;">\n' +
                     '<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum['+n+']" style="width:110%;" />\n' +
-                    '<button type="button" class="btn btn-xs btn-link del_stock_up" style="margin-left:350px;margin-top:-27px">删除</button>\n' +
+                    /*'<button type="button" class="btn btn-xs btn-link del_stock_out" style="margin-left:350px;margin-top:-27px">删除</button>\n' +*/
                     '</div>\n' +
                     '</div>\n' +
-					'<div class="col-md-6 form-group" style="width:20%;margin-left:-80px">\n' +
+                    '<div class="col-md-6 form-group" style="width:20%;margin-left:-80px">\n' +
                     '<label for="" class="col-md-5 control-label" style="margin-top:6px">货位编号：</label>\n' +
                     '<div class="col-md-6" style="margin-left: -40px;">\n' +
                     '<select name="locationNO['+n+']" class="form-control location_no_selector" style="width:120%;">\n' +
                     '</select>\n' +
+                    '<button type="button" class="btn btn-xs btn-link del_stock_up" style="margin-left:136px;margin-top:-24px">删除</button>\n' +
                     '</div>\n' +
                     '</div>\n' +
                     '</div>\n' +
@@ -50,11 +61,11 @@
                 $('#locationup_form').bootstrapValidator('addField', 'goodsNum['+n+']', {
                     validators : {
                         notEmpty : {
-                            message : '数量只能为数字'
+                            message : '数量不能为空'
                         },
-                        greaterThan: {
-                            value: 0,
-                            message: '数量不能小于0'
+                        regexp: {
+                            regexp:/^[0-9]*[1-9][0-9]*$/,
+                            message:'请输入大于0的数'
                         }
                     }
                 });
@@ -67,14 +78,21 @@
                 $("[name='locationNO["+n+"]']").append(locationNOOption);
                 //动态添加-绑定删除动作
                 $('.del_stock_up').click(function() {
-                    debugger
-                    var roleName = $(this).parent("div").find('input[type]').attr("name");
+                    var roleName = $(this).parent("div").parent("div").prev().find('input[type]').attr("name");
                     $("#locationup_form").bootstrapValidator('removeField',roleName);
-                    $(this).parent("div").parent("div").parent("div").remove();
+                    $(this).parent("div").parent("div").parent("div").parent("div").remove();
                 });
             });
-
-
+        },
+        //货物编号校验提示语
+        locationUpGoodsCheck : function(goodsName){
+            if(goodsName == ""){
+                layer.alert('请输入正确的货物编号，以便获取货物名称、颜色、尺码等!', {
+                    icon : 0
+                });
+                return true;
+            }
+            return false;
         },
     }
 
@@ -106,16 +124,16 @@
 						}
 					}
 				},
-                goodsNum : {
-					validators : {
+                'goodsNum[0]' : {
+                    validators : {
                         notEmpty : {
-                            message : '数量只能为数字'
+                            message : '数量不能为空'
                         },
-                        greaterThan: {
-                            value: 0,
-                            message: '数量不能小于0'
+                        regexp: {
+                            regexp:/^[0-9]*[1-9][0-9]*$/,
+                            message:'请输入大于0的数'
                         }
-					}
+                    }
 				}
 			}
 		})
@@ -321,16 +339,19 @@
 		}
 	}
 
-	// 执行货物上架操作
+	// 执行货物入库操作
 	function locationUpOption(){
 		$('#submit').click(function(){
             if(UnRepoAuthTip())return;
 			// data validate
+            if(locationUpManage.locationUpGoodsCheck($('#goods_name').val().trim())){
+                return;
+            }
 			$('#locationup_form').data('bootstrapValidator').validate();
 			if (!$('#locationup_form').data('bootstrapValidator').isValid()) {
 				return;
 			}
-			//获取上架获取的明细
+			//获取入库获取的明细
             var upGoodsDetail = "";
             $(".up-goods-detail").each(function(i,item){
                 var goodsColor = $(item).find('.goods_color_selector').val()
@@ -340,7 +361,8 @@
                 upGoodsDetail += goodsColor + "," + goodsSize + "," + goodsNum +"," + locationNO + ";"
             })
 			data = {
-                goodsNO : $("#goods_no").val().trim(),
+                //goodsNO : $("#goods_no").val().trim(),
+                goodsID : locationup_goods,
                 goodsName : $("#goods_name").val().trim(),
                 goodsDetail : upGoodsDetail,
                 repositoryID : locationup_repository,
@@ -359,11 +381,11 @@
 					var append = '';
 					if(response.result == "success"){
 						type = 'success';
-						msg = '货物上架成功';
+						msg = '货物入库成功';
 						inputReset();
 					}else{
 						type = 'error';
-						msg = '货物上架失败'
+						msg = '货物入库失败'
 					}
 					showMsg(type, msg, append);
 				},
@@ -404,7 +426,7 @@
 
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>货物上架</li>
+		<li>货物入库</li>
 	</ol>
 	<div class="panel-body">
         <form class="form-inline" role="form" id="locationup_form">
@@ -428,11 +450,11 @@
 				<div class="row visible-md visible-lg">
 					<div class="col-md-12 col-sm-12">
 						<div class='pull-right' style="cursor:pointer" id="upDetail-show">
-							<span>显示上架详情</span>
+							<span>显示入库详情</span>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</div>
 						<div class='pull-right hide' style="cursor:pointer" id="upDetail-hidden">
-							<span>隐藏上架详情</span>
+							<span>隐藏入库详情</span>
 							<span class="glyphicon glyphicon-chevron-up"></span>
 						</div>
 					</div>
@@ -442,7 +464,7 @@
 						<div class="row">
 							<div class="col-md-1 col-sm-1"></div>
 							<div class="col-md-10 col-sm-10">
-								<label for="" class="text-info">上架货物明细</label>
+								<label for="" class="text-info">入库货物明细</label>
 							</div>
 						</div>
 
@@ -451,27 +473,27 @@
 								<div class="col-md-6 form-group" style="width:20%">
 									<label for=""  class="col-md-5 control-label" style="margin-top:6px">货物颜色：</label>
 									<div class="col-md-7" style="margin-left: -40px;">
-										<select name="goodsColor" class="form-control goods_color_selector" style="width:100%;">
+										<select name="goodsColor[0]" class="form-control goods_color_selector" style="width:100%;">
 										</select>
 									</div>
 								</div>
 								<div class="col-md-6 form-group" style="width:20%;margin-left:-70px">
 									<label for="" class="col-md-5 control-label" style="margin-top:6px">货物尺码：</label>
 									<div class="col-md-5" style="margin-left: -40px;">
-										<select name="goodsSize" class="form-control goods_size_selector" style="width:100%;">
+										<select name="goodsSize[0]" class="form-control goods_size_selector" style="width:100%;">
 										</select>
 									</div>
 								</div>
 								<div class="col-md-6 form-group" style="width:20%;margin-left:-110px">
 									<label for="" class="col-md-5 control-label" style="margin-top:6px">货物数量：</label>
 									<div class="col-md-6" style="margin-left: -40px;">
-										<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum" style="width:110%;" />
+										<input class="form-control goods-num" type="text" placeholder="货物数量" name="goodsNum[0]" style="width:110%;" />
 									</div>
 								</div>
 								<div class="col-md-6 form-group" style="width:20%;margin-left:-80px">
 									<label for="" class="col-md-5 control-label" style="margin-top:6px">货位编号：</label>
 									<div class="col-md-6" style="margin-left: -40px;">
-										<select name="locationNO" class="form-control location_no_selector" style="width:120%;">
+										<select name="locationNO[0]" class="form-control location_no_selector" style="width:120%;">
 										</select>
 									</div>
 								</div>
@@ -491,7 +513,7 @@
                     <div class="col-md-1 col-sm-1"></div>
                     <div class="col-md-10 col-sm-11">
 						<div class="form-group">
-							<label for="" class="form-label">上架仓库：</label>
+							<label for="" class="form-label">仓库：</label>
 							<select name="" id="search_input_repository" class="form-control">
 							</select>
 						</div>
@@ -505,7 +527,7 @@
 					<div class="col-md-1 col-sm-1"></div>
 					<div class="col-md-10 col-sm-11">
 						<div class="form-group">
-							<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：</label>
+							<label for="" class="form-label">备注：</label>
 							<input type="text" class="form-control" id="remark" placeholder="备注说明">
 						</div>
 					</div>
@@ -519,7 +541,7 @@
 					<div class="col-md-10 col-sm-11">
 						<form action="" class="form-inline" id="">
 							<div class="form-group">
-								<label for="" class="control-label">上架数量：</label>
+								<label for="" class="control-label">入库数量：</label>
 								<input type="text" class="form-control" placeholder="请输入数量" id="locationup_input" name="locationup_input">
 								<span>(当前库存量：</span>
 								<span id="info_storage">-</span>
@@ -534,7 +556,7 @@
 	</div>
 	<div class="panel-footer">
 		<div style="text-align:right">
-			<button class="btn btn-success" type="button" id="submit">提交上架</button>
+			<button class="btn btn-success" type="button" id="submit">提交入库</button>
 		</div>
 	</div>
 </div>

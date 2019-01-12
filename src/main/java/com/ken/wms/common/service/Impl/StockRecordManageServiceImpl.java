@@ -41,17 +41,17 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     private StockOutMapper stockOutMapper;
 
     /**
-     * 货物入库操作
+     * 货物进货操作
      *
      * @param supplierID   供应商ID
      * @param goodsNO      货物编号
      * @param goodsName    货物名称
      * @param goodsDetail  货物明细
-     * @param repositoryID 入库仓库ID
-     * @param personInCharge 入库人员
-     * @return 返回一个boolean 值，若值为true表示入库成功，否则表示入库失败
+     * @param repositoryID 进货仓库ID
+     * @param personInCharge 进货人员
+     * @return 返回一个boolean 值，若值为true表示进货成功，否则表示进货失败
      */
-    @UserOperation(value = "货物入库")
+    @UserOperation(value = "进货单")
     @Override
     public boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException {
 
@@ -62,7 +62,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         if (personInCharge == null)
             return false;
 
-        // 检查入库数量有效性
+        // 检查进货数量有效性
         /*if (number < 0)
             return false;*/
 
@@ -76,7 +76,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
             for(String goodss : goodsSingle){
                 List<String> goodsStr = SPLIT_COMMA.splitToList(goodss);
                 isSuccess = storageManageService.storageIncrease(goodsID, goodsNO, goodsName, goodsStr, repositoryID);
-                // 保存入库记录
+                // 保存进货记录
                 if (isSuccess) {
                     StockInDO stockInDO = new StockInDO();
                     stockInDO.setSupplierID(supplierID);
@@ -99,13 +99,13 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     }
 
     /**
-     * 货物出库操作
+     * 货物出货操作
      *
      * @param customerID   客户ID
-     * @param repositoryID 出库仓库ID
-     * @return 返回一个boolean值，若值为true表示出库成功，否则表示出库失败
+     * @param repositoryID 出货仓库ID
+     * @return 返回一个boolean值，若值为true表示出货成功，否则表示出货失败
      */
-    @UserOperation(value = "货物出库")
+    @UserOperation(value = "出货单")
     @Override
     public boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException {
 
@@ -113,7 +113,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         if (!(customerValidate(customerID) && goodsNOValidate(goodsNO) && repositoryValidate(repositoryID)))
             return false;
 
-        // 检查出库数量范围是否有效
+        // 检查出货数量范围是否有效
         /*if (number < 0)
             return false;*/
 
@@ -127,7 +127,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
             for(String goodss : goodsSingle){
                 List<String> goodsStr = SPLIT_COMMA.splitToList(goodss);
                 isSuccess = storageManageService.storageDecrease(goodsID, goodsNO, goodsName, goodsStr, repositoryID);
-                // 保存出库记录
+                // 保存出货记录
                 if (isSuccess) {
                     StockOutDO stockOutDO = new StockOutDO();
                     stockOutDO.setCustomerID(customerID);
@@ -150,7 +150,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     }
 
     /**
-     * 查询出入库记录
+     * 查询进出货记录
      *
      * @param repositoryID 仓库ID
      * @param endDateStr   查询记录起始日期
@@ -164,7 +164,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     }
 
     /**
-     * 分页查询出入库记录
+     * 分页查询进出货记录
      *
      * @param repositoryID 仓库ID
      * @param endDateStr   查询记录起始日期
@@ -236,7 +236,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                         int appendSize = (stockInRecordDosSize - stockInRecordLimit) > (stockOutRecordLimit - stockOutRecordDoSize) ?
                                 (stockOutRecordLimit - stockOutRecordDoSize) : (stockInRecordDosSize - stockInRecordLimit);
                         stockInRecordDOS = stockInRecordDOS.subList(0, stockInRecordLimit + appendSize);
-                    }//以上查询上下架数目，最大程度地满足所需条数。
+                    }//以上查询进出货数目，最大程度地满足所需条数。
                 }
                 long stockInRecordDOSTotal = (long) stockInTemp.get("total");
                 long stockOutRecordDOSTotal = (long) stockOutTemp.get("total");
@@ -271,14 +271,14 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     }
 
     /**
-     * 查询入库记录
+     * 查询进货记录
      *
-     * @param repositoryID 入库仓库ID
-     * @param startDate    入库记录起始日期
-     * @param endDate      入库记录结束日期
+     * @param repositoryID 进货仓库ID
+     * @param startDate    进货记录起始日期
+     * @param endDate      进货记录结束日期
      * @param offset       分页偏移值
      * @param limit        分页大小
-     * @return 返回所有符合要求的入库记录
+     * @return 返回所有符合要求的进货记录
      */
     private Map<String, Object> selectStockInRecord(Integer repositoryID, Date startDate, Date endDate, int offset, int limit) throws StockRecordManageServiceException {
         Map<String, Object> result = new HashMap<>();
@@ -316,14 +316,14 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     }
 
     /**
-     * 查询出库记录
+     * 查询出货记录
      *
-     * @param repositoryID 出库仓库ID
-     * @param startDate    出库记录起始日期
-     * @param endDate      出库记录结束日期
+     * @param repositoryID 出货仓库ID
+     * @param startDate    出货记录起始日期
+     * @param endDate      出货记录结束日期
      * @param offset       分页偏移值
      * @param limit        分页大小
-     * @return 返回所有符合要求的出库记录
+     * @return 返回所有符合要求的出货记录
      */
     private Map<String, Object> selectStockOutRecord(Integer repositoryID, Date startDate, Date endDate, int offset, int limit) throws StockRecordManageServiceException {
         Map<String, Object> result = new HashMap<>();
@@ -381,7 +381,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setRepositoryID(stockInDO.getRepositoryID());
         stockRecordDTO.setPersonInCharge(stockInDO.getPersonInCharge());
         stockRecordDTO.setRemark(stockInDO.getRemark());
-        stockRecordDTO.setType("入库");
+        stockRecordDTO.setType("进货");
         return stockRecordDTO;
     }
 
@@ -404,7 +404,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         stockRecordDTO.setRepositoryID(stockOutDO.getRepositoryID());
         stockRecordDTO.setPersonInCharge(stockOutDO.getPersonInCharge());
         stockRecordDTO.setRemark(stockOutDO.getRemark());
-        stockRecordDTO.setType("出库");
+        stockRecordDTO.setType("出货");
         return stockRecordDTO;
     }
 

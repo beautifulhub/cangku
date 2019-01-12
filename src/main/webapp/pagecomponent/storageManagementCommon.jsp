@@ -171,7 +171,7 @@
 </script>
 <div class="panel panel-default">
 	<ol class="breadcrumb">
-		<li>库存信息管理</li>
+		<li>进出货盘点</li>
 	</ol>
 	<div class="panel-body">
 		<div class="row">

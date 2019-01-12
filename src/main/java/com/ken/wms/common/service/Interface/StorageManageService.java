@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 库存信息管理 service
+ * 进出货盘点 service
  *
  * @author Bea
  */
@@ -156,7 +156,7 @@ public interface StorageManageService {
     boolean deleteStorage(Integer goodsID, Integer repositoryID) throws StorageManageServiceException;
 
     /**
-     * 导入库存记录
+     * 导进货存记录
      *
      * @param file 保存有的库存记录的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
@@ -164,7 +164,7 @@ public interface StorageManageService {
     Map<String, Object> importStorage(MultipartFile file) throws StorageManageServiceException;
 
     /**
-     * 导出库存记录
+     * 导出货存记录
      *
      * @param storages 保存有库存记录的List
      * @return excel 文件
