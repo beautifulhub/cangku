@@ -27,7 +27,7 @@
         </property>
     </entity>
 
-    <entity class="com.ken.wms.domain.Customer" sheetName="供应商信息" boldHeading="true">
+    <entity class="com.ken.wms.domain.Customer" sheetName="客户信息" boldHeading="true">
         <property>
             <field>name</field>
             <value>客户名称</value>
@@ -146,7 +146,7 @@
         </property>
     </entity>
 
-    <entity class="com.ken.wms.domain.Storage" sheetName="库存信息" boldHeading="true">
+    <entity class="com.ken.wms.domain.Storage" sheetName="进出货盘点信息" boldHeading="true">
         <property>
             <field>goodsNO</field>
             <value>货物编号</value>
@@ -173,7 +173,58 @@
         </property>
     </entity>
 
-    <entity class="com.ken.wms.domain.LocationStorage" sheetName="货位库存信息" boldHeading="true">
+    <entity class="com.ken.wms.domain.StockRecordDTO" sheetName="进出货记录" boldHeading="true">
+        <property>
+            <field>recordID</field>
+            <value>记录ID</value>
+        </property>
+        <property>
+            <field>supplierOrCustomerName</field>
+            <value>供应商/客户名称</value>
+        </property>
+        <property>
+            <field>goodsNO</field>
+            <value>商品编号</value>
+        </property>
+        <property>
+            <field>goodsName</field>
+            <value>商品名称</value>
+        </property>
+        <property>
+            <field>goodsColor</field>
+            <value>商品颜色</value>
+        </property>
+        <property>
+            <field>goodsSize</field>
+            <value>商品尺码</value>
+        </property>
+        <property>
+            <field>goodsNum</field>
+            <value>商品数量</value>
+        </property>
+        <property>
+            <field>time</field>
+            <value>日期</value>
+        </property>
+        <property>
+            <field>repositoryID</field>
+            <value>仓库ID</value>
+        </property>
+        <property>
+            <field>personInCharge</field>
+            <value>经手人</value>
+        </property>
+        <property>
+            <field>type</field>
+            <value>记录类型</value>
+        </property>
+        <property>
+            <field>remark</field>
+            <value>备注说明</value>
+        </property>
+    </entity>
+
+    <entity class="com.ken.wms.domain.LocationStorage" sheetName="库存信息" boldHeading="true">
         <property>
             <field>goodsNO</field>
             <value>货物编号</value>
@@ -199,4 +250,55 @@
             <value>仓库ID</value>
         </property>
     </entity>
+    <entity class="com.ken.wms.domain.LocationRecordDTO" sheetName="出入库记录" boldHeading="true">
+        <property>
+            <field>recordID</field>
+            <value>记录ID</value>
+        </property>
+        <property>
+            <field>goodsNO</field>
+            <value>商品编号</value>
+        </property>
+        <property>
+            <field>goodsName</field>
+            <value>商品名称</value>
+        </property>
+        <property>
+            <field>goodsColor</field>
+            <value>商品颜色</value>
+        </property>
+        <property>
+            <field>goodsSize</field>
+            <value>商品尺码</value>
+        </property>
+        <property>
+            <field>goodsNum</field>
+            <value>商品数量</value>
+        </property>
+        <property>
+            <field>locationNO</field>
+            <value>货位编号</value>
+        </property>
+        <property>
+            <field>time</field>
+            <value>日期</value>
+        </property>
+        <property>
+            <field>repositoryID</field>
+            <value>仓库ID</value>
+        </property>
+        <property>
+            <field>personInCharge</field>
+            <value>经手人</value>
+        </property>
+        <property>
+            <field>type</field>
+            <value>记录类型</value>
+        </property>
+        <property>
+            <field>remark</field>
+            <value>备注说明</value>
+        </property>
+    </entity>
+
 </configuration>

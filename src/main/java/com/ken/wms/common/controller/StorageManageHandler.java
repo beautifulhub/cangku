@@ -296,7 +296,7 @@ public class StorageManageHandler {
     }
 
     /**
-     * 导进货存信息
+     * 导入进出货盘点信息
      *
      * @param file 保存有库存信息的文件
      * @return 返回一个map，其中：key 为 result表示操作的结果，包括：success 与
@@ -342,7 +342,7 @@ public class StorageManageHandler {
     }
 
     /**
-     * 导出货存信息
+     * 导出进出货盘点信息
      *
      * @param searchType       查询类型
      * @param keyword          查询关键字
@@ -358,7 +358,7 @@ public class StorageManageHandler {
                                     @RequestParam("selectSize") String selectSize,
                                     @RequestParam(value = "repositoryBelong", required = false) String repositoryBelong,
                                     HttpServletRequest request, HttpServletResponse response) throws StorageManageServiceException, IOException {
-        String fileName = "storageRecord.xlsx";
+        String fileName = "storage.xlsx";
 
         HttpSession session = request.getSession();
         UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");

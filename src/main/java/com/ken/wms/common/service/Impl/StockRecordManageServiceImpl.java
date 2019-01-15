@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.base.Splitter;
 import com.ken.wms.common.service.Interface.StockRecordManageService;
 import com.ken.wms.common.service.Interface.StorageManageService;
+import com.ken.wms.common.util.EJConvertor;
 import com.ken.wms.dao.*;
 import com.ken.wms.domain.*;
 import com.ken.wms.exception.StockRecordManageServiceException;
@@ -15,6 +16,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +41,8 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     private StockInMapper stockinMapper;
     @Autowired
     private StockOutMapper stockOutMapper;
+    @Autowired
+    private EJConvertor ejConvertor;
 
     /**
      * 货物进货操作
@@ -231,7 +235,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                     } else if (stockInRecordDosSize < stockInRecordLimit && stockOutRecordDoSize > stockOutRecordLimit) {
                         int appendSize = (stockOutRecordDoSize - stockOutRecordLimit) > (stockInRecordLimit - stockInRecordDosSize) ?
                                 (stockInRecordLimit - stockInRecordDosSize) : (stockOutRecordDoSize - stockOutRecordLimit);
-                        stockOutRecordDOS = stockOutRecordDOS.subList(0, stockInRecordLimit + appendSize - 1);
+                        stockOutRecordDOS = stockOutRecordDOS.subList(0, stockInRecordLimit + appendSize);//左闭右开
                     } else if (stockOutRecordDoSize < stockOutRecordLimit && stockInRecordDosSize > stockInRecordLimit) {
                         int appendSize = (stockInRecordDosSize - stockInRecordLimit) > (stockOutRecordLimit - stockOutRecordDoSize) ?
                                 (stockOutRecordLimit - stockOutRecordDoSize) : (stockInRecordDosSize - stockInRecordLimit);
@@ -268,6 +272,20 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
         resultSet.put("data", stockRecordDTOS);
         resultSet.put("total", total);
         return resultSet;
+    }
+
+    /**
+     * 导出货存记录
+     *
+     * @param storagesRecord 进出货记录List
+     * @return excel 文件
+     */
+    @UserOperation(value = "导出进出货记录")
+    @Override
+    public File exportJCHRecord(List<StockRecordDTO> storagesRecord) {
+        if (storagesRecord == null)
+            return null;
+        return ejConvertor.excelWriter(StockRecordDTO.class, storagesRecord);
     }
 
     /**

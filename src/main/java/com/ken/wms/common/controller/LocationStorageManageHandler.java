@@ -338,7 +338,7 @@ public class LocationStorageManageHandler {
                                     @RequestParam("selectSize") String selectSize,
                                     @RequestParam(value = "repositoryBelong", required = false) String repositoryBelong,
                                     HttpServletRequest request, HttpServletResponse response) throws LocationStorageManageServiceException, IOException {
-        String fileName = "locationStorageRecord.xlsx";
+        String fileName = "locationStorage.xlsx";
 
         HttpSession session = request.getSession();
         UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");

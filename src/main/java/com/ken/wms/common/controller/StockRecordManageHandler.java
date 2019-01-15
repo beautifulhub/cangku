@@ -4,6 +4,7 @@ import com.ken.wms.common.service.Interface.StockRecordManageService;
 import com.ken.wms.common.util.Response;
 import com.ken.wms.common.util.ResponseFactory;
 import com.ken.wms.domain.StockRecordDTO;
+import com.ken.wms.domain.Storage;
 import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.StockRecordManageServiceException;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -214,4 +222,63 @@ public class StockRecordManageHandler {
         responseContent.setResponseTotal(total);
         return responseContent.generateResponse();
     }
+
+    /**
+     * 导出进出货信息
+     *
+     * @param searchType       查询类型
+     * @param repositoryIDStr 查询所属仓库
+     * @param request          请求
+     * @param response         响应
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "exportJCHRecord", method = RequestMethod.GET)
+    public void exportJCHRecord(@RequestParam("searchType") String searchType,
+                                @RequestParam("repositoryID") String repositoryIDStr,
+                                @RequestParam("startDate") String startDateStr,
+                                @RequestParam("endDate") String endDateStr,
+                                HttpServletRequest request, HttpServletResponse response) throws StockRecordManageServiceException, IOException {
+        String fileName = "jchRecord.xlsx";
+
+        HttpSession session = request.getSession();
+        UserInfoDTO userInfo = (UserInfoDTO) session.getAttribute("userInfo");
+        Integer sessionRepositoryBelong = userInfo.getRepositoryBelong();
+        if (sessionRepositoryBelong > 0)
+            repositoryIDStr = sessionRepositoryBelong.toString();
+        // 参数检查
+        String regex = "([0-9]{4})-([0-9]{2})-([0-9]{2})";
+        boolean startDateFormatCheck = (StringUtils.isEmpty(startDateStr) || startDateStr.matches(regex));
+        boolean endDateFormatCheck = (StringUtils.isEmpty(endDateStr) || endDateStr.matches(regex));
+        boolean repositoryIDCheck = (StringUtils.isEmpty(repositoryIDStr) || StringUtils.isNumeric(repositoryIDStr));
+        List<StockRecordDTO> stockRecordList = null;
+        if (startDateFormatCheck && endDateFormatCheck && repositoryIDCheck) {
+            Integer repositoryID = -1;
+            if (StringUtils.isNumeric(repositoryIDStr)) {
+                repositoryID = Integer.valueOf(repositoryIDStr);
+            }
+            Map<String, Object> queryResult = stockRecordManageService.selectStockRecord(repositoryID, startDateStr, endDateStr, searchType, -1, -1);
+            if (queryResult != null) {
+                stockRecordList = (List<StockRecordDTO>) queryResult.get("data");
+            }
+        }
+        File file = stockRecordManageService.exportJCHRecord(stockRecordList);
+        if (file != null) {
+            // 设置响应头
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            FileInputStream inputStream = new FileInputStream(file);
+            OutputStream outputStream = response.getOutputStream();
+            byte[] buffer = new byte[8192];
+
+            int len;
+            while ((len = inputStream.read(buffer, 0, buffer.length)) > 0) {
+                outputStream.write(buffer, 0, len);
+                outputStream.flush();
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+        }
+    }
+
 }

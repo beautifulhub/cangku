@@ -7,6 +7,7 @@ import com.ken.wms.common.service.Interface.LocationRecordManageService;
 import com.ken.wms.common.service.Interface.LocationStorageManageService;
 import com.ken.wms.common.service.Interface.StockRecordManageService;
 import com.ken.wms.common.service.Interface.StorageManageService;
+import com.ken.wms.common.util.EJConvertor;
 import com.ken.wms.dao.*;
 import com.ken.wms.domain.*;
 import com.ken.wms.exception.LocationRecordManageServiceException;
@@ -18,6 +19,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +40,8 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
     private LocationDownMapper locationDownMapper;
     @Autowired
     private LocationStorageManageService locationStorageManageService;
+    @Autowired
+    private EJConvertor ejConvertor;
 
     /**
      * 货物入库操作
@@ -195,7 +199,7 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
                     } else if (locationUpRecordDosSize < locationUpRecordLimit && locationDownRecordDoSize > locationDownRecordLimit) {
                         int appendSize = (locationDownRecordDoSize - locationDownRecordLimit) > (locationUpRecordLimit - locationUpRecordDosSize) ?
                                 (locationUpRecordLimit - locationUpRecordDosSize) : (locationDownRecordDoSize - locationDownRecordLimit);
-                        locationDownRecordDOS = locationDownRecordDOS.subList(0, locationUpRecordLimit + appendSize - 1);
+                        locationDownRecordDOS = locationDownRecordDOS.subList(0, locationUpRecordLimit + appendSize);
                     } else if (locationDownRecordDoSize < locationDownRecordLimit && locationUpRecordDosSize > locationUpRecordLimit) {
                         int appendSize = (locationUpRecordDosSize - locationUpRecordLimit) > (locationDownRecordLimit - locationDownRecordDoSize) ?
                                 (locationDownRecordLimit - locationDownRecordDoSize) : (locationUpRecordDosSize - locationUpRecordLimit);
@@ -232,6 +236,20 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
         resultSet.put("data", locationRecordDTOS);
         resultSet.put("total", total);
         return resultSet;
+    }
+
+    /**
+     * 导出出入库记录
+     *
+     * @param locationStoRecord 出入库记录List
+     * @return excel 文件
+     */
+    @UserOperation(value = "导出出入库记录")
+    @Override
+    public File exportCRKRecord(List<LocationRecordDTO> locationStoRecord) {
+        if (locationStoRecord == null)
+            return null;
+        return ejConvertor.excelWriter(LocationRecordDTO.class, locationStoRecord);
     }
 
     public static void main(String[] args) {

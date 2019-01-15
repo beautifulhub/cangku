@@ -45,7 +45,7 @@ public class LocationRecordDTO {
     private long goodsNum;
 
     /**
-     * 出库或入库数量
+     * 货位编号
      */
     private String locationNO;
 

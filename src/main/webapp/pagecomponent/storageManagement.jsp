@@ -648,22 +648,22 @@
 		</div>
 
 
-		<div class="row" style="margin-top: 25px">
-                    <div class="col-md-5">
-                        <%--<button class="btn btn-sm btn-default" id="add_storage">
-                            <span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
-                        </button>--%>
-                        <button class="btn btn-sm btn-default" id="import_storage">
-                            <span class="glyphicon glyphicon-import"></span> <span>导入</span>
-                        </button>
-                        <button class="btn btn-sm btn-default" id="export_storage">
-                            <span class="glyphicon glyphicon-export"></span> <span>导出</span>
-                        </button>
-                    </div>
-                    <div class="col-md-5">
-						查询的总数量：<font id="total_num" color="red"></font>
-					</div>
-                </div>
+        <div class="row" style="margin-top: 25px">
+            <div class="col-md-5">
+                <%--<button class="btn btn-sm btn-default" id="add_storage">
+                    <span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
+                </button>--%>
+                <button class="btn btn-sm btn-default" id="import_storage">
+                    <span class="glyphicon glyphicon-import"></span> <span>导入</span>
+                </button>
+                <button class="btn btn-sm btn-default" id="export_storage">
+                    <span class="glyphicon glyphicon-export"></span> <span>导出</span>
+                </button>
+            </div>
+            <div class="col-md-5">
+                查询的总数量：<font id="total_num" color="red"></font>
+            </div>
+        </div>
 		<div class="row" style="margin-top: 15px">
 			<div class="col-md-12">
 				<table id="storageList" class="table table-striped"></table>
@@ -752,7 +752,7 @@
 							</div>
 							<div style="margin-top: 30px; margin-buttom: 15px">
 								<a class="btn btn-info"
-									href="commons/fileSource/download/storageRecord.xlsx"
+									href="commons/fileSource/download/storage.xlsx"
 									target="_blank"> <span class="glyphicon glyphicon-download"></span>
 									<span>下载</span>
 								</a>

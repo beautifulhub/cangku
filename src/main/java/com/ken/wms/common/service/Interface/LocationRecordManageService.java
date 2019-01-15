@@ -1,9 +1,11 @@
 package com.ken.wms.common.service.Interface;
 
 import com.ken.wms.domain.LocationDownDO;
+import com.ken.wms.domain.LocationRecordDTO;
 import com.ken.wms.domain.LocationUpDO;
 import com.ken.wms.exception.LocationRecordManageServiceException;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -49,4 +51,12 @@ public interface LocationRecordManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     Map<String, Object> selectLocationRecordPage(String goodsNo, String goodsName, String goodsColor, String goodsSize, Integer repositoryID, Integer personID, String startDateStr, String endDateStr, String upOrDown, int offset, int limit) throws LocationRecordManageServiceException;
+
+    /**
+     * 导出出入库记录
+     *
+     * @param locationStoRecord 出入库记录List
+     * @return excel 文件
+     */
+    File exportCRKRecord(List<LocationRecordDTO> locationStoRecord);
 }

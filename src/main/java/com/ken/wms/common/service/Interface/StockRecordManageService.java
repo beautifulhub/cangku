@@ -1,7 +1,10 @@
 package com.ken.wms.common.service.Interface;
 
+import com.ken.wms.domain.StockRecordDTO;
 import com.ken.wms.exception.StockRecordManageServiceException;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,4 +59,12 @@ public interface StockRecordManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     Map<String, Object> selectStockRecord(Integer repositoryID, String startDateStr, String endDateStr, String searchType, int offset, int limit) throws StockRecordManageServiceException;
+
+    /**
+     * 导出进出货记录
+     *
+     * @param storagesRecord 进出货记录List
+     * @return excel 文件
+     */
+    File exportJCHRecord(List<StockRecordDTO> storagesRecord);
 }

@@ -27,6 +27,7 @@
         datePickerInit();
         //storageListInit();
         searchAction();
+        exportRecordAction();
     })
 
     // 仓库下拉框数据初始化
@@ -185,7 +186,62 @@
 	        tableRefresh();
 	    })
 	}
+
+    // 导出进出货记录
+    function exportRecordAction() {
+        $('#export_jch_record').click(function() {
+            $('#export_jch_modal').modal("show");
+        })
+
+        $('#export_jch_record_download').click(function(){
+            var data = {
+                searchType : search_type,
+                repositoryID : search_repositoryID,
+                startDate : search_start_date,
+                endDate : search_end_date
+            }
+            var url = "stockRecordManage/exportJCHRecord?" + $.param(data)
+            window.open(url, '_blank');
+            $('#export_jch_modal').modal("hide");
+        })
+    }
 </script>
+
+<!-- 导出进出货记录信息模态框 -->
+<div class="modal fade" id="export_jch_modal" table-index="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true"
+     data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">导出进出货记录</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-3" style="text-align: center;">
+                        <img src="media/icons/warning-icon.png" alt=""
+                             style="width: 70px; height: 70px; margin-top: 20px;">
+                    </div>
+                    <div class="col-md-8 col-sm-8">
+                        <h3>是否确认导出进出货记录</h3>
+                        <p>(注意：请确定要导出的进出货记录，导出的内容为当前列表的搜索结果)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">
+                    <span>取消</span>
+                </button>
+                <button class="btn btn-success" type="button" id="export_jch_record_download">
+                    <span>确认下载</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="panel panel-default">
     <ol class="breadcrumb">
@@ -231,7 +287,17 @@
                 </form>
             </div>
         </div>
-        <div class="row" style="margin-top:50px">
+        <div class="row" style="margin-top:20px">
+            <div class="col-md-5">
+                <%--<button class="btn btn-sm btn-default" id="import_storage">
+                    <span class="glyphicon glyphicon-import"></span> <span>导入</span>
+                </button>--%>
+                <button class="btn btn-sm btn-default" id="export_jch_record">
+                    <span class="glyphicon glyphicon-export"></span> <span>导出</span>
+                </button>
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px">
             <div class="col-md-12">
                 <table id="stockRecords" class="table table-striped" ></table>
             </div>

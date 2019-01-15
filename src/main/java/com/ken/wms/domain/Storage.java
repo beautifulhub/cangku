@@ -1,20 +1,20 @@
 package com.ken.wms.domain;
 
 /**
- * 仓库库存
+ * 仓库盘点
  * 
  * @author Bea
  *
  */
 public class Storage {
 
-	private Integer storageID;//库存ID
+	private Integer storageID;//盘点ID
 	private Integer goodsID;// 货物ID
 	private String goodsNO;// 货物编号
 	private String goodsName;// 货物名称
 	private String goodsColor;// 货物颜色
 	private String goodsSize;// 货物尺码
-	private Long goodsNum;// 货物库存数量
+	private Long goodsNum;// 货物盘点数量
 	private String goodsType;// 货物类型
 	private Double goodsValue;// 货物价值
 	private Integer repositoryID;// 仓库ID

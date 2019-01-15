@@ -645,7 +645,7 @@
 							</div>
 							<div style="margin-top: 30px; margin-buttom: 15px">
 								<a class="btn btn-info"
-									href="commons/fileSource/download/storageRecord.xlsx"
+									href="commons/fileSource/download/storage.xlsx"
 									target="_blank"> <span class="glyphicon glyphicon-download"></span>
 									<span>下载</span>
 								</a>
