@@ -247,3 +247,34 @@ function UnRepoAuthTip(){
     	return false;
 	}
 }
+
+/**
+ * 全局的ajax请求后台已经配置拦截，非ajax请求（如下载请求），后台已做处理
+ */
+$.ajaxSetup({
+    complete:function(XMLHttpRequest,textStatus){
+        if(textStatus=="parsererror"){
+            /*$.messager.alert('提示信息', "登陆超时！请重新登陆！", 'info',function(){
+                window.location.href = 'login.jsp';
+            });*/
+            window.location.href = "/WMS";
+        } else if(textStatus=="error"){
+            layer.open({
+                content: '请求超时，请重新登录！',
+                btn: ['确定', '取消'],
+                yes: function(index, layero){
+                    window.location.href = "/WMS";
+                },
+                btn2: function(index, layero){
+                    //按钮【按钮二】的回调
+                    //return false 开启该代码可禁止点击该按钮关闭
+                },
+                cancel: function(){
+                    //右上角关闭回调
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }
+            });
+            //$.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
+        }
+    }
+});
