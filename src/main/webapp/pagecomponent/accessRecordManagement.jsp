@@ -94,7 +94,7 @@
             search_access_type = $('#access_type').val();
             search_start_date = $('#start_date').val();
             search_end_date = $('#end_date').val();
-            tableRefresh();
+            $('#accessRecordDOS').bootstrapTable('selectPage',1);
         })
     }
 </script>

@@ -46,7 +46,7 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input').val();
-			tableRefresh();
+            $('#repositoryList').bootstrapTable('selectPage',1);
 		})
 	}
 

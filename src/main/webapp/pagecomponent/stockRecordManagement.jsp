@@ -183,7 +183,7 @@
 	        search_type = $('#search_type').val();
 	        search_start_date = $('#search_start_date').val();
 	        search_end_date = $('#search_end_date').val();
-	        tableRefresh();
+            $('#stockRecords').bootstrapTable('selectPage',1);
 	    })
 	}
 

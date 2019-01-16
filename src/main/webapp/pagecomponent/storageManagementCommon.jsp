@@ -45,7 +45,7 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input_type').val();
-			tableRefresh();
+            $('#storageList').bootstrapTable('selectPage',1);
 		})
 	}
 

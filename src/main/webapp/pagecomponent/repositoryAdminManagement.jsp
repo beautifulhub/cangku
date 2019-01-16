@@ -50,7 +50,7 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input').val();
-			tableRefresh();
+            $('#repositoryAdminList').bootstrapTable('selectPage',1);
 		})
 	}
 

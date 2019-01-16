@@ -154,9 +154,12 @@
 
 	// 表格刷新
 	function tableRefresh() {
-		$('#locationRecords').bootstrapTable('refresh', {
-			query : {}
-		});
+		/*$('#locationRecords').bootstrapTable('refresh', {
+			query : {
+			    offset : 0
+            }
+		});*///刷新，但页码依然为当前的页码，比如page=5依然为5
+		$('#locationRecords').bootstrapTable('selectPage',1);//重新查询，跳转到第一页，比如page=5会变成page=1
 	}
 
 	// 分页查询参数

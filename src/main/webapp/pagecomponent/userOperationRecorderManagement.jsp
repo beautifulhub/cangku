@@ -91,7 +91,7 @@
             search_user_id = $('#user_id').val();
             search_start_date = $('#start_date').val();
             search_end_date = $('#end_date').val();
-            tableRefresh();
+            $('#userOperationRecordTable').bootstrapTable('selectPage',1);
         })
     }
 </script>

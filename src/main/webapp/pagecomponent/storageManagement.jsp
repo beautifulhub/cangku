@@ -86,7 +86,7 @@
 			search_color = $('#search_input_color').val();
 			search_size = $('#search_input_size').val();
 			search_repository = $('#search_input_repository').val();
-			tableRefresh();
+            $('#storageList').bootstrapTable('selectPage',1);
 		})
 	}
 

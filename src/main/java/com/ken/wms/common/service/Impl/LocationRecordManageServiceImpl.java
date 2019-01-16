@@ -168,8 +168,8 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
 
         // 根据查询模式执行查询
         List<LocationRecordDTO> locationRecordDTOS = new ArrayList<>();
-        Map<String, Object> locationUpTemp;
-        Map<String, Object> locationDownTemp;
+        Map<String, Object> locationUpTemp = new HashMap<String,Object>();
+        Map<String, Object> locationDownTemp = new HashMap<String,Object>();
         List<LocationUpDO> locationUpRecordDOS = null;
         List<LocationDownDO> locationDownRecordDOS = null;
         switch (upOrDown) {
@@ -180,17 +180,14 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
                     locationUpRecordDOS = (List<LocationUpDO>) locationUpTemp.get("data");
                     locationDownRecordDOS = (List<LocationDownDO>) locationDownTemp.get("data");
                 } else {
-                    int locationUpRecordOffset = offset / 2;
+                    /*int locationUpRecordOffset = offset / 2;
                     int locationDownRecordOffset = locationUpRecordOffset * 2 < offset ? locationUpRecordOffset + 1 : locationUpRecordOffset;
                     int locationUpRecordLimit = limit / 2;
                     int locationDownRecordLimit = locationUpRecordLimit * 2 < limit ? locationUpRecordLimit + 1 : locationUpRecordLimit;
-
                     locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, locationUpRecordOffset, limit);
                     locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate, locationDownRecordOffset, limit);
-
                     locationUpRecordDOS = (List<LocationUpDO>) locationUpTemp.get("data");
                     locationDownRecordDOS = (List<LocationDownDO>) locationDownTemp.get("data");
-
                     int locationUpRecordDosSize = locationUpRecordDOS.size();
                     int locationDownRecordDoSize = locationDownRecordDOS.size();
                     if (locationUpRecordDosSize >= locationUpRecordLimit && locationDownRecordDoSize >= locationDownRecordLimit) {
@@ -199,11 +196,25 @@ public class LocationRecordManageServiceImpl implements LocationRecordManageServ
                     } else if (locationUpRecordDosSize < locationUpRecordLimit && locationDownRecordDoSize > locationDownRecordLimit) {
                         int appendSize = (locationDownRecordDoSize - locationDownRecordLimit) > (locationUpRecordLimit - locationUpRecordDosSize) ?
                                 (locationUpRecordLimit - locationUpRecordDosSize) : (locationDownRecordDoSize - locationDownRecordLimit);
-                        locationDownRecordDOS = locationDownRecordDOS.subList(0, locationUpRecordLimit + appendSize);
+                        locationDownRecordDOS = locationDownRecordDOS.subList(0, locationDownRecordLimit + appendSize);
                     } else if (locationDownRecordDoSize < locationDownRecordLimit && locationUpRecordDosSize > locationUpRecordLimit) {
                         int appendSize = (locationUpRecordDosSize - locationUpRecordLimit) > (locationDownRecordLimit - locationDownRecordDoSize) ?
                                 (locationDownRecordLimit - locationDownRecordDoSize) : (locationUpRecordDosSize - locationUpRecordLimit);
                         locationUpRecordDOS = locationUpRecordDOS.subList(0, locationUpRecordLimit + appendSize);
+                    }*/
+                    //先查询入库的，再查询出库的
+                    locationUpTemp = selectLocationUpRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID,personID, startDate, endDate, offset, limit);
+                    locationUpRecordDOS = (List<LocationUpDO>) locationUpTemp.get("data");
+                    if((long) locationUpTemp.get("total") < offset + limit){
+                        long needNum = offset + limit - (long) locationUpTemp.get("total");
+                        if((int)needNum / limit == 0){
+                            locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate, 0, (int)needNum);
+                        }else{
+                            locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate, (int)needNum - limit, limit);
+                        }
+                        locationDownRecordDOS = (List<LocationDownDO>) locationDownTemp.get("data");
+                    }else{
+                        locationDownTemp = selectLocationDownRecord(goodsNo,goodsName,goodsColor,goodsSize,repositoryID, personID,startDate, endDate, offset, limit);
                     }
                 }
                 long locationUpRecordDOSTotal = (long) locationUpTemp.get("total");

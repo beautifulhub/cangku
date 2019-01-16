@@ -125,7 +125,7 @@
             }
 			search_keyWord = $('#search_input').val();
             search_repo_id = $("#own_repo_text").text().trim();
-			tableRefresh();
+            $('#locationList').bootstrapTable('selectPage',1);
 		})
 	}
 

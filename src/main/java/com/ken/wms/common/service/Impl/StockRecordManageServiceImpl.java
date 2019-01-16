@@ -216,17 +216,15 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                     stockInRecordDOS = (List<StockInDO>) stockInTemp.get("data");
                     stockOutRecordDOS = (List<StockOutDO>) stockOutTemp.get("data");
                 } else {
-                    int stockInRecordOffset = offset / 2; //求整数部分
+                    /*int stockInRecordOffset = offset / 2; //求整数部分
                     int stockOutRecordOffset = stockInRecordOffset * 2 < offset ? stockInRecordOffset + 1 : stockInRecordOffset;//0:0 0; 1:0 1; 2:1 1;
                     int stockInRecordLimit = limit / 2; //求整数部分
                     int stockOutRecordLimit = stockInRecordLimit * 2 < limit ? stockInRecordLimit + 1 : stockInRecordLimit;//5:2 3; 10:5 5;
                     //合理分配分页与条数
                     stockInTemp = selectStockInRecord(repositoryID, startDate, endDate, stockInRecordOffset, limit);
                     stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, stockOutRecordOffset, limit);
-
                     stockInRecordDOS = (List<StockInDO>) stockInTemp.get("data");
                     stockOutRecordDOS = (List<StockOutDO>) stockOutTemp.get("data");
-
                     int stockInRecordDosSize = stockInRecordDOS.size();
                     int stockOutRecordDoSize = stockOutRecordDOS.size();
                     if (stockInRecordDosSize >= stockInRecordLimit && stockOutRecordDoSize >= stockOutRecordLimit) {
@@ -240,7 +238,21 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
                         int appendSize = (stockInRecordDosSize - stockInRecordLimit) > (stockOutRecordLimit - stockOutRecordDoSize) ?
                                 (stockOutRecordLimit - stockOutRecordDoSize) : (stockInRecordDosSize - stockInRecordLimit);
                         stockInRecordDOS = stockInRecordDOS.subList(0, stockInRecordLimit + appendSize);
-                    }//以上查询进出货数目，最大程度地满足所需条数。
+                    }//以上查询进出货数目，最大程度地满足所需条数。*/
+                    //先查询进货的，再查询出货的
+                    stockInTemp = selectStockInRecord(repositoryID, startDate, endDate, offset, limit);
+                    stockInRecordDOS = (List<StockInDO>) stockInTemp.get("data");
+                    if((long) stockInTemp.get("total") < offset + limit){
+                        long needNum = offset + limit - (long) stockInTemp.get("total");
+                        if((int)needNum / limit == 0){
+                            stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, 0, (int)needNum);
+                        }else{
+                            stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, (int)needNum - limit, limit);
+                        }
+                        stockOutRecordDOS = (List<StockOutDO>) stockOutTemp.get("data");
+                    }else{
+                        stockOutTemp = selectStockOutRecord(repositoryID, startDate, endDate, offset, limit);
+                    }
                 }
                 long stockInRecordDOSTotal = (long) stockInTemp.get("total");
                 long stockOutRecordDOSTotal = (long) stockOutTemp.get("total");
