@@ -74,12 +74,16 @@ function showMsg(type, msg, append) {
 
 // 处理 Ajax 错误响应
 function handleAjaxError(responseStatus){
-	var type = 'error';
+	/*var type = 'error';
 	var msg  = '';
 	var append = '';
-	if (responseStatus == 403) {
-		msg = '未授权操作';
-		append = '对不起，您未授权执行此操作，请重新登陆';
+    if (responseStatus == 401) {
+        msg = '权限提示';
+        append = '没有对应的权限，请联系管理员！';
+        showMsg(type, msg, append);
+    } else if (responseStatus == 403) {
+		msg = '停留时间过长';
+		append = '对不起，由于您长时间未操作，请重新登陆';
 		showMsg(type, msg, append);
 		// 刷新重新登陆
 		delay(function(){
@@ -103,7 +107,7 @@ function handleAjaxError(responseStatus){
 	} else {
 		msg = '遇到未知的错误';
 		showMsg(type, msg, append);
-	};
+	};*/
 }
 
 // 初始密码修改
@@ -253,28 +257,93 @@ function UnRepoAuthTip(){
  */
 $.ajaxSetup({
     complete:function(XMLHttpRequest,textStatus){
-        if(textStatus=="parsererror"){
-            /*$.messager.alert('提示信息', "登陆超时！请重新登陆！", 'info',function(){
+        var type = 'error';
+        var msg  = '';
+        var append = '';
+        if(textStatus=="error"){
+            if (XMLHttpRequest.status == 401) {
+                msg = '无权限';
+                append = '没有对应的权限，请联系管理员！';
+                showMsg(type, msg, append);
+            } else if (XMLHttpRequest.status == 403) {
+                /*msg = '停留时间过长';
+                append = '由于您长时间未操作，请重新登陆';
+                showMsg(type, msg, append);
+                // 刷新重新登陆
+                delay(function(){
+                    window.location.reload(true);
+                }, 5000);*/
+                layer.open({
+                    content: '请求超时，请重新登录！',
+                    btn: ['确定', '取消'],
+                    yes: function(index, layero){
+                        window.location.href = "/WMS";
+                    },
+                    btn2: function(index, layero){
+                        //按钮【按钮二】的回调 //return false 开启该代码可禁止点击该按钮关闭
+                    },
+                    cancel: function(){
+                        //右上角关闭回调 //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+            } else if (XMLHttpRequest.status == 404) {
+                msg = '不存在的操作';
+                showMsg(type, msg, append);
+            } else if (XMLHttpRequest.status == 430){
+                /*msg = '您的账号在其他地方登陆';
+                append = '请确认是否为您本人的操作，若否请及时更换密码';
+                showMsg(type, msg, append);
+                // 刷新重新登陆
+                delay(function(){
+                    window.location.reload(true);
+                }, 5000);*/
+                layer.open({
+                    content: '您的账号在其他地方登陆，请确认是否为您本人操作，若否，请重新登录，及时更换密码',
+                    btn: ['确定', '取消'],
+                    yes: function(index, layero){
+                        window.location.href = "/WMS";
+                    },
+                    btn2: function(index, layero){
+                        //按钮【按钮二】的回调 //return false 开启该代码可禁止点击该按钮关闭
+                    },
+                    cancel: function(){
+                        //右上角关闭回调 //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+            }else if (XMLHttpRequest.status == 500) {
+                msg = '服务器错误';
+                append = '服务器发生了错误，我们将尽快解决，请稍候重试';
+                showMsg(type, msg, append);
+            } else {
+                msg = '遇到未知的错误';
+                showMsg(type, msg, append);
+            };
+        }
+        /*if(textStatus=="parsererror"){
+            /!*$.messager.alert('提示信息', "登陆超时！请重新登陆！", 'info',function(){
                 window.location.href = 'login.jsp';
-            });*/
+            });*!/
             window.location.href = "/WMS";
         } else if(textStatus=="error"){
-            layer.open({
-                content: '请求超时，请重新登录！',
-                btn: ['确定', '取消'],
-                yes: function(index, layero){
-                    window.location.href = "/WMS";
-                },
-                btn2: function(index, layero){
-                    //按钮【按钮二】的回调
-                    //return false 开启该代码可禁止点击该按钮关闭
-                },
-                cancel: function(){
-                    //右上角关闭回调
-                    //return false 开启该代码可禁止点击该按钮关闭
-                }
-            });
+            if(XMLHttpRequest.status == 403){
+                //layer.alert('没有对应的权限，请联系管理员', {icon: 0});
+                layer.open({
+                    content: '请求超时，请重新登录！',
+                    btn: ['确定', '取消'],
+                    yes: function(index, layero){
+                        window.location.href = "/WMS";
+                    },
+                    btn2: function(index, layero){
+                        //按钮【按钮二】的回调
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    },
+                    cancel: function(){
+                        //右上角关闭回调
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+            }
             //$.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
-        }
+        }*/
     }
 });

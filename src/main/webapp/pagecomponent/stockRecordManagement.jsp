@@ -76,6 +76,7 @@
 									{
 										field : 'recordID',
 										title : '记录ID',
+                                        width : 80,
                                         //visible : false
 									//sortable: true
 									},
@@ -90,36 +91,53 @@
 									},
 									{
 										field : 'goodsNO',
-										title : '商品编号'
+										title : '商品编号',
+                                        formatter : function (value, row, index) {
+                                            return commonUtil.showParamDetail(row.goodsNO)
+                                        }
 									},
 									{
 										field : 'goodsName',
-										title : '商品名称'
+										title : '商品名称',
+                                        formatter : function (value, row, index) {
+                                            return commonUtil.showParamDetail(row.goodsName)
+                                        }
 									},
 									{
 										field : 'goodsColor',
-										title : '商品颜色'
+										title : '商品颜色',
+                                        formatter : function (value, row, index) {
+                                            return commonUtil.showParamDetail(row.goodsColor)
+                                        }
+
 									},
 									{
 										field : 'goodsSize',
-										title : '商品尺码'
+										title : '商品尺码',
+                                        formatter : function (value, row, index) {
+                                            return commonUtil.showParamDetail(row.goodsSize)
+                                        }
 									},
 									{
 										field : 'goodsNum',
 										title : '数量',
-                                        sortable: true
+                                        sortable: true,
+                                        formatter : function (value, row, index) {
+                                            return commonUtil.showParamDetail(row.goodsNum+"")
+                                        }
 									},
 									{
 										field : 'time',
 										title : '日期',
                                         width : 150,
                                         formatter: function (value, row, index) {
-                                            return commonUtil.changeDateFormat(value);
+                                            return commonUtil.showParamDetail(commonUtil.changeDateFormat(value));
                                         }
 									},
                                     {
                                         field : 'repositoryID',
                                         title : '仓库ID',
+                                        width : 100,
                                         //visible : false
                                     },
 									{
@@ -128,7 +146,8 @@
 									},
 									{
 										field : 'type',
-										title : '记录类型'
+										title : '记录类型',
+                                        width : 80
 									},
 									{
 										field : 'remark',
