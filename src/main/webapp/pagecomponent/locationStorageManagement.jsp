@@ -74,6 +74,7 @@
 					$('#search_input_repository').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
 				})
                 if(UnRepoAuthTip())return;
+                search_repository = $('#search_input_repository').val();
                 storageListInit();
 			},
 			error : function(response){
