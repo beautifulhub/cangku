@@ -12,6 +12,7 @@
 		<result property="tel" column="CUSTOMER_TEL"/>
 		<result property="email" column="CUSTOMER_EMAIL"/>
 		<result property="address" column="CUSTOMER_ADDRESS"/>
+		<result property="repoID" column="CUSTOMER_REPOSITORYID"/>
 	</resultMap>
 
 	<select id="selectAll" resultMap="customer">
@@ -24,6 +25,8 @@
 			c.CUSTOMER_ADDRESS
 		from
 			wms_customer c
+		where
+			c.customer_repositoryid = #{repoID}
 	</select>
 	
 	<select id="selectById" resultMap="customer">
@@ -52,6 +55,7 @@
 			wms_customer c
 		where
 			c.CUSTOMER_NAME = #{customerName}
+			and c.customer_repositoryid = #{repoID}
 	</select>
 	
 	<select id="selectApproximateByName" resultMap="customer">
@@ -66,18 +70,34 @@
 			wms_customer c
 		where
 			c.CUSTOMER_NAME like concat(concat('%',#{customerName}),'%')
+			and c.customer_repositoryid = #{repoID}
 	</select>
-	
+
+	<select id="selectApproximateByPrincipal" resultMap="customer">
+		select
+			c.CUSTOMER_ID,
+			c.CUSTOMER_NAME,
+			c.CUSTOMER_PERSON,
+			c.CUSTOMER_TEL,
+			c.CUSTOMER_EMAIL,
+			c.CUSTOMER_ADDRESS
+		from
+			wms_customer c
+		where
+			c.CUSTOMER_PERSON like concat(concat('%',#{principal}),'%')
+			and c.customer_repositoryid = #{repoID}
+	</select>
+
 	<insert id="insert">
-		insert into wms_customer(CUSTOMER_NAME,CUSTOMER_PERSON,CUSTOMER_TEL,CUSTOMER_EMAIL,CUSTOMER_ADDRESS)
-		values (#{name},#{personInCharge},#{tel},#{email},#{address})
+		insert into wms_customer(CUSTOMER_NAME,CUSTOMER_PERSON,CUSTOMER_TEL,CUSTOMER_EMAIL,CUSTOMER_ADDRESS,CUSTOMER_REPOSITORYID)
+		values (#{name},#{personInCharge},#{tel},#{email},#{address},#{repoID})
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_customer(CUSTOMER_NAME,CUSTOMER_PERSON,CUSTOMER_TEL,CUSTOMER_EMAIL,CUSTOMER_ADDRESS)
+		insert into wms_customer(CUSTOMER_NAME,CUSTOMER_PERSON,CUSTOMER_TEL,CUSTOMER_EMAIL,CUSTOMER_ADDRESS,CUSTOMER_REPOSITORYID)
 		values
 		<foreach collection="list" item="customer" separator=",">
-			(#{customer.name},#{customer.personInCharge},#{customer.tel},#{customer.email},#{customer.address})
+			(#{customer.name},#{customer.personInCharge},#{customer.tel},#{customer.email},#{customer.address},#{customer.repoID})
 		</foreach>
 	</insert>
 	

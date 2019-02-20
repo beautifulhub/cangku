@@ -81,7 +81,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByName(int offset, int limit, String customerName) throws CustomerManageServiceException {
+    public Map<String, Object> selectByName(int offset, int limit, String customerName, Integer repoID) throws CustomerManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Customer> customers;
@@ -96,14 +96,14 @@ public class CustomerManageServiceImpl implements CustomerManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                customers = customerMapper.selectApproximateByName(customerName);
+                customers = customerMapper.selectApproximateByName(customerName,repoID);
                 if (customers != null) {
                     PageInfo<Customer> pageInfo = new PageInfo<>(customers);
                     total = pageInfo.getTotal();
                 } else
                     customers = new ArrayList<>();
             } else {
-                customers = customerMapper.selectApproximateByName(customerName);
+                customers = customerMapper.selectApproximateByName(customerName,repoID);
                 if (customers != null)
                     total = customers.size();
                 else
@@ -126,18 +126,11 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      */
     @Override
     public Map<String, Object> selectByName(String customerName) throws CustomerManageServiceException {
-        return selectByName(-1, -1, customerName);
+        return selectByName(-1, -1, customerName,-1);
     }
 
-    /**
-     * 分页查询客户的记录
-     *
-     * @param offset 分页的偏移值
-     * @param limit  分页的大小
-     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
-     */
     @Override
-    public Map<String, Object> selectAll(int offset, int limit) throws CustomerManageServiceException {
+    public Map<String, Object> selectByPrincipal(int offset, int limit, String principal, Integer repoID) throws CustomerManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Customer> customers;
@@ -152,14 +145,59 @@ public class CustomerManageServiceImpl implements CustomerManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                customers = customerMapper.selectAll();
+                customers = customerMapper.selectApproximateByPrincipal(principal,repoID);
                 if (customers != null) {
                     PageInfo<Customer> pageInfo = new PageInfo<>(customers);
                     total = pageInfo.getTotal();
                 } else
                     customers = new ArrayList<>();
             } else {
-                customers = customerMapper.selectAll();
+                customers = customerMapper.selectApproximateByPrincipal(principal,repoID);
+                if (customers != null)
+                    total = customers.size();
+                else
+                    customers = new ArrayList<>();
+            }
+        } catch (PersistenceException e) {
+            throw new CustomerManageServiceException(e);
+        }
+
+        resultSet.put("data", customers);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
+    /**
+     * 分页查询客户的记录
+     *
+     * @param offset 分页的偏移值
+     * @param limit  分页的大小
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectAll(int offset, int limit,Integer repoID) throws CustomerManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Customer> customers;
+        long total = 0;
+        boolean isPagination = true;
+
+        // validate
+        if (offset < 0 || limit < 0)
+            isPagination = false;
+
+        // query
+        try {
+            if (isPagination) {
+                PageHelper.offsetPage(offset, limit);
+                customers = customerMapper.selectAll(repoID);
+                if (customers != null) {
+                    PageInfo<Customer> pageInfo = new PageInfo<>(customers);
+                    total = pageInfo.getTotal();
+                } else
+                    customers = new ArrayList<>();
+            } else {
+                customers = customerMapper.selectAll(repoID);
                 if (customers != null)
                     total = customers.size();
                 else
@@ -181,7 +219,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      */
     @Override
     public Map<String, Object> selectAll() throws CustomerManageServiceException {
-        return selectAll(-1, -1);
+        return selectAll(-1, -1, -1);
     }
 
     /**
@@ -210,7 +248,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
             // 验证
             if (customerCheck(customer)) {
                 try {
-                    if (null == customerMapper.selectByName(customer.getName())) {
+                    if (null == customerMapper.selectByName(customer.getName(),customer.getRepoID())) {
                         customerMapper.insert(customer);
                         return true;
                     }
@@ -238,7 +276,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
             if (customerCheck(customer)) {
                 try {
                     // 检查重名
-                    Customer customerFromDB = customerMapper.selectByName(customer.getName());
+                    Customer customerFromDB = customerMapper.selectByName(customer.getName(),customer.getRepoID());
                     if (customerFromDB == null || customerFromDB.getId().equals(customer.getId())) {
                         customerMapper.update(customer);
                         return true;
@@ -285,7 +323,7 @@ public class CustomerManageServiceImpl implements CustomerManageService {
      */
     @UserOperation(value = "导入客户信息")
     @Override
-    public Map<String, Object> importCustomer(MultipartFile file) throws CustomerManageServiceException {
+    public Map<String, Object> importCustomer(MultipartFile file,Integer repoID) throws CustomerManageServiceException {
         // 初始化结果集
         Map<String, Object> result = new HashMap<>();
         int total = 0;
@@ -301,8 +339,10 @@ public class CustomerManageServiceImpl implements CustomerManageService {
                 List<Customer> availableList = new ArrayList<>();
                 for (Customer customer : customers) {
                     if (customerCheck(customer)) {
-                        if (customerMapper.selectByName(customer.getName()) == null)
+                        if (customerMapper.selectByName(customer.getName(),repoID) == null){
+                            customer.setRepoID(repoID);
                             availableList.add(customer);
+                        }
                     }
                 }
 

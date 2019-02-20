@@ -33,6 +33,7 @@ public class CustomerManageHandler {
     private CustomerManageService customerManageService;
 
     private static final String SEARCH_BY_ID = "searchByID";
+    private static final String SEARCH_BY_PRINCIPAL = "searchByPrincipal";
     private static final String SEARCH_BY_NAME = "searchByName";
     private static final String SEARCH_ALL = "searchAll";
 
@@ -45,19 +46,22 @@ public class CustomerManageHandler {
      * @param limit      分页大小
      * @return 返回指定条件查询的结果
      */
-    private Map<String, Object> query(String searchType, String keyWord, int offset, int limit) throws CustomerManageServiceException {
+    private Map<String, Object> query(String searchType, String keyWord, int offset, int limit, Integer repoID) throws CustomerManageServiceException {
         Map<String, Object> queryResult = null;
 
         switch (searchType) {
-            case SEARCH_BY_ID:
+            /*case SEARCH_BY_ID:
                 if (StringUtils.isNumeric(keyWord))
                     queryResult = customerManageService.selectById(Integer.valueOf(keyWord));
+                break;*/
+            case SEARCH_BY_PRINCIPAL:
+                queryResult = customerManageService.selectByPrincipal(offset, limit, keyWord,repoID);
                 break;
             case SEARCH_BY_NAME:
-                queryResult = customerManageService.selectByName(offset, limit, keyWord);
+                queryResult = customerManageService.selectByName(offset, limit, keyWord,repoID);
                 break;
             case SEARCH_ALL:
-                queryResult = customerManageService.selectAll(offset, limit);
+                queryResult = customerManageService.selectAll(offset, limit, repoID);
                 break;
             default:
                 // do other thing
@@ -79,7 +83,7 @@ public class CustomerManageHandler {
     @RequestMapping(value = "getCustomerList", method = RequestMethod.GET)
     public
     @ResponseBody
-    Map<String, Object> getCustomerList(@RequestParam("searchType") String searchType,
+    Map<String, Object> getCustomerList(@RequestParam("repoID") Integer repoID,@RequestParam("searchType") String searchType,
                                         @RequestParam("offset") int offset,
                                         @RequestParam("limit") int limit,
                                         @RequestParam("keyWord") String keyWord) throws CustomerManageServiceException {
@@ -89,7 +93,7 @@ public class CustomerManageHandler {
         List<Supplier> rows = null;
         long total = 0;
 
-        Map<String, Object> queryResult = query(searchType, keyWord, offset, limit);
+        Map<String, Object> queryResult = query(searchType, keyWord, offset, limit, repoID);
 
         if (queryResult != null) {
             rows = (List<Supplier>) queryResult.get("data");
@@ -140,7 +144,7 @@ public class CustomerManageHandler {
 
         // 获取客户信息
         Customer customer = null;
-        Map<String, Object> queryResult = query(SEARCH_BY_ID, customerID, -1, -1);
+        Map<String, Object> queryResult = customerManageService.selectById(Integer.valueOf(customerID));
         if (queryResult != null) {
             customer = (Customer) queryResult.get("data");
             if (customer != null) {
@@ -212,7 +216,7 @@ public class CustomerManageHandler {
     @RequestMapping(value = "importCustomer", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> importCustomer(@RequestParam("file") MultipartFile file) throws CustomerManageServiceException {
+    Map<String, Object> importCustomer(@RequestParam("file") MultipartFile file, @RequestParam("repoID") Integer repoID) throws CustomerManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
         String result = Response.RESPONSE_RESULT_SUCCESS;
@@ -222,7 +226,7 @@ public class CustomerManageHandler {
         int available = 0;
         if (file == null)
             result = Response.RESPONSE_RESULT_ERROR;
-        Map<String, Object> importInfo = customerManageService.importCustomer(file);
+        Map<String, Object> importInfo = customerManageService.importCustomer(file,repoID);
         if (importInfo != null) {
             total = (int) importInfo.get("total");
             available = (int) importInfo.get("available");
@@ -243,13 +247,13 @@ public class CustomerManageHandler {
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "exportCustomer", method = RequestMethod.GET)
-    public void exportCustomer(@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
+    public void exportCustomer(@RequestParam("repoID") Integer repoID,@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
                                HttpServletResponse response) throws CustomerManageServiceException, IOException {
 
         String fileName = "customerInfo.xlsx";
 
         List<Customer> customers = null;
-        Map<String, Object> queryResult = query(searchType, keyWord, -1, -1);
+        Map<String, Object> queryResult = query(searchType, keyWord, -1, -1, repoID);
 
         if (queryResult != null) {
             customers = (List<Customer>) queryResult.get("data");

@@ -4,12 +4,56 @@
 <script>
 	var search_type_customer = "searchAll";
 	var search_keyWord = "";
+    var search_repo_id = "";
 	var selectID;
+
+	var customerManage = {
+        //初始化所属仓库选择下拉框
+        showOwnRepo : function(){
+            $.ajax({
+                type : "GET",
+                url : "repositoryManage/getOwnRepo",
+                dataType : "json",
+                success : function(response) {
+                    if (response.result == "success") {
+                        if(response.data.length > 1){
+                            var repoList = "";
+                            for(var i = 0; i < response.data.length; i++){
+                                repoList += '<li><a href="javascript:void(0)" class="repo-option" data-id="'+response.data[i].id+'">'+response.data[i].id+'</a></li>';
+                            }
+                            $("#own_repo_text").html(response.data[0].id);
+                            $("#own_repo_text").parent().after('<ul class="dropdown-menu" role="menu" id="own_repo_select"></ul>');
+                            $("#own_repo_select").html(repoList);
+                            $(".repo-option").click(function() {
+                                $("#own_repo_text").text($(this).text());
+                                search_repo_id = $(this).text();
+                                tableRefresh()
+                            })
+                        }else if(response.data.length == 1){
+                            $("#own_repo_text").html(response.data[0].id);
+                        }
+                        search_repo_id = $("#own_repo_text").text().trim();
+                        if("无所属仓库" == search_repo_id){
+                            showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                            return;
+                        }
+                        customerListInit();
+                    }else{
+                        showMsg("error", "查询出现异常", "");
+                    }
+                },
+                error : function(xhr, textStatus, errorThrow) {
+                    // handler error
+                    handleAjaxError(xhr.status);
+                }
+            })
+        }
+	}
 
 	$(function() {
 		optionAction();
 		searchAction();
-		customerListInit();
+		/*customerListInit();*/
 		bootstrapValidatorInit();
 
 		addCustomerAction();
@@ -21,19 +65,23 @@
 
 	// 下拉框選擇動作
 	function optionAction() {
+        customerManage.showOwnRepo(); //初始化所属仓库
 		$(".dropOption").click(function() {
 			var type = $(this).text();
 			$("#search_input").val("");
 			if (type == "所有") {
 				$("#search_input").attr("readOnly", "true");
 				search_type_customer = "searchAll";
-			} else if (type == "客户ID") {
+			} /*else if (type == "客户ID") {
 				$("#search_input").removeAttr("readOnly");
 				search_type_customer = "searchByID";
-			} else if (type == "客户名称") {
+			}*/ else if (type == "客户名称") {
 				$("#search_input").removeAttr("readOnly");
 				search_type_customer = "searchByName";
-			} else {
+			} else if (type == "负责人") {
+                $("#search_input").removeAttr("readOnly");
+                search_type_customer = "searchByPrincipal";
+            } else {
 				$("#search_input").removeAttr("readOnly");
 			}
 
@@ -45,7 +93,12 @@
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
+            if("无所属仓库" == search_repo_id){
+                showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                return;
+            }
 			search_keyWord = $('#search_input').val();
+            search_repo_id = $("#own_repo_text").text().trim();
             $('#customerList').bootstrapTable('selectPage',1);
 		})
 	}
@@ -56,7 +109,8 @@
 			limit : params.limit,
 			offset : params.offset,
 			searchType : search_type_customer,
-			keyWord : search_keyWord
+			keyWord : search_keyWord,
+            repoID : search_repo_id
 		}
 		return temp;
 	}
@@ -225,7 +279,8 @@
 						personInCharge : $('#customer_person_edit').val(),
 						tel : $('#customer_tel_edit').val(),
 						email : $('#customer_email_edit').val(),
-						address : $('#customer_address_edit').val()
+						address : $('#customer_address_edit').val(),
+                        repoID : $("#own_repo_text").text()
 					}
 
 					// ajax
@@ -316,7 +371,8 @@
 				personInCharge : $('#customer_person').val(),
 				tel : $('#customer_tel').val(),
 				email : $('#customer_email').val(),
-				address : $('#customer_address').val()
+				address : $('#customer_address').val(),
+                repoID : $("#own_repo_text").text()
 			}
 			// ajax
 			$.ajax({
@@ -409,6 +465,7 @@
 				secureuri: false,
 				dataType: 'json',
 				fileElementId:"file",
+                data:{"repoID" : $("#own_repo_text").text()},
 				success : function(data, status){
 					var total = 0;
 					var available = 0;
@@ -452,7 +509,8 @@
 		$('#export_customer_download').click(function(){
 			var data = {
 				searchType : search_type_customer,
-				keyWord : search_keyWord
+				keyWord : search_keyWord,
+                repoID : $("#own_repo_text").text()
 			}
 			var url = "customerManage/exportCustomer?" + $.param(data)
 			window.open(url, '_blank');
@@ -507,6 +565,15 @@
 	</ol>
 	<div class="panel-body">
 		<div class="row">
+			<div class="col-md-2 col-sm-2">
+				<label > <span>所属仓库：</span></label>
+				<div class="btn-group">
+					<button class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown">
+						<span id="own_repo_text">无所属仓库</span> <span class="caret"></span>
+					</button>
+				</div>
+			</div>
 			<div class="col-md-1 col-sm-2">
 				<div class="btn-group">
 					<button class="btn btn-default dropdown-toggle"
@@ -515,8 +582,9 @@
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0)" class="dropOption">客户ID</a></li>
+						<%--<li><a href="javascript:void(0)" class="dropOption">客户ID</a></li>--%>
 						<li><a href="javascript:void(0)" class="dropOption">客户名称</a></li>
+						<li><a href="javascript:void(0)" class="dropOption">负责人</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
@@ -525,7 +593,7 @@
 				<div>
 					<div class="col-md-3 col-sm-4">
 						<input id="search_input" type="text" class="form-control"
-							placeholder="客户ID">
+							placeholder="客户信息查询">
 					</div>
 					<div class="col-md-2 col-sm-2">
 						<button id="search_button" class="btn btn-success">

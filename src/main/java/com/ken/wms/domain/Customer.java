@@ -13,6 +13,7 @@ public class Customer {
 	private String tel;// 联系电话
 	private String email;// 电子邮件
 	private String address;// 地址
+	private Integer repoID;// 货位所属仓库
 
 	public Integer getId() {
 		return id;
@@ -62,10 +63,24 @@ public class Customer {
 		this.address = address;
 	}
 
-	@Override
-	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", personInCharge=" + personInCharge + ", tel=" + tel
-				+ ", email=" + email + ", address=" + address + "]";
+	public Integer getRepoID() {
+		return repoID;
 	}
 
+	public void setRepoID(Integer repoID) {
+		this.repoID = repoID;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", personInCharge='" + personInCharge + '\'' +
+				", tel='" + tel + '\'' +
+				", email='" + email + '\'' +
+				", address='" + address + '\'' +
+				", repoID=" + repoID +
+				'}';
+	}
 }

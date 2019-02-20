@@ -1,6 +1,7 @@
 package com.ken.wms.dao;
 
 import com.ken.wms.domain.Customer;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,32 +13,40 @@ import java.util.List;
 public interface CustomerMapper {
 
 	/**
-	 * 选择所有的 Customer
+	 * 选择所有的 Customer 附加所属仓库ID
 	 * @return 返回所有的 Customer
 	 */
-	List<Customer> selectAll();
+	List<Customer> selectAll(Integer repoID);
 	
 	/**
-	 * 选择指定 id 的 Supplier
+	 * 选择指定 id 的 Customer
 	 * @param id Customer的ID
 	 * @return 返回指定ID对应的Customer
 	 */
 	Customer selectById(Integer id);
 	
 	/**
-	 * 选择指定 Customer name 的 customer
+	 * 选择指定 Customer name 的 customer 附加所属仓库ID
 	 * @param customerName 客户的名称
 	 * @return 返回指定CustomerName对应的Customer
 	 */
-	Customer selectByName(String customerName);
+	Customer selectByName(@Param("customerName")String customerName,@Param("repoID")Integer repoID);
 	
 	/**
-	 * 选择指定 customer name 的 Customer
+	 * 选择指定 customer name 的 Customer 附加所属仓库ID
 	 * 与 selectByName 方法的区别在于本方法将返回相似匹配的结果
 	 * @param customerName Customer 供应商名
 	 * @return 返回模糊匹配指定customerName 对应的Customer
 	 */
-	List<Customer> selectApproximateByName(String customerName);
+	List<Customer> selectApproximateByName(@Param("customerName")String customerName,@Param("repoID")Integer repoID);
+
+	/**
+	 * 选择指定 customer Principal 的 Customer 附加所属仓库ID
+	 * 返回相似匹配的结果
+	 * @param principal Customer 客户负责人
+	 * @return 返回模糊匹配指定customer负责人 对应的Customer
+	 */
+	List<Customer> selectApproximateByPrincipal(@Param("principal")String principal,@Param("repoID")Integer repoID);
 	
 	/**
 	 * 插入 Customer 到数据库中
