@@ -2,6 +2,7 @@ package com.ken.wms.dao;
 
 
 import com.ken.wms.domain.Goods;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,6 +18,12 @@ public interface GoodsMapper {
 	 * @return 返回所有的Goods
 	 */
 	List<Goods> selectAll();
+
+	/**
+	 * 选择所有的 Goods 通过仓库Id
+	 * @return 返回所有的Goods
+	 */
+	List<Goods> selectByRepoID(Integer repoID);
 	
 	/**
 	 * 选择指定 id 的 Goods
@@ -26,40 +33,47 @@ public interface GoodsMapper {
 	Goods selectById(Integer id);
 
 	/**
-	 * 选择指定 no 的 Goods
+	 * 选择指定 id 的 Goods 通过仓库Id
+	 * @param id 货物的ID
+	 * @return 返回执行ID对应的Goods
+	 */
+	/*Goods selectByIdRepoID(Integer id);*/
+
+	/**
+	 * 选择指定 no 的 Goods 通过仓库Id
 	 * @param no 货物的编号
 	 * @return 返回执行NO对应的Goods
 	 */
-	Goods selectByNo(String no);
+	Goods selectByNo(@Param("no")String no,@Param("repoID")Integer repoID);
 
 	/**
-	 * 选择指定 no 的 Goods
+	 * 选择指定 no 的 Goods 通过仓库Id
 	 * @param no 货物的编号
 	 * @return 返回执行NO对应的Goods
 	 */
-	List<Goods> selectByLikeNo(String no);
+	List<Goods> selectByLikeNo(@Param("no")String no,@Param("repoID")Integer repoID);
 
 	/**
-	 * 选择指定 no 的 Goods
+	 * 选择指定 no 的 Goods 通过仓库Id
 	 * @param no 货物的编号
 	 * @return 返回执行NO对应的GoodsID
 	 */
-	Integer selectIDByNO(String no);
+	Integer selectIDByNO(@Param("no")String no,@Param("repoID")Integer repoID);
 
 	/**
 	 * 选择指定 Goods name 的 Goods
 	 * @param goodsName 货物的名称
 	 * @return 返回指定GoodsName对应的货物
 	 */
-	Goods selectByName(String goodsName);
+	/*Goods selectByName(String goodsName);*/
 	
 	/**
-	 * 选择制定 goods name 的 goods
+	 * 选择制定 goods name 的 goods 通过仓库Id
 	 * 模糊匹配
 	 * @param goodsName 货物德名称
 	 * @return 返回模糊匹配指定goodsName的货物
 	 */
-	List<Goods> selectApproximateByName(String goodsName);
+	List<Goods> selectApproximateByName(@Param("goodsName")String goodsName,@Param("repoID")Integer repoID);
 	
 	/**
 	 * 插入一条新的记录到数据库

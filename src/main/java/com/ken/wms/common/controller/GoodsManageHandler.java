@@ -47,7 +47,7 @@ public class GoodsManageHandler {
      * @param limit      分页大小
      * @return 返回一个 Map ，包含所有符合要求的查询结果，以及记录的条数
      */
-    private Map<String, Object> query(String searchType, String keyWord, int offset, int limit) throws GoodsManageServiceException {
+    private Map<String, Object> query(Integer repoID, String searchType, String keyWord, int offset, int limit) throws GoodsManageServiceException {
         Map<String, Object> queryResult = null;
 
         switch (searchType) {
@@ -56,13 +56,13 @@ public class GoodsManageHandler {
                     queryResult = goodsManageService.selectById(Integer.valueOf(keyWord));
                 break;*/
             case SEARCH_BY_NO:
-                queryResult = goodsManageService.selectByNo(keyWord);
+                queryResult = goodsManageService.selectByNo(repoID, keyWord);
                 break;
             case SEARCH_BY_NAME:
-                queryResult = goodsManageService.selectByName(keyWord); //模糊查询
+                queryResult = goodsManageService.selectByName(repoID, keyWord); //模糊查询
                 break;
             case SEARCH_ALL:
-                queryResult = goodsManageService.selectAll(offset, limit);
+                queryResult = goodsManageService.selectAll(repoID, offset, limit);
                 break;
             default:
                 // do other thing
@@ -85,7 +85,7 @@ public class GoodsManageHandler {
     @RequestMapping(value = "getGoodsList", method = RequestMethod.GET)
     public
     @ResponseBody
-    Map<String, Object> getGoodsList(@RequestParam("searchType") String searchType,
+    Map<String, Object> getGoodsList(@RequestParam("repoID") Integer repoID, @RequestParam("searchType") String searchType,
                                      @RequestParam("offset") int offset, @RequestParam("limit") int limit,
                                      @RequestParam("keyWord") String keyWord) throws GoodsManageServiceException {
         // 初始化 Response
@@ -94,7 +94,7 @@ public class GoodsManageHandler {
         long total = 0;
 
         // 查询
-        Map<String, Object> queryResult = query(searchType, keyWord, offset, limit);
+        Map<String, Object> queryResult = query(repoID, searchType, keyWord, offset, limit);
 
         if (queryResult != null) {
             rows = (List<Supplier>) queryResult.get("data");
@@ -212,7 +212,7 @@ public class GoodsManageHandler {
     @RequestMapping(value = "importGoods", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> importGoods(@RequestParam("file") MultipartFile file) throws GoodsManageServiceException {
+    Map<String, Object> importGoods(@RequestParam("file") MultipartFile file, @RequestParam("repoID") Integer repoID) throws GoodsManageServiceException {
         //  初始化 Response
         Response responseContent = ResponseFactory.newInstance();
         String result = Response.RESPONSE_RESULT_ERROR;
@@ -221,7 +221,7 @@ public class GoodsManageHandler {
         int total = 0;
         int available = 0;
         if (file != null) {
-            Map<String, Object> importInfo = goodsManageService.importGoods(file);
+            Map<String, Object> importInfo = goodsManageService.importGoods(file,repoID);
             if (importInfo != null) {
                 total = (int) importInfo.get("total");
                 available = (int) importInfo.get("available");
@@ -245,13 +245,13 @@ public class GoodsManageHandler {
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "exportGoods", method = RequestMethod.GET)
-    public void exportGoods(@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
+    public void exportGoods(@RequestParam("repoID") Integer repoID, @RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
                             HttpServletResponse response) throws GoodsManageServiceException, IOException {
 
         String fileName = "goodsInfo.xlsx";
 
         List<Goods> goodsList = null;
-        Map<String, Object> queryResult = query(searchType, keyWord, -1, -1);
+        Map<String, Object> queryResult = query(repoID, searchType, keyWord, -1, -1);
 
         if (queryResult != null) {
             goodsList = (List<Goods>) queryResult.get("data");

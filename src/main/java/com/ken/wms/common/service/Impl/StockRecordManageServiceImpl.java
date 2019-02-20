@@ -60,7 +60,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     public boolean stockInOperation(Integer supplierID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException {
 
         // ID对应的记录是否存在
-        if (!(supplierValidate(supplierID) && goodsNOValidate(goodsNO) && repositoryValidate(repositoryID)))
+        if (!(supplierValidate(supplierID) && repositoryValidate(repositoryID) && goodsNOValidate(goodsNO,repositoryID) ))
             return false;
 
         if (personInCharge == null)
@@ -74,7 +74,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
             // 更新库存记录
             boolean isSuccess = false;
             //根据货物编号查询货物ID
-            Integer goodsID = goodsMapper.selectIDByNO(goodsNO);
+            Integer goodsID = goodsMapper.selectIDByNO(goodsNO,repositoryID);
             //组装批量录入的货物信息
             List<String> goodsSingle = SPLIT_SEMICOLON.splitToList(goodsDetail);
             for(String goodss : goodsSingle){
@@ -114,7 +114,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
     public boolean stockOutOperation(Integer customerID, String goodsNO, String goodsName, String goodsDetail, Integer repositoryID, String personInCharge, String remark) throws StockRecordManageServiceException {
 
         // 检查ID对应的记录是否存在
-        if (!(customerValidate(customerID) && goodsNOValidate(goodsNO) && repositoryValidate(repositoryID)))
+        if (!(customerValidate(customerID) && repositoryValidate(repositoryID) && goodsNOValidate(goodsNO,repositoryID) ))
             return false;
 
         // 检查出货数量范围是否有效
@@ -125,7 +125,7 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
             // 更新库存信息
             boolean isSuccess = false;
             //根据货物编号查询货物ID
-            Integer goodsID = goodsMapper.selectIDByNO(goodsNO);
+            Integer goodsID = goodsMapper.selectIDByNO(goodsNO,repositoryID);
             //组装批量录入的货物信息
             List<String> goodsSingle = SPLIT_SEMICOLON.splitToList(goodsDetail);
             for(String goodss : goodsSingle){
@@ -460,9 +460,9 @@ public class StockRecordManageServiceImpl implements StockRecordManageService {
      * @param goodsNO 货物编号
      * @return 若存在则返回true，否则返回false
      */
-    private boolean goodsNOValidate(String goodsNO) throws StockRecordManageServiceException {
+    private boolean goodsNOValidate(String goodsNO, Integer repositoryID) throws StockRecordManageServiceException {
         try {
-            Goods goods = goodsMapper.selectByNo(goodsNO);
+            Goods goods = goodsMapper.selectByNo(goodsNO,repositoryID);
             return goods != null;
         } catch (PersistenceException e) {
             throw new StockRecordManageServiceException(e);

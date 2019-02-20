@@ -31,7 +31,7 @@ public interface GoodsManageService {
      * @param goodsNo 货物ID
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByNo(String goodsNo) throws GoodsManageServiceException;
+    Map<String, Object> selectByNo(Integer repoID,String goodsNo) throws GoodsManageServiceException;
 
     /**
      * 返回指定 goods name 的货物记录
@@ -42,7 +42,7 @@ public interface GoodsManageService {
      * @param goodsName 货物的名称
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByName(int offset, int limit, String goodsName) throws GoodsManageServiceException;
+    Map<String, Object> selectByName(Integer repoID, int offset, int limit, String goodsName) throws GoodsManageServiceException;
 
     /**
      * 返回指定 goods name 的货物记录
@@ -51,7 +51,7 @@ public interface GoodsManageService {
      * @param goodsName 货物名称
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByName(String goodsName) throws GoodsManageServiceException;
+    Map<String, Object> selectByName(Integer repoID, String goodsName) throws GoodsManageServiceException;
 
     /**
      * 分页查询货物记录
@@ -60,7 +60,7 @@ public interface GoodsManageService {
      * @param limit  分页的大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectAll(int offset, int limit) throws GoodsManageServiceException;
+    Map<String, Object> selectAll(Integer repoID, int offset, int limit) throws GoodsManageServiceException;
 
     /**
      * 查询所有的货物记录
@@ -99,7 +99,7 @@ public interface GoodsManageService {
      * @param file 导入信息的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
-    Map<String, Object> importGoods(MultipartFile file) throws GoodsManageServiceException;
+    Map<String, Object> importGoods(MultipartFile file,Integer repoID) throws GoodsManageServiceException;
 
     /**
      * 导出货物信息到文件中

@@ -15,6 +15,7 @@
 		<result property="pic" column="goods_pic"/>
 		<result property="value" column="goods_value"/>
 		<result property="remark" column="goods_remark"/>
+		<result property="repoID" column="goods_repositoryid"/>
 	</resultMap>
 	
 	<select id="selectAll" resultMap="goods">
@@ -31,7 +32,23 @@
 		where
 		    g.goods_typeid = gt.goods_type_id
 	</select>
-	
+
+	<select id="selectByRepoID" resultMap="goods">
+		select
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
+		from
+			wms_goods g, wms_goods_type gt
+		where
+		    g.goods_typeid = gt.goods_type_id
+		    AND g.goods_repositoryid = #{repoID}
+	</select>
+
 	<select id="selectById" resultMap="goods">
 		select
 			g.goods_id,
@@ -48,6 +65,23 @@
 		    and g.goods_id = #{id}
 	</select>
 
+	<!--<select id="selectByIdRepoID" resultMap="goods">
+		select
+			g.goods_id,
+			g.goods_no,
+			g.goods_name,
+			gt.goods_type_name as goods_typeid,
+			g.goods_sizes,
+			g.goods_colors,
+			g.goods_pic
+		from
+			wms_goods g, wms_goods_type gt
+		where
+		    g.goods_typeid = gt.goods_type_id
+		    and g.goods_id = #{id}
+		    AND g.goods_repositoryid = #{repoID}
+	</select>-->
+
 	<select id="selectByNo" resultMap="goods">
 		select
 			g.goods_id,
@@ -61,6 +95,7 @@
 			wms_goods g, wms_goods_type gt
 		where
 		    g.goods_typeid = gt.goods_type_id
+		    AND g.goods_repositoryid = #{repoID}
 		    and g.goods_no = #{no}
 	</select>
 
@@ -76,9 +111,10 @@
 		from
 			wms_goods g, wms_goods_type gt
 		where
-		    g.goods_typeid = gt.goods_type_id
-		    <!--and g.goods_no = #{no}-->
-		    and g.goods_no like concat(concat('%',#{no}),'%')
+			g.goods_typeid = gt.goods_type_id
+			AND g.goods_repositoryid = #{repoID}
+			<!--and g.goods_no = #{no}-->
+			and g.goods_no like concat(concat('%',#{no}),'%')
 	</select>
 
 	<select id="selectIDByNO" resultType="java.lang.Integer">
@@ -88,6 +124,7 @@
 		wms_goods g
 		where
 		g.goods_no = #{no}
+		AND g.goods_repositoryid = #{repoID}
 	</select>
 
 	<select id="selectByName" resultMap="goods">
@@ -119,19 +156,20 @@
 			wms_goods g, wms_goods_type gt
 		where
 			g.goods_typeid = gt.goods_type_id
+			AND g.goods_repositoryid = #{repoID}
 			and g.goods_name like concat(concat('%',#{goodsName}),'%')
 	</select>
 
 	<insert id="insert">
-		insert into wms_goods(goods_no,goods_name,goods_typeid,goods_sizes,goods_colors,goods_pic)
-		values (#{no},#{name},#{type},#{sizes},#{colors},#{pic})
+		insert into wms_goods(goods_no,goods_name,goods_typeid,goods_sizes,goods_colors,goods_pic,goods_repositoryid)
+		values (#{no},#{name},#{type},#{sizes},#{colors},#{pic},#{repoID})
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_goods(goods_no,goods_name,goods_typeid,goods_sizes,goods_colors)
+		insert into wms_goods(goods_no,goods_name,goods_typeid,goods_sizes,goods_colors,goods_repositoryid)
 		value
 		<foreach collection="list" item="goods" separator=",">
-			(#{goods.no},#{goods.name},#{goods.type},#{goods.sizes},#{goods.colors})
+			(#{goods.no},#{goods.name},#{goods.type},#{goods.sizes},#{goods.colors},#{goods.repoID})
 		</foreach>
 	</insert>
 	
@@ -156,8 +194,8 @@
 		where goods_id = #{id}
 	</delete>
 	
-	<delete id="deleteByName">
+	<!--<delete id="deleteByName">
 		delete from wms_goods
 		where goods_name = #{goodsName}
-	</delete>
+	</delete>-->
 </mapper>

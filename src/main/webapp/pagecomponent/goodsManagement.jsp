@@ -4,6 +4,7 @@
 <script>
 	var search_type_goods = "searchAll";
 	var search_keyWord = "";
+    var search_repo_id = "";
 	var selectID;
 
     layui.use('upload', function () {
@@ -56,7 +57,46 @@
 
     //定义个性化命名空间
 	var goodsManage = {
-
+        //初始化所属仓库选择下拉框
+        showOwnRepo : function(){
+            $.ajax({
+                type : "GET",
+                url : "repositoryManage/getOwnRepo",
+                dataType : "json",
+                success : function(response) {
+                    if (response.result == "success") {
+                        if(response.data.length > 1){
+                            var repoList = "";
+                            for(var i = 0; i < response.data.length; i++){
+                                repoList += '<li><a href="javascript:void(0)" class="repo-option" data-id="'+response.data[i].id+'">'+response.data[i].id+'</a></li>';
+                            }
+                            $("#own_repo_text").html(response.data[0].id);
+                            $("#own_repo_text").parent().after('<ul class="dropdown-menu" role="menu" id="own_repo_select"></ul>');
+                            $("#own_repo_select").html(repoList);
+                            $(".repo-option").click(function() {
+                                $("#own_repo_text").text($(this).text());
+                                search_repo_id = $(this).text();
+                                tableRefresh()
+                            })
+                        }else if(response.data.length == 1){
+                            $("#own_repo_text").html(response.data[0].id);
+                        }
+                        search_repo_id = $("#own_repo_text").text().trim();
+                        if("无所属仓库" == search_repo_id){
+                            showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                            return;
+                        }
+                        goodsListInit();
+                    }else{
+                        showMsg("error", "查询出现异常", "");
+                    }
+                },
+                error : function(xhr, textStatus, errorThrow) {
+                    // handler error
+                    handleAjaxError(xhr.status);
+                }
+            })
+        },
         //初始化货物类型选择下拉框
 	   showSelectType : function(typeDealType){
            $.ajax({
@@ -293,7 +333,7 @@
 	$(function() {
 		optionAction();
 		searchAction();
-		goodsListInit();
+		//goodsListInit();
 		bootstrapValidatorInit();
 
 		addGoodsAction();
@@ -306,6 +346,7 @@
 
 	// 下拉框選擇動作
 	function optionAction() {
+        goodsManage.showOwnRepo(); //初始化所属仓库
 		$(".dropOption").click(function() {
 			var type = $(this).text();
 			$("#search_input").val("");
@@ -330,7 +371,12 @@
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
+            if("无所属仓库" == search_repo_id){
+                showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                return;
+            }
 			search_keyWord = $('#search_input').val();
+            search_repo_id = $("#own_repo_text").text().trim();
             $('#goodsList').bootstrapTable('selectPage',1);
 		})
 	}
@@ -341,7 +387,8 @@
 			limit : params.limit,
 			offset : params.offset,
 			searchType : search_type_goods,
-			keyWord : search_keyWord
+			keyWord : search_keyWord,
+            repoID : search_repo_id
 		}
 		return temp;
 	}
@@ -679,6 +726,7 @@
 				sizes : $('#goods_sizes').val(),
                 colors : $('#goods_colors').val(),
                 pic : $('#goods_pic').attr("src") == undefined ? "" : $('#goods_pic').attr("src").trim(),
+                repoID : $("#own_repo_text").text()
 			}
 			// ajax
 			$.ajax({
@@ -775,6 +823,7 @@
 				secureuri: false,
 				dataType: 'json',
 				fileElementId:"file",
+                data:{"repoID" : $("#own_repo_text").text()},
 				success : function(data, status){
 					var total = 0;
 					var available = 0;
@@ -818,7 +867,8 @@
 		$('#export_goods_download').click(function(){
 			var data = {
 				searchType : search_type_goods,
-				keyWord : search_keyWord
+				keyWord : search_keyWord,
+                repoID : search_repo_id
 			}
 			var url = "goodsManage/exportGoods?" + $.param(data)
 			window.open(url, '_blank');
@@ -874,6 +924,15 @@
 	</ol>
 	<div class="panel-body">
 		<div class="row">
+			<div class="col-md-2 col-sm-2">
+				<label > <span>所属仓库：</span></label>
+				<div class="btn-group">
+					<button class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown">
+						<span id="own_repo_text">无所属仓库</span> <span class="caret"></span>
+					</button>
+				</div>
+			</div>
 			<div class="col-md-1 col-sm-2">
 				<div class="btn-group">
 					<button class="btn btn-default dropdown-toggle"

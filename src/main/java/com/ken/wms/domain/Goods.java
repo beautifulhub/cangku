@@ -16,6 +16,7 @@ public class Goods {
 	private String pic;// 货物实物图
 	private Double value;// 货物价值
 	private String remark;// 货物说明
+	private Integer repoID;// 货位所属仓库
 
 	public Integer getId() {
 		return id;
@@ -89,6 +90,14 @@ public class Goods {
 		this.remark = remark;
 	}
 
+	public Integer getRepoID() {
+		return repoID;
+	}
+
+	public void setRepoID(Integer repoID) {
+		this.repoID = repoID;
+	}
+
 	@Override
 	public String toString() {
 		return "Goods{" +
@@ -96,11 +105,12 @@ public class Goods {
 				", no='" + no + '\'' +
 				", name='" + name + '\'' +
 				", type='" + type + '\'' +
-				", colors='" + colors + '\'' +
 				", sizes='" + sizes + '\'' +
+				", colors='" + colors + '\'' +
 				", pic='" + pic + '\'' +
 				", value=" + value +
 				", remark='" + remark + '\'' +
+				", repoID=" + repoID +
 				'}';
 	}
 }

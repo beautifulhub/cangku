@@ -118,7 +118,7 @@
 
 	// 表格初始化
 	function storageListInit() {
-        if($("#is_admin").length > 0){
+        /*if($("#is_admin").length > 0){*/
             $('#storageList')
                 .bootstrapTable(
                     {
@@ -208,7 +208,7 @@
                             $("#total_num").text("");
                         },
                     });
-        }else{
+        /*}else{
             $('#storageList')
                 .bootstrapTable(
                     {
@@ -268,7 +268,7 @@
                             $("#total_num").text("");
                         },
                     });
-        }
+        }*/
 	}
 
 	// 表格刷新

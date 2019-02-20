@@ -83,7 +83,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByNo(String goodsNo) throws GoodsManageServiceException {
+    public Map<String, Object> selectByNo(Integer repoID,String goodsNo) throws GoodsManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Goods> goodsList = new ArrayList<>();
@@ -91,7 +91,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
 
         // 查询
         try {
-            goodsList = goodsMapper.selectByLikeNo(goodsNo);
+            goodsList = goodsMapper.selectByLikeNo(goodsNo,repoID);
         } catch (PersistenceException e) {
             throw new GoodsManageServiceException(e);
         }
@@ -110,7 +110,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByName(int offset, int limit, String goodsName) throws GoodsManageServiceException {
+    public Map<String, Object> selectByName(Integer repoID, int offset, int limit, String goodsName) throws GoodsManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Goods> goodsList;
@@ -125,14 +125,14 @@ public class GoodsManageServiceImpl implements GoodsManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                goodsList = goodsMapper.selectApproximateByName(goodsName);
+                goodsList = goodsMapper.selectApproximateByName(goodsName,repoID);
                 if (goodsList != null) {
                     PageInfo<Goods> pageInfo = new PageInfo<>(goodsList);
                     total = pageInfo.getTotal();
                 } else
                     goodsList = new ArrayList<>();
             } else {
-                goodsList = goodsMapper.selectApproximateByName(goodsName);
+                goodsList = goodsMapper.selectApproximateByName(goodsName,repoID);
                 if (goodsList != null)
                     total = goodsList.size();
                 else
@@ -154,8 +154,8 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectByName(String goodsName) throws GoodsManageServiceException {
-        return selectByName(-1, -1, goodsName);
+    public Map<String, Object> selectByName(Integer repoID, String goodsName) throws GoodsManageServiceException {
+        return selectByName(repoID, -1, -1, goodsName);
     }
 
     /**
@@ -166,7 +166,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectAll(int offset, int limit) throws GoodsManageServiceException {
+    public Map<String, Object> selectAll(Integer repoID, int offset, int limit) throws GoodsManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Goods> goodsList;
@@ -181,14 +181,14 @@ public class GoodsManageServiceImpl implements GoodsManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                goodsList = goodsMapper.selectAll();
+                goodsList = goodsMapper.selectByRepoID(repoID);
                 if (goodsList != null) {
                     PageInfo<Goods> pageInfo = new PageInfo<>(goodsList);
                     total = pageInfo.getTotal();
                 } else
                     goodsList = new ArrayList<>();
             } else {
-                goodsList = goodsMapper.selectAll();
+                goodsList = goodsMapper.selectByRepoID(repoID);
                 if (goodsList != null)
                     total = goodsList.size();
                 else
@@ -210,7 +210,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      */
     @Override
     public Map<String, Object> selectAll() throws GoodsManageServiceException {
-        return selectAll(-1, -1);
+        return selectAll(-1, -1, -1);
     }
 
     /**
@@ -326,7 +326,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
      */
     @UserOperation(value = "导入货物信息")
     @Override
-    public Map<String, Object> importGoods(MultipartFile file) throws GoodsManageServiceException {
+    public Map<String, Object> importGoods(MultipartFile file,Integer repoID) throws GoodsManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         int total = 0;
@@ -344,6 +344,7 @@ public class GoodsManageServiceImpl implements GoodsManageService {
                     if (goodsCheck(goods)) {
                         String upperSizes = goods.getSizes().toUpperCase();
                         goods.setSizes(upperSizes);
+                        goods.setRepoID(repoID);
                         availableList.add(goods);
                     }
                 }

@@ -213,7 +213,12 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
                         errorTip = "第"+i+"行的货物数量应该是大于等于0";
                         break;
                     }
-                    goods = goodsMapper.selectByNo(locationStorage.getGoodsNO());
+                    repository = repositoryMapper.selectByID(locationStorage.getRepositoryID());
+                    if (repository == null) {
+                        errorTip = "第"+i+"行对应的仓库编号不存在";
+                        break;
+                    }
+                    goods = goodsMapper.selectByNo(locationStorage.getGoodsNO(),locationStorage.getRepositoryID());
                     if (goods == null) {
                         errorTip = "第"+i+"行的货物编号不存在";
                         break;
@@ -222,15 +227,10 @@ public class LocationStorageManageServiceImpl implements LocationStorageManageSe
                             errorTip = "第"+i+"行的货物颜色不存在";
                             break;
                         }else if(!goods.getSizes().contains(locationStorage.getGoodsSize())){
-                                errorTip = "第"+i+"行的货物尺码不存在";
-                                break;
+                            errorTip = "第"+i+"行的货物尺码不存在";
+                            break;
                         }
                         locationStorage.setGoodsID(goods.getId());
-                    }
-                    repository = repositoryMapper.selectByID(locationStorage.getRepositoryID());
-                    if (repository == null) {
-                        errorTip = "第"+i+"行对应的仓库编号不存在";
-                        break;
                     }
                     location = locationMapper.selectByNo(locationStorage.getRepositoryID(),locationStorage.getLocationNO());
                     if (location == null) {

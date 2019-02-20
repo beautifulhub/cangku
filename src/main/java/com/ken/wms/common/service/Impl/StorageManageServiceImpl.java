@@ -528,7 +528,12 @@ public class StorageManageServiceImpl implements StorageManageService {
                         break;
                     }
 //                    goods = goodsMapper.selectById(storage.getGoodsID());
-                    goods = goodsMapper.selectByNo(storage.getGoodsNO());
+                    repository = repositoryMapper.selectByID(storage.getRepositoryID());
+                    if (repository == null) {
+                        errorTip = "第"+i+"行对应的仓库编号不存在";
+                        break;
+                    }
+                    goods = goodsMapper.selectByNo(storage.getGoodsNO(),storage.getRepositoryID());
                     if (goods == null) {
                         errorTip = "第"+i+"行的货物编号不存在";
                         break;
@@ -541,11 +546,6 @@ public class StorageManageServiceImpl implements StorageManageService {
                             break;
                         }
                         storage.setGoodsID(goods.getId());
-                    }
-                    repository = repositoryMapper.selectByID(storage.getRepositoryID());
-                    if (repository == null) {
-                        errorTip = "第"+i+"行对应的仓库编号不存在";
-                        break;
                     }
                     List<Storage> temp = storageMapper.selectByGoodsIDAndRepositoryID(goods.getId(), storage.getRepositoryID());
                     if (!(temp != null && !temp.isEmpty())){
