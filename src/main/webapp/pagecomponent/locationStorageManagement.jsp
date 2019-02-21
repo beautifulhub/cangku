@@ -25,7 +25,7 @@
 		exportStorageAction()
 	})
 
-	// 下拉框選擇動作
+	// 筛选条件下拉框選擇動作
 	function optionAction() {
 		$(".dropOption").click(function() {
 			var type = $(this).text();
@@ -56,7 +56,7 @@
                 $('#search_input_size').empty();
                 colorSizeSearchInit();
             }else{
-                commonUtil.goodsAutocomplete(search_type_storage);
+                commonUtil.goodsAutocomplete(search_type_storage,$('#search_input_repository').val());
 			}
         })
     }
@@ -681,7 +681,7 @@
 					<div class="col-md-2 col-sm-4">
 						<select class="form-control" id="search_input_repository">
 							<shiro:hasRole name="systemAdmin">
-								<option value='all'>所有仓库</option>
+								<option value='0'>所有仓库</option>
 								<input type="hidden" id="is_admin"></input>
 							</shiro:hasRole>
 						</select>

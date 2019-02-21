@@ -46,7 +46,9 @@
 			wms_goods g, wms_goods_type gt
 		where
 		    g.goods_typeid = gt.goods_type_id
-		    AND g.goods_repositoryid = #{repoID}
+			<if test="repoID > 0">
+				AND g.goods_repositoryid = #{repoID}
+			</if>
 	</select>
 
 	<select id="selectById" resultMap="goods">
@@ -95,8 +97,10 @@
 			wms_goods g, wms_goods_type gt
 		where
 		    g.goods_typeid = gt.goods_type_id
-		    AND g.goods_repositoryid = #{repoID}
 		    and g.goods_no = #{no}
+		<if test="repoID > 0">
+			AND g.goods_repositoryid = #{repoID}
+		</if>
 	</select>
 
 	<select id="selectByLikeNo" resultMap="goods">
@@ -112,9 +116,11 @@
 			wms_goods g, wms_goods_type gt
 		where
 			g.goods_typeid = gt.goods_type_id
-			AND g.goods_repositoryid = #{repoID}
 			<!--and g.goods_no = #{no}-->
-			and g.goods_no like concat(concat('%',#{no}),'%')
+		and g.goods_no like concat(concat('%',#{no}),'%')
+		<if test="repoID > 0">
+			AND g.goods_repositoryid = #{repoID}
+		</if>
 	</select>
 
 	<select id="selectIDByNO" resultType="java.lang.Integer">
@@ -124,7 +130,9 @@
 		wms_goods g
 		where
 		g.goods_no = #{no}
-		AND g.goods_repositoryid = #{repoID}
+		<if test="repoID > 0">
+			AND g.goods_repositoryid = #{repoID}
+		</if>
 	</select>
 
 	<select id="selectByName" resultMap="goods">
@@ -156,8 +164,10 @@
 			wms_goods g, wms_goods_type gt
 		where
 			g.goods_typeid = gt.goods_type_id
-			AND g.goods_repositoryid = #{repoID}
 			and g.goods_name like concat(concat('%',#{goodsName}),'%')
+		<if test="repoID > 0">
+			AND g.goods_repositoryid = #{repoID}
+		</if>
 	</select>
 
 	<insert id="insert">

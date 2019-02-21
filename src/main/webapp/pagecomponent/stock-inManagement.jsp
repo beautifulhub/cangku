@@ -148,7 +148,8 @@
 						offset : -1,
 						limit : -1,
 						keyWord : request.term,
-						searchType : 'searchByNO'
+						searchType : 'searchByNO',
+						repoID : $('#search_input_repository').val()
 					},
 					success : function(data){
 						var autoCompleteInfo = new Array();
@@ -167,6 +168,7 @@
 			},
 			select : function(event, ui){
 				$('#goods_no').val(ui.item.label);
+                $('#stockin_form').data('bootstrapValidator').updateStatus('goodsNO', 'NOT_VALIDATED').validateField('goodsNO');
 				stockin_goods = ui.item.value;
 				goodsInfoSet(stockin_goods);
 				//loadStorageInfo();
@@ -190,7 +192,8 @@
 						offset : -1,
 						limit : -1,
 						searchType : 'searchByName',
-						keyWord : request.term
+						keyWord : request.term,
+                        repoID : $('#search_input_repository').val()
 					},
 					success : function(data){
 						var autoCompleteInfo = new Array();
@@ -208,6 +211,7 @@
 			},
 			select : function(event, ui){
 				$('#supplier_input').val(ui.item.label);
+                $('#stockin_form').data('bootstrapValidator').updateStatus('supplierInput', 'NOT_VALIDATED').validateField('supplierInput');
 				stockin_supplier = ui.item.value;
 				supplierInfoSet(stockin_supplier);
 				return false;

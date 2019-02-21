@@ -20,7 +20,7 @@ var commonUtil={
         }
     },
     // 货物信息自动匹配
-    goodsAutocomplete :function(searchKey){
+    goodsAutocomplete :function(searchKey,repoID){
         var _this = this;
         var goodsCache = new Array();
         var searchType = ''
@@ -44,7 +44,8 @@ var commonUtil={
                         offset : -1,
                         limit : -1,
                         keyWord : request.term,
-                        searchType : searchType
+                        searchType : searchType,
+                        repoID : repoID
                     },
                     success : function(data){
                         var autoCompleteInfo = new Array();

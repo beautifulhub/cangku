@@ -154,7 +154,8 @@
 						offset : -1,
 						limit : -1,
 						keyWord : request.term,
-						searchType : 'searchByNO'
+						searchType : 'searchByNO',
+                        repoID : $('#search_input_repository').val()
 					},
 					success : function(data){
 						var autoCompleteInfo = new Array();
