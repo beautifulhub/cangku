@@ -23,7 +23,7 @@ public interface GoodsMapper {
 	 * 选择所有的 Goods 通过仓库Id
 	 * @return 返回所有的Goods
 	 */
-	List<Goods> selectByRepoID(Integer repoID);
+	List<Goods> selectByRepoID(@Param("repoID")Integer repoID);
 	
 	/**
 	 * 选择指定 id 的 Goods
