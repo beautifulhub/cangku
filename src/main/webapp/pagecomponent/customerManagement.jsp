@@ -121,10 +121,17 @@
 				.bootstrapTable(
 						{
 							columns : [
-									{
+									/*{
 										field : 'id',
 										title : '客户ID'
 									//sortable: true
+									},*/
+									{
+										field : 'num',
+										title : '序号',
+                                        formatter:function(value,row,index){
+                                            return commonUtil.tableIndexNum(index);
+                                        }
 									},
 									{
 										field : 'name',

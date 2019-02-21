@@ -109,5 +109,11 @@ var commonUtil={
             return "<span title="+values+">"+param+"</span>"
         }
     },
+    //生成列表序号，便于查看
+    tableIndexNum : function (index){
+        var currentPage=$(".page-number.active").find('a').text();
+        return Number(index+1+eval((currentPage-1)*$(".page-size").text()));
+    }
+
 
 }

@@ -76,13 +76,21 @@
 				.bootstrapTable(
 						{
 							columns : [
-									{
+									/*{
 										field : 'recordID',
 										title : '记录ID',
                                         width : 80,
                                         //visible : false
 									//sortable: true
-									},
+									},*/
+                                    {
+                                        field : 'num',
+                                        title : '序号',
+                                        width : 80,
+                                        formatter:function(value,row,index){
+                                            return commonUtil.tableIndexNum(index);
+                                        }
+                                    },
 									{
 										field : 'goodsNO',
 										title : '商品编号',
