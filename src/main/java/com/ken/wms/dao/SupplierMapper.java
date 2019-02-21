@@ -1,6 +1,7 @@
 package com.ken.wms.dao;
 
 import com.ken.wms.domain.Supplier;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,10 +13,10 @@ import java.util.List;
 public interface SupplierMapper {
 
 	/**
-	 * 选择全部的 Supplier
+	 * 选择全部的 Supplier 附加所属仓库ID
 	 * @return 返回所有的供应商
 	 */
-	List<Supplier> selectAll();
+	List<Supplier> selectAll(Integer repoID);
 	
 	/**
 	 * 选择指定 id 的 Supplier
@@ -29,7 +30,7 @@ public interface SupplierMapper {
 	 * @param supplierName 供应商名称
 	 * @return 返回supplierName对应的供应商
 	 */
-	Supplier selectBuName(String supplierName);
+	Supplier selectByName(@Param("supplierName")String supplierName,@Param("repoID")Integer repoID);
 	
 	/**
 	 * 选择指定 supplier name 的 Supplier
@@ -37,8 +38,16 @@ public interface SupplierMapper {
 	 * @param supplierName 供应商名
 	 * @return 返回所有模糊匹配指定supplierName的供应商
 	 */
-	List<Supplier> selectApproximateByName(String supplierName);
-	
+	List<Supplier> selectApproximateByName(@Param("supplierName")String supplierName,@Param("repoID")Integer repoID);
+
+	/**
+	 * 选择指定 supplier principal 的 Supplier
+	 * 返回相似匹配的结果
+	 * @param principal 供应商负责人
+	 * @return 返回所有模糊匹配指定principal的供应商
+	 */
+	List<Supplier> selectApproximateByPrincipal(@Param("principal")String principal,@Param("repoID")Integer repoID);
+
 	/**
 	 * 插入 Supplier 到数据库中
 	 * 不需要指定 Supplier 的主键，采用的数据库 AI 方式

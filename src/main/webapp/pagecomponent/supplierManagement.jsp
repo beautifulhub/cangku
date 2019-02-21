@@ -4,12 +4,56 @@
 <script>
 	var search_type_supplier = "searchAll";
 	var search_keyWord = "";
+    var search_repo_id = "";
 	var selectID;
+
+    var supplierManage = {
+        //初始化所属仓库选择下拉框
+        showOwnRepo : function(){
+            $.ajax({
+                type : "GET",
+                url : "repositoryManage/getOwnRepo",
+                dataType : "json",
+                success : function(response) {
+                    if (response.result == "success") {
+                        if(response.data.length > 1){
+                            var repoList = "";
+                            for(var i = 0; i < response.data.length; i++){
+                                repoList += '<li><a href="javascript:void(0)" class="repo-option" data-id="'+response.data[i].id+'">'+response.data[i].id+'</a></li>';
+                            }
+                            $("#own_repo_text").html(response.data[0].id);
+                            $("#own_repo_text").parent().after('<ul class="dropdown-menu" role="menu" id="own_repo_select"></ul>');
+                            $("#own_repo_select").html(repoList);
+                            $(".repo-option").click(function() {
+                                $("#own_repo_text").text($(this).text());
+                                search_repo_id = $(this).text();
+                                tableRefresh()
+                            })
+                        }else if(response.data.length == 1){
+                            $("#own_repo_text").html(response.data[0].id);
+                        }
+                        search_repo_id = $("#own_repo_text").text().trim();
+                        if("无所属仓库" == search_repo_id){
+                            showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                            return;
+                        }
+                        supplierListInit();
+                    }else{
+                        showMsg("error", "查询出现异常", "");
+                    }
+                },
+                error : function(xhr, textStatus, errorThrow) {
+                    // handler error
+                    handleAjaxError(xhr.status);
+                }
+            })
+        }
+    }
 
 	$(function() {
 		optionAction();
 		searchAction();
-		supplierListInit();
+		/*supplierListInit();*/
 		bootstrapValidatorInit();
 
 		addSupplierAction();
@@ -21,19 +65,23 @@
 
 	// 下拉框選擇動作
 	function optionAction() {
+        supplierManage.showOwnRepo(); //初始化所属仓库
 		$(".dropOption").click(function() {
 			var type = $(this).text();
 			$("#search_input").val("");
 			if (type == "所有") {
 				$("#search_input").attr("readOnly", "true");
 				search_type_supplier = "searchAll";
-			} else if (type == "供应商ID") {
+			} /*else if (type == "供应商ID") {
 				$("#search_input").removeAttr("readOnly");
 				search_type_supplier = "searchByID";
-			} else if (type == "供应商名称") {
+			} */else if (type == "供应商名称") {
 				$("#search_input").removeAttr("readOnly");
 				search_type_supplier = "searchByName";
-			} else {
+			} else if (type == "负责人") {
+                $("#search_input").removeAttr("readOnly");
+                search_type_supplier = "searchByPrincipal";
+            } else {
 				$("#search_input").removeAttr("readOnly");
 			}
 
@@ -45,7 +93,12 @@
 	// 搜索动作
 	function searchAction() {
 		$('#search_button').click(function() {
+            if("无所属仓库" == search_repo_id){
+                showMsg("error", "权限不足", "请联系管理员给你分配仓库管理权限！");
+                return;
+            }
 			search_keyWord = $('#search_input').val();
+            search_repo_id = $("#own_repo_text").text().trim();
             $('#supplierList').bootstrapTable('selectPage',1);
 		})
 	}
@@ -56,7 +109,8 @@
 			limit : params.limit,
 			offset : params.offset,
 			searchType : search_type_supplier,
-			keyWord : search_keyWord
+			keyWord : search_keyWord,
+            repoID : search_repo_id
 		}
 		return temp;
 	}
@@ -225,7 +279,8 @@
 						personInCharge : $('#supplier_person_edit').val(),
 						tel : $('#supplier_tel_edit').val(),
 						email : $('#supplier_email_edit').val(),
-						address : $('#supplier_address_edit').val()
+						address : $('#supplier_address_edit').val(),
+                        repoID : $("#own_repo_text").text()
 					}
 
 					// ajax
@@ -317,7 +372,8 @@
 				personInCharge : $('#supplier_person').val(),
 				tel : $('#supplier_tel').val(),
 				email : $('#supplier_email').val(),
-				address : $('#supplier_address').val()
+				address : $('#supplier_address').val(),
+                repoID : $("#own_repo_text").text()
 			}
 			// ajax
 			$.ajax({
@@ -410,6 +466,7 @@
 				secureuri: false,
 				dataType: 'json',
 				fileElementId:"file",
+                data:{"repoID" : $("#own_repo_text").text()},
 				success : function(data, status){
 					var total = 0;
 					var available = 0;
@@ -454,7 +511,8 @@
 		$('#export_supplier_download').click(function(){
 			var data = {
 				searchType : search_type_supplier,
-				keyWord : search_keyWord
+				keyWord : search_keyWord,
+                repoID : $("#own_repo_text").text()
 			}
 			var url = "supplierManage/exportSupplier?" + $.param(data)
 			window.open(url, '_blank');
@@ -508,6 +566,15 @@
 	</ol>
 	<div class="panel-body">
 		<div class="row">
+			<div class="col-md-2 col-sm-2">
+				<label > <span>所属仓库：</span></label>
+				<div class="btn-group">
+					<button class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown">
+						<span id="own_repo_text">无所属仓库</span> <span class="caret"></span>
+					</button>
+				</div>
+			</div>
 			<div class="col-md-1 col-sm-2">
 				<div class="btn-group">
 					<button class="btn btn-default dropdown-toggle"
@@ -515,8 +582,9 @@
 						<span id="search_type">查询方式</span> <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0)" class="dropOption">供应商ID</a></li>
+						<%--<li><a href="javascript:void(0)" class="dropOption">供应商ID</a></li>--%>
 						<li><a href="javascript:void(0)" class="dropOption">供应商名称</a></li>
+						<li><a href="javascript:void(0)" class="dropOption">负责人</a></li>
 						<li><a href="javascript:void(0)" class="dropOption">所有</a></li>
 					</ul>
 				</div>
@@ -525,7 +593,7 @@
 				<div>
 					<div class="col-md-3 col-sm-4">
 						<input id="search_input" type="text" class="form-control"
-							placeholder="供应商ID">
+							placeholder="供应商信息查询">
 					</div>
 					<div class="col-md-2 col-sm-3">
 						<button id="search_button" class="btn btn-success">
@@ -668,7 +736,7 @@
 						<div class="col-md-1 col-sm-1"></div>
 						<div class="col-md-10 col-sm-10">
 							<div>
-								<h4>请按照学生信息电子表格中指定的格式填写需要添加的一个或多个供应商信息</h4>
+								<h4>请按照供应商信息电子表格中指定的格式添加一个或多个供应商信息</h4>
 							</div>
 							<div class="alert alert-info"
 								style="margin-top: 10px; margin-buttom: 30px">

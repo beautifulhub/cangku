@@ -736,7 +736,7 @@
 						<div class="col-md-1 col-sm-1"></div>
 						<div class="col-md-10 col-sm-10">
 							<div>
-								<h4>请按照客户信息电子表格中指定的格式填写需要添加的一个或多个客户信息</h4>
+								<h4>请按照客户信息电子表格中指定的格式添加一个或多个客户信息</h4>
 							</div>
 							<div class="alert alert-info"
 								style="margin-top: 10px; margin-buttom: 30px">

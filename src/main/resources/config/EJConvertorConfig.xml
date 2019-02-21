@@ -7,7 +7,7 @@
     <entity class="com.ken.wms.domain.Supplier" sheetName="供应商信息" boldHeading="true">
         <property>
             <field>name</field>
-            <value>供应商名</value>
+            <value>供应商名称</value>
         </property>
         <property>
             <field>personInCharge</field>

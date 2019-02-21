@@ -68,16 +68,8 @@ public class SupplierManageServiceImpl implements SupplierManageService {
         return resultSet;
     }
 
-    /**
-     * 返回指定 supplierName 的供应商记录 支持查询分页以及模糊查询
-     *
-     * @param offset       分页的偏移值
-     * @param limit        分页德大小
-     * @param supplierName 供应商德名称
-     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
-     */
     @Override
-    public Map<String, Object> selectByName(int offset, int limit, String supplierName) throws SupplierManageServiceException {
+    public Map<String, Object> selectByPrincipal(int offset, int limit, String principal,Integer repoID) throws SupplierManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Supplier> suppliers;
@@ -92,14 +84,60 @@ public class SupplierManageServiceImpl implements SupplierManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                suppliers = supplierMapper.selectApproximateByName(supplierName);
+                suppliers = supplierMapper.selectApproximateByPrincipal(principal,repoID);
                 if (suppliers != null) {
                     PageInfo<Supplier> pageInfo = new PageInfo<>(suppliers);
                     total = pageInfo.getTotal();
                 } else
                     suppliers = new ArrayList<>();
             } else {
-                suppliers = supplierMapper.selectApproximateByName(supplierName);
+                suppliers = supplierMapper.selectApproximateByPrincipal(principal,repoID);
+                if (suppliers != null)
+                    total = suppliers.size();
+                else
+                    suppliers = new ArrayList<>();
+            }
+        } catch (PersistenceException e) {
+            throw new SupplierManageServiceException(e);
+        }
+
+        resultSet.put("data", suppliers);
+        resultSet.put("total", total);
+        return resultSet;
+    }
+
+    /**
+     * 返回指定 supplierName 的供应商记录 支持查询分页以及模糊查询
+     *
+     * @param offset       分页的偏移值
+     * @param limit        分页德大小
+     * @param supplierName 供应商德名称
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    @Override
+    public Map<String, Object> selectByName(int offset, int limit, String supplierName,Integer repoID) throws SupplierManageServiceException {
+        // 初始化结果集
+        Map<String, Object> resultSet = new HashMap<>();
+        List<Supplier> suppliers;
+        long total = 0;
+        boolean isPagination = true;
+
+        // validate
+        if (offset < 0 || limit < 0)
+            isPagination = false;
+
+        // query
+        try {
+            if (isPagination) {
+                PageHelper.offsetPage(offset, limit);
+                suppliers = supplierMapper.selectApproximateByName(supplierName,repoID);
+                if (suppliers != null) {
+                    PageInfo<Supplier> pageInfo = new PageInfo<>(suppliers);
+                    total = pageInfo.getTotal();
+                } else
+                    suppliers = new ArrayList<>();
+            } else {
+                suppliers = supplierMapper.selectApproximateByName(supplierName,repoID);
                 if (suppliers != null)
                     total = suppliers.size();
                 else
@@ -122,7 +160,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      */
     @Override
     public Map<String, Object> selectByName(String supplierName) throws SupplierManageServiceException {
-        return selectByName(-1, -1, supplierName);
+        return selectByName(-1, -1, supplierName, -1);
     }
 
     /**
@@ -133,7 +171,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
     @Override
-    public Map<String, Object> selectAll(int offset, int limit) throws SupplierManageServiceException {
+    public Map<String, Object> selectAll(int offset, int limit, Integer repoID) throws SupplierManageServiceException {
         // 初始化结果集
         Map<String, Object> resultSet = new HashMap<>();
         List<Supplier> suppliers;
@@ -148,14 +186,14 @@ public class SupplierManageServiceImpl implements SupplierManageService {
         try {
             if (isPagination) {
                 PageHelper.offsetPage(offset, limit);
-                suppliers = supplierMapper.selectAll();
+                suppliers = supplierMapper.selectAll(repoID);
                 if (suppliers != null) {
                     PageInfo<Supplier> pageInfo = new PageInfo<>(suppliers);
                     total = pageInfo.getTotal();
                 } else
                     suppliers = new ArrayList<>();
             } else {
-                suppliers = supplierMapper.selectAll();
+                suppliers = supplierMapper.selectAll(repoID);
                 if (suppliers != null)
                     total = suppliers.size();
                 else
@@ -177,7 +215,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      */
     @Override
     public Map<String, Object> selectAll() throws SupplierManageServiceException {
-        return selectAll(-1, -1);
+        return selectAll(-1, -1, -1);
     }
 
     /**
@@ -207,7 +245,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
             try {
                 if (supplierCheck(supplier)) {
                     // 检查重名
-                    if (null == supplierMapper.selectBuName(supplier.getName())) {
+                    if (null == supplierMapper.selectByName(supplier.getName(),supplier.getRepoID())) {
                         supplierMapper.insert(supplier);
                         if (supplier.getId() != null) {
                             return true;
@@ -238,7 +276,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
                 if (supplierCheck(supplier)) {
                     if (supplier.getId() != null) {
                         // 检查重名
-                        Supplier supplierFromDB = supplierMapper.selectBuName(supplier.getName());
+                        Supplier supplierFromDB = supplierMapper.selectByName(supplier.getName(),supplier.getRepoID());
                         if (supplierFromDB == null || supplier.getId().equals(supplierFromDB.getId())) {
                             supplierMapper.update(supplier);
                             return true;
@@ -280,7 +318,7 @@ public class SupplierManageServiceImpl implements SupplierManageService {
      */
     @UserOperation(value = "导入供应商信息")
     @Override
-    public Map<String, Object> importSupplier(MultipartFile file) throws SupplierManageServiceException {
+    public Map<String, Object> importSupplier(MultipartFile file,Integer repoID) throws SupplierManageServiceException {
         // 初始化结果集
         Map<String, Object> result = new HashMap<>();
         int total = 0;
@@ -297,8 +335,10 @@ public class SupplierManageServiceImpl implements SupplierManageService {
                 for (Supplier supplier : suppliers) {
                     if (supplierCheck(supplier)) {
                         // 检查重名
-                        if (null == supplierMapper.selectBuName(supplier.getName()))
+                        if (null == supplierMapper.selectByName(supplier.getName(),repoID)){
+                            supplier.setRepoID(repoID);
                             availableList.add(supplier);
+                        }
                     }
                 }
 

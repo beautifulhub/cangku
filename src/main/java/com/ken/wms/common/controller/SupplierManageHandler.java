@@ -32,6 +32,7 @@ public class SupplierManageHandler {
     private SupplierManageService supplierManageService;
 
     private static final String SEARCH_BY_ID = "searchByID";
+    private static final String SEARCH_BY_PRINCIPAL = "searchByPrincipal";
     private static final String SEARCH_BY_NAME = "searchByName";
     private static final String SEARCH_ALL = "searchAll";
 
@@ -44,20 +45,23 @@ public class SupplierManageHandler {
      * @param limit      分页大小
      * @return 返回所有符合条件的记录
      */
-    private Map<String, Object> query(String searchType, String keyWord, int offset, int limit) throws SupplierManageServiceException {
+    private Map<String, Object> query(String searchType, String keyWord, int offset, int limit, Integer repoID) throws SupplierManageServiceException {
         Map<String, Object> queryResult = null;
 
         switch (searchType) {
-            case SEARCH_BY_ID:
+            /*case SEARCH_BY_ID:
                 if (StringUtils.isNumeric(keyWord)) {
                     queryResult = supplierManageService.selectById(Integer.valueOf(keyWord));
                 }
+                break;*/
+            case SEARCH_BY_PRINCIPAL:
+                queryResult = supplierManageService.selectByPrincipal(offset, limit, keyWord,repoID);
                 break;
             case SEARCH_BY_NAME:
-                queryResult = supplierManageService.selectByName(offset, limit, keyWord);
+                queryResult = supplierManageService.selectByName(offset, limit, keyWord,repoID);
                 break;
             case SEARCH_ALL:
-                queryResult = supplierManageService.selectAll(offset, limit);
+                queryResult = supplierManageService.selectAll(offset, limit, repoID);
                 break;
             default:
                 // do other thing
@@ -80,7 +84,7 @@ public class SupplierManageHandler {
     @SuppressWarnings("unchecked")
     public
     @ResponseBody
-    Map<String, Object> getSupplierList(@RequestParam("searchType") String searchType,
+    Map<String, Object> getSupplierList(@RequestParam("repoID") Integer repoID,@RequestParam("searchType") String searchType,
                                         @RequestParam("offset") int offset, @RequestParam("limit") int limit,
                                         @RequestParam("keyWord") String keyWord) throws SupplierManageServiceException {
         // 初始化 Response
@@ -89,7 +93,7 @@ public class SupplierManageHandler {
         List<Supplier> rows = null;
         long total = 0;
 
-        Map<String, Object> queryResult = query(searchType, keyWord, offset, limit);
+        Map<String, Object> queryResult = query(searchType, keyWord, offset, limit, repoID);
 
         // 结果转换
         if (queryResult != null) {
@@ -205,7 +209,7 @@ public class SupplierManageHandler {
     @RequestMapping(value = "importSupplier", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> importSupplier(@RequestParam("file") MultipartFile file) throws SupplierManageServiceException {
+    Map<String, Object> importSupplier(@RequestParam("file") MultipartFile file,@RequestParam("repoID") Integer repoID) throws SupplierManageServiceException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
         String result = Response.RESPONSE_RESULT_SUCCESS;
@@ -215,7 +219,7 @@ public class SupplierManageHandler {
         int available = 0;
         if (file == null)
             result = Response.RESPONSE_RESULT_ERROR;
-        Map<String, Object> importInfo = supplierManageService.importSupplier(file);
+        Map<String, Object> importInfo = supplierManageService.importSupplier(file,repoID);
         if (importInfo != null) {
             total = (int) importInfo.get("total");
             available = (int) importInfo.get("available");
@@ -237,7 +241,7 @@ public class SupplierManageHandler {
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "exportSupplier", method = RequestMethod.GET)
-    public void exportSupplier(@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
+    public void exportSupplier(@RequestParam("repoID") Integer repoID,@RequestParam("searchType") String searchType, @RequestParam("keyWord") String keyWord,
                                HttpServletResponse response) throws SupplierManageServiceException, IOException {
 
         String fileName = "supplierInfo.xlsx";
@@ -245,7 +249,7 @@ public class SupplierManageHandler {
         // 根据查询类型进行查询
         List<Supplier> suppliers = null;
         Map<String, Object> queryResult;
-        queryResult = query(searchType, keyWord, -1, -1);
+        queryResult = query(searchType, keyWord, -1, -1, repoID);
 
         if (queryResult != null) {
             suppliers = (List<Supplier>) queryResult.get("data");

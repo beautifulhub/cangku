@@ -12,6 +12,7 @@
 		<result property="tel" column="SUPPLIER_TEL"/>
 		<result property="email" column="SUPPLIER_EMAIL"/>
 		<result property="address" column="SUPPLIER_ADDRESS"/>
+		<result property="repoID" column="SUPPLIER_REPOSITORYID"/>
 	</resultMap> 	
 	
 	<select id="selectAll" resultMap="supplier">
@@ -24,6 +25,8 @@
 			s.SUPPLIER_ADDRESS
 		from
 			wms_supplier s
+		where
+		    s.supplier_repositoryid = #{repoID}
 	</select>
 	
 	<select id="selectById" resultMap="supplier">
@@ -40,7 +43,7 @@
 			s.SUPPLIER_ID = #{id}
 	</select>
 	
-	<select id="selectBuName" resultMap="supplier">
+	<select id="selectByName" resultMap="supplier">
 		select
 			s.SUPPLIER_ID,
 			s.SUPPLIER_NAME,
@@ -52,6 +55,7 @@
 			wms_supplier s
 		where
 			s.SUPPLIER_NAME = #{supplierName}
+			and s.supplier_repositoryid = #{repoID}
 	</select>
 	
 	<select id="selectApproximateByName" resultMap="supplier">
@@ -66,18 +70,34 @@
 			wms_supplier s
 		where
 			s.SUPPLIER_NAME like concat(concat('%',#{supplierName}),'%')
+			and s.supplier_repositoryid = #{repoID}
 	</select>
-	
+
+	<select id="selectApproximateByPrincipal" resultMap="supplier">
+		select
+			s.SUPPLIER_ID,
+			s.SUPPLIER_NAME,
+			s.SUPPLIER_PERSON,
+			s.SUPPLIER_TEL,
+			s.SUPPLIER_EMAIL,
+			s.SUPPLIER_ADDRESS
+		from
+			wms_supplier s
+		where
+			s.SUPPLIER_PERSON like concat(concat('%',#{principal}),'%')
+			and s.supplier_repositoryid = #{repoID}
+	</select>
+
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true">
-		insert into wms_supplier(SUPPLIER_NAME,SUPPLIER_PERSON,SUPPLIER_TEL,SUPPLIER_EMAIL,SUPPLIER_ADDRESS)
-		values(#{name},#{personInCharge},#{tel},#{email},#{address})
+		insert into wms_supplier(SUPPLIER_NAME,SUPPLIER_PERSON,SUPPLIER_TEL,SUPPLIER_EMAIL,SUPPLIER_ADDRESS,SUPPLIER_REPOSITORYID)
+		values(#{name},#{personInCharge},#{tel},#{email},#{address},#{repoID})
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_supplier(SUPPLIER_NAME,SUPPLIER_PERSON,SUPPLIER_TEL,SUPPLIER_EMAIL,SUPPLIER_ADDRESS)
+		insert into wms_supplier(SUPPLIER_NAME,SUPPLIER_PERSON,SUPPLIER_TEL,SUPPLIER_EMAIL,SUPPLIER_ADDRESS,SUPPLIER_REPOSITORYID)
 		values
 		<foreach collection="list" item="supplier" separator=",">
-			(#{supplier.name},#{supplier.personInCharge},#{supplier.tel},#{supplier.email},#{supplier.address})
+			(#{supplier.name},#{supplier.personInCharge},#{supplier.tel},#{supplier.email},#{supplier.address},#{supplier.repoID})
 		</foreach>
 	</insert>
 	

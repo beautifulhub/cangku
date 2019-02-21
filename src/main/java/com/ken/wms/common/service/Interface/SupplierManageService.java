@@ -25,6 +25,17 @@ public interface SupplierManageService {
     Map<String, Object> selectById(Integer supplierId) throws SupplierManageServiceException;
 
     /**
+     * 返回指定 principal 的供应商记录
+     * 支持查询分页以及模糊查询
+     *
+     * @param offset       分页的偏移值
+     * @param limit        分页的大小
+     * @param principal    供应商负责人
+     * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
+     */
+    Map<String, Object> selectByPrincipal(int offset, int limit,String principal,Integer repoID) throws SupplierManageServiceException;
+
+    /**
      * 返回指定 supplierName 的供应商记录
      * 支持查询分页以及模糊查询
      *
@@ -33,7 +44,7 @@ public interface SupplierManageService {
      * @param supplierName 供应商的名称
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectByName(int offset, int limit, String supplierName) throws SupplierManageServiceException;
+    Map<String, Object> selectByName(int offset, int limit, String supplierName,Integer repoID) throws SupplierManageServiceException;
 
     /**
      * 返回指定 supplierName 的供应商记录
@@ -51,7 +62,7 @@ public interface SupplierManageService {
      * @param limit  分页的大小
      * @return 结果的一个Map，其中： key为 data 的代表记录数据；key 为 total 代表结果记录的数量
      */
-    Map<String, Object> selectAll(int offset, int limit) throws SupplierManageServiceException;
+    Map<String, Object> selectAll(int offset, int limit, Integer repoID) throws SupplierManageServiceException;
 
     /**
      * 查询所有的供应商记录
@@ -90,7 +101,7 @@ public interface SupplierManageService {
      * @param file 导入信息的文件
      * @return 返回一个Map，其中：key为total代表导入的总记录数，key为available代表有效导入的记录数
      */
-    Map<String, Object> importSupplier(MultipartFile file) throws SupplierManageServiceException;
+    Map<String, Object> importSupplier(MultipartFile file,Integer repoID) throws SupplierManageServiceException;
 
     /**
      * 导出供应商信息到文件中
