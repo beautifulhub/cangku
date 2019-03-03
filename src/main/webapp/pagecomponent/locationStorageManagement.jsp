@@ -7,8 +7,98 @@
 	var search_color = "";
 	var search_size = "";
 	var search_repository = "";
-	var select_goodsID;
-	var select_repositoryID;
+	var select_goodsID = "";
+	var select_repositoryID = "";
+
+	var locationStorageManage = {
+	    //配置货位
+        configLocation : function(){
+            var _this = this;
+            var totalNum = $('#storage_number_edit').val().trim();
+            $("#location_config_tip").text(totalNum);
+            commonUtil.locationAutocomplete(0,select_repositoryID);//初始化
+            if($('.del-location-config').length > 0 ){//初始化
+                $("#location_no0").parent().parent().nextAll().not("#location_config_group").remove();
+            }
+            $('#add_location_config').unbind("click").click(function(){
+                var n=$(".location-no").length;
+                //if(_this.checkLocationExist($("#location_no"+(n-1)).val().trim())) return;
+                var addAttr = '<div class="form-group">\n' +
+                    '<label for="" class="control-label col-md-3 col-sm-4"> <span>货位编号：</span></label>'+
+                    '<div class="col-md-3 col-sm-8">\n' +
+                    '<input type="text" class="form-control location-no" style="margin-left:-25px"\n' +
+                    'name="locationNo['+n+']" id="location_no'+n+'" placeholder="编号">\n' +
+                    '<div class="alert alert-danger hide">不能为空</div>' +
+                    '</div>\n' +
+					'<label for="" class="control-label col-md-2 col-sm-4" style="margin-left:-40px"> <span>数量：</span></label>'+
+                    '<div class="col-md-3 col-sm-8">\n' +
+					'<input type="text" class="form-control location-goods-num" style="margin-left:-25px"\n' +
+					'name="locationGoodsNum['+n+']" placeholder="数量">\n' +
+					'<div class="alert alert-danger hide">不能为空</div>' +
+					'</div>\n' +
+                    '<button type="button" class="btn btn-xs btn-link del-location-config" style="margin-top:-25px;margin-left:500px">删除</button>\n' +
+                    '</div>';
+                $("#location_config_group").before(addAttr);
+                $('#location_config_form').bootstrapValidator('addField', 'locationNo['+n+']', {
+                    validators: {
+                        notEmpty: {
+                            message: '编号不能为空'
+                        }
+                    }
+                });
+                $('#location_config_form').bootstrapValidator('addField', 'locationGoodsNum['+n+']', {
+                    validators: {
+                        notEmpty:{
+                            message:'数量不能为空'
+                        },
+                        regexp: {
+                            regexp:/^\d+$/,
+                            message:'只能输入数字且必须大于或等于0'
+                        }
+                    }
+                });
+                //动态添加-绑定删除动作
+                $('.del-location-config').click(function() {
+                    var roleLocationNo = $(this).prev().prev().prev().find('input[type]').attr("name");
+                    $("#location_config_form").bootstrapValidator('removeField',roleLocationNo);
+                    var roleGoodsNum = $(this).prev().find('input[type]').attr("name");
+                    $("#location_config_form").bootstrapValidator('removeField',roleGoodsNum);
+                    $(this).parent("div").remove();
+                });
+                //添加自动补全货位号
+                commonUtil.locationAutocomplete(n,select_repositoryID);
+            });
+        },
+		//判断货位是否存在
+		checkLocationExist : function(rowNO,locationNo){
+            var flag = true;
+            var data = {
+                limit : -1,
+                offset : -1,
+                searchType : "searchByNO",
+                keyWord : locationNo,
+                repoID : select_repositoryID
+			}
+            $.ajax({
+				async : false,
+                type : "GET",
+                url : 'locationManage/getLocationList',
+                dataType : "json",
+                contentType : "application/json",
+                data : data,
+                success : function(response){
+                    if(response.rows.length <= 0){ //不存在
+                        layer.alert('第'+(rowNO+1)+'行，请输入真实有效的货位编号！', {
+                            icon : 0
+                        });
+                        flag = false;
+					}
+                },error : function(xhr, textStatus, errorThrown){
+                }
+            })
+			return flag;
+		}
+	}
 
 	$(function() {
 		optionAction();
@@ -22,7 +112,7 @@
 		editStorageAction();
 		deleteStorageAction();
 		importStorageAction();
-		exportStorageAction()
+		exportStorageAction();
 	})
 
 	// 筛选条件下拉框選擇動作
@@ -152,7 +242,10 @@
                             },
                             {
                                 field : 'locationNO',
-                                title : '所在货位'
+                                title : '所在货位',
+                                formatter : function(value, row, index) {
+                                    return value == "null" ? "" : value;
+                                }
                             },
                             {
                                 field : 'repositoryID',
@@ -172,6 +265,8 @@
                                     'click .edit' : function(e, value,
                                                              row, index) {
                                         //selectID = row.id;
+                                        select_goodsID = row.goodsID;
+                                        select_repositoryID = row.repositoryID
                                         rowEditOperation(row);
                                     },
                                     'click .delete' : function(e,
@@ -289,7 +384,7 @@
 		$('#storage_goodsName_edit').text(row.goodsName);
 		$('#storage_goodsColor_edit').text(row.goodsColor);
 		$('#storage_goodsSize_edit').text(row.goodsSize);
-		$('#location_no_edit').text(row.locationNO);
+		$('#location_no_edit').text(row.locationNO=="null"?"":row.locationNO);
 		$('#storage_repositoryID_edit').text(row.repositoryID);
 		$('#storage_number_edit').val(row.goodsNum);
 	}
@@ -350,11 +445,129 @@
 					}
 				}
 			}
+		}),
+		//对配置的货位首行校验
+		$("#location_config_form").bootstrapValidator({
+			message : 'This is not valid',
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			excluded : [ ':disabled' ],
+			fields : {
+				"locationNo[0]": {
+					validators : {
+						notEmpty : {
+							message : '编号不能为空'
+						}
+					}
+				},
+                locationGoodsNum:{
+                    validators:{
+                        notEmpty:{
+                            message:'数量不能为空'
+                        },
+                        regexp: {
+                            regexp:/^\d+$/,
+                            message:'只能输入数字且必须大于或等于0'
+                        }
+                    }
+                }
+			}
 		})
 	}
 
 	// 编辑库存信息
 	function editStorageAction() {
+	    //货位配置触发
+        $('#config_location').click(function() {
+            $('#configLocation_modal').modal("show");
+            locationStorageManage.configLocation();
+        });
+        //提交配置
+        $('#config_modal_submit').click(function() {
+            //由于提交的type不是submit,所以需要手动校验
+            $('#location_config_form').data('bootstrapValidator').validate();
+            if (!$('#location_config_form').data('bootstrapValidator').isValid()) {
+                return;
+            }
+            //获取配置入库明细
+			var goodsColor = $('#storage_goodsColor_edit').text();
+			var goodsSize = $('#storage_goodsSize_edit').text();
+			var upGoodsDetail = "";
+			var newTotalNum = 0;
+            var locationIsExist = true;
+            $(".location-no").each(function(i,item){
+                var locationNO = $(item).val().trim()
+                locationIsExist = locationStorageManage.checkLocationExist(i,locationNO);
+                if(!locationIsExist) return false; //直接跳出循环
+                var goodsNum = $(item).parent().next().next().find('.location-goods-num').val().trim()
+                upGoodsDetail += goodsColor + "," + goodsSize + "," + goodsNum +"," + locationNO + ";"
+                newTotalNum += parseInt(goodsNum);
+            })
+			if(!locationIsExist) return;//结束整个提交
+			if(newTotalNum != $('#storage_number_edit').val().trim()){
+                layer.alert('配置后的数量之和不等于原先总数量，请重新配置!', {
+                    icon : 0
+                });
+                return;
+			}
+            data = {
+                //goodsNO : $("#goods_no").val().trim(),
+                goodsID : select_goodsID,
+                goodsName : $('#storage_goodsName_edit').text(),
+                goodsDetail : upGoodsDetail,
+                repositoryID : select_repositoryID,
+				remark : "货位重新配置入库"
+            }
+            $.ajax({
+				async : false,
+                type : 'POST',
+                url : 'locationRecordManage/locationUp',
+                dataType : 'json',
+                content : 'application/json',
+                data : data,
+                success : function(response){
+                    var msg;
+                    var type;
+                    var append = '';
+                    if(response.result == "success"){
+                        //接着删除之前的老货位
+                        $.ajax({
+                            async : false,
+                            type : "GET",
+                            url : "locationStorageManage/deleteLocationStorageRecord",
+                            dataType : "json",
+                            contentType : "application/json",
+                            data : {"locationStorageID" : $('#location_storage_id').val()},
+                            success : function(response){
+                                type = 'success';
+                                msg = '配置货位成功';
+                                //inputReset();
+                            },
+                            error : function(xhr, textStatus, errorThrown){
+                                type = 'error'
+								msg = '被配置的老货位需要手动删除！'
+                                //handleAjaxError(xhr.status);
+                            }
+                        })
+                    }else{
+                        type = 'error';
+                        msg = '配置货位失败'
+                    }
+                    $('#edit_modal').modal("hide");
+                    $('#configLocation_modal').modal("hide");
+                    tableRefresh();
+                    showMsg(type, msg, append);
+                },
+                error : function(xhr, textStatus, errorThrown){
+                    // handler error：设置的全局ajax异常会处理
+                    //handleAjaxError(xhr.status);
+                }
+            })
+        });
+        //提交修改
 		$('#edit_modal_submit').click(
 				function() {
 					$('#storage_form_edit').data('bootstrapValidator')
@@ -1017,6 +1230,9 @@
 								<div class="col-md-4 col-sm-4">
 									<p id="location_no_edit" class="form-control-static"></p>
 								</div>
+								<button class="btn btn-info" type="button" id="config_location">
+									<span>配置货位</span>
+								</button>
 							</div>
 							<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库ID：</span>
@@ -1078,6 +1294,57 @@
 				</button>
 				<button class="btn btn-danger" type="button" id="delete_confirm">
 					<span>确认删除</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 配置货位信息模态框 -->
+<div id="configLocation_modal" class="modal fade" table-index="-1" role="dialog"
+	 aria-labelledby="addModalLabel" aria-hidden="true"
+	 data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="addModalLabel">配置货位与数量</h4>
+			</div>
+			<div class="modal-body">
+				<!-- 模态框的内容 -->
+				<div class="row">
+					<div class="col-md-10 col-sm-1">
+						<p style="color:#31708f">提示：要保证配置后的数量总和等于配置前的总数：<span id="location_config_tip" style="color:red"></span>，否则无法提交</p>
+					</div>
+					<div class="col-md-12 col-sm-8">
+						<form class="form-horizontal" role="form" id="location_config_form" style="margin-top: 25px">
+							<div class="form-group">
+								<label for="" class="control-label col-md-3 col-sm-4"> <span>货位编号：</span></label>
+								<div class="col-md-3 col-sm-8">
+									<input type="text" class="form-control location-no" style="margin-left:-25px" id="location_no0"
+										   name="locationNo[0]" placeholder="编号">
+								</div>
+								<label for="" class="control-label col-md-2 col-sm-4" style="margin-left:-40px"> <span>数量：</span></label>
+								<div class="col-md-3 col-sm-8">
+									<input type="text" class="form-control location-goods-num" style="margin-left:-25px" id="location_goods_num"
+										   name="locationGoodsNum" placeholder="数量">
+								</div>
+							</div>
+							<div class="form-group" id="location_config_group">
+								<button type="button" class="btn btn-xs btn-link" style="margin-left:500px" id="add_location_config">添加</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-1 col-sm-1"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" type="button" data-dismiss="modal">
+					<span>取消</span>
+				</button>
+				<button class="btn btn-success" type="button" id="config_modal_submit">
+					<span>提交</span>
 				</button>
 			</div>
 		</div>

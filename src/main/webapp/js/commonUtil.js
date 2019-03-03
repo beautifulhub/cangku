@@ -114,7 +114,52 @@ var commonUtil={
     tableIndexNum : function (index){
         var currentPage=$(".page-number.active").find('a').text();
         return Number(index+1+eval((currentPage-1)*$(".page-size").text()));
-    }
+    },
+    //货位信息自动匹配
+    locationAutocomplete :function(n,repoID){
+        $("#location_no"+n).autocomplete({
+            minLength : 0,
+            delay : 500,
+            source : function(request, response){
+                $.ajax({
+                    type : 'GET',
+                    url : 'locationManage/getLocationList',
+                    dataType : 'json',
+                    contentType : 'application/json',
+                    data : {
+                        offset : -1,
+                        limit : -1,
+                        keyWord : request.term,
+                        searchType : "searchByNO",
+                        repoID : repoID
+                    },
+                    success : function(data){
+                        var autoCompleteInfo = new Array();
+                        $.each(data.rows, function(index,elem){
+                            autoCompleteInfo.push({label:elem.no,value:elem.id});
+                        });
+                        if(autoCompleteInfo.length == 0){
+                            layer.alert('请输入真实有效的货位编号！', {
+                                icon : 0
+                            });
+                            /*showMsg('error','请保证货位信息已经存在，且输入了对应的货位号','')*/
+                        }else{
+                            response(autoCompleteInfo);
+                        }
+                    }
+                });
+            },
+            /*focus : function(event, ui){
+                $("#location_no"+n).val(ui.item.label);
+                return false;
+            },*/
+            select : function(event, ui){
+                $("#location_no"+n).val(ui.item.label);
+                $('#location_config_form').data('bootstrapValidator').updateStatus('locationNo['+n+']', 'NOT_VALIDATED').validateField('locationNo['+n+']');
 
+                return false;
+            }
+        })
+    }
 
 }
